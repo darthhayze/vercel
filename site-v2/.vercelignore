@@ -1,0 +1,6 @@
+qa
+ref
+node_modules
+dist
+.env*
+resume-src

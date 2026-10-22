@@ -1,0 +1,31 @@
+/* LCD ticker: two rows, opposite directions, CSS-only. */
+.skillsband { background: #10140d; color: var(--white); border-block: 5px solid var(--ink); overflow: hidden; }
+.sk-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.sk-row { position: relative; overflow: hidden; padding-block: 1.4rem; border-top: 2px solid #2a3022;
+  background-image: radial-gradient(#242b1c 1px, transparent 1.2px); background-size: 4px 4px;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%); }
+.sk-row:first-of-type { border-top: 0; }
+.sk-track { display: flex; width: max-content; will-change: transform; animation: sk-left 70s linear infinite; }
+.sk-build .sk-track { animation-name: sk-right; animation-duration: 95s; }
+.skillsband:hover .sk-track, .skillsband:focus-within .sk-track { animation-play-state: paused; }
+.sk-item { display: inline-flex; align-items: baseline; gap: 0.85rem; padding-inline: 1.8rem; border-right: 1px solid #303728; white-space: nowrap; }
+.sk-tag { font: 700 0.8rem/1 var(--mono); letter-spacing: 0.08em; color: #a6ad96; }
+.sk-name { font: 700 clamp(2rem, 4vw, 3.2rem)/1.2 var(--mono); text-transform: uppercase; letter-spacing: 0.04em; }
+.sk-lab .sk-name { color: var(--yellow); }
+.sk-build .sk-name { color: var(--white); }
+@supports (background-clip: text) {
+  .sk-name { background-image: radial-gradient(var(--sk-lit) .95px, transparent 1.15px); background-size: 2.5px 2.5px; background-clip: text; color: transparent; }
+  .sk-lab .sk-name { --sk-lit: var(--yellow); color: transparent; }
+  .sk-build .sk-name { --sk-lit: var(--white); color: transparent; }
+}
+@media (forced-colors: active) { .sk-name { background: none; } .sk-lab .sk-name, .sk-build .sk-name { color: CanvasText; } }
+@keyframes sk-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes sk-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .skillsband .sk-track { animation: none; flex-wrap: wrap; width: auto; row-gap: 1rem; justify-content: center; }
+  .sk-item { max-width: 100%; padding-inline: 1rem; white-space: normal; }
+  .sk-name { min-width: 0; overflow-wrap: anywhere; }
+  .sk-track .sk-item:nth-child(n + 12) { display: none; }
+  .sk-row { -webkit-mask-image: none; mask-image: none; }
+}

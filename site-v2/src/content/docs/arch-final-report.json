@@ -1,0 +1,146 @@
+{
+ "slug": "arch-final-report",
+ "title": "Pediatric arch support: final project documentation",
+ "pdf": "/docs/arch-final-report.pdf",
+ "pages": 23,
+ "coords": "x and y are percent of the page image, measured from the top left",
+ "startHere": [3, 4, 5, 6, 7, 9, 10, 11, 13, 14, 15],
+ "intro": "Our 23-page Group 11 report. Page 10 lists contributions; page 16 shows V1 and V2.",
+ "hotspots": [
+  {
+   "page": 1,
+   "x": 50,
+   "y": 14,
+   "n": 1,
+   "title": "Cover and authors",
+   "kind": "what",
+   "note": "Our Group 11 report for BME 3050. Pages 3 to 9 repeat the background review."
+  },
+  {
+   "page": 3,
+   "x": 45,
+   "y": 12,
+   "n": 2,
+   "title": "Problem statement",
+   "kind": "what",
+   "note": "A positionally adaptable device for growing children aged 5 to 7, with targets of up to 10% volumetric foot growth and a 150 N ground-reaction load. Both are design targets."
+  },
+  {
+   "page": 10,
+   "x": 55,
+   "y": 25,
+   "n": 3,
+   "title": "Who did what",
+   "kind": "what",
+   "note": "I coordinated clinical contact and researched existing treatments. A teammate fabricated the prototype."
+  },
+  {
+   "page": 10,
+   "x": 55,
+   "y": 63,
+   "n": 4,
+   "title": "Work distribution",
+   "kind": "what",
+   "note": "My name is on the system diagram, the engineering analysis and the draft V&V matrix. Brainstorming and downselection were done by the team. The effort scores are our own estimates on a 1 to 10 scale."
+  },
+  {
+   "page": 15,
+   "x": 55,
+   "y": 50,
+   "n": 5,
+   "title": "Inputs and how we planned to check them",
+   "kind": "limit",
+   "note": "The table lists six requirements and planned checks. Only the separate dumbbell bench tests have results here."
+  },
+  {
+   "page": 16,
+   "x": 40,
+   "y": 41,
+   "n": 6,
+   "title": "V1 and V2",
+   "kind": "what",
+   "note": "V1 was cardboard and foam in standard socks: it showed the lift but was not stable. V2 was gel pads in compression sleeves: steadier, and it showed we needed a dedicated pad pocket."
+  },
+  {
+   "page": 16,
+   "x": 50,
+   "y": 61,
+   "n": 7,
+   "title": "V2 and V3",
+   "kind": "limit",
+   "note": "We completed V2. The report calls it a functional alpha; the résumé calls it a beta. V3 remained a hand-off plan."
+  },
+  {
+   "page": 17,
+   "x": 50,
+   "y": 18,
+   "n": 8,
+   "title": "Regulatory planning",
+   "kind": "limit",
+   "note": "The report proposes a classification and submission path. Neither was confirmed through a regulatory review."
+  },
+  {
+   "page": 20,
+   "x": 50,
+   "y": 36,
+   "n": 9,
+   "title": "Risk table",
+   "kind": "why",
+   "note": "Five failure modes, each with a severity rating and a proposed mitigation."
+  },
+  {
+   "page": 20,
+   "x": 50,
+   "y": 74,
+   "n": 10,
+   "title": "Test procedure and pass criterion",
+   "kind": "what",
+   "note": "Insert and sleeve on a flat surface, 30 lb dumbbell held on it for 1 minute, then dropped from 1 foot. To pass, no gel outside the pouch, no stitching undone, no fabric torn."
+  },
+  {
+   "page": 21,
+   "x": 50,
+   "y": 16,
+   "n": 11,
+   "title": "Results table",
+   "kind": "what",
+   "note": "Three static holds and two drops are marked 'Insert Unaffected'. Impact #3 reads: insert slightly damaged, but contained, slight leakage. The report marks that drop as Pass; the design review marks it Fail. Leakage fails the stated criterion."
+  },
+  {
+   "page": 22,
+   "x": 40,
+   "y": 30,
+   "n": 12,
+   "title": "Concept sketches",
+   "kind": "what",
+   "note": "Three hand-drawn concepts: an oversized insole in a flexible sock, an insole suspended in a non-Newtonian fluid, and an insole with fluid-filled arch bladders. The sock idea is the closest to the sleeve we built."
+  },
+  {
+   "page": 23,
+   "x": 50,
+   "y": 14,
+   "n": 13,
+   "title": "Memo to the next team",
+   "kind": "what",
+   "note": "The memo hands off the V3 design and proposed testing to a future team."
+  },
+  {
+   "page": 23,
+   "x": 50,
+   "y": 40,
+   "n": 14,
+   "title": "TPU printed encasement",
+   "kind": "limit",
+   "note": "The hand-off memo proposes a 3D-printed TPU casing for the next version. Not built."
+  },
+  {
+   "page": 23,
+   "x": 50,
+   "y": 62,
+   "n": 15,
+   "title": "Proposed gait study",
+   "kind": "limit",
+   "note": "The memo proposes a pediatric gait study to test heel position and fatigue. No pediatric study was run."
+  }
+ ]
+}

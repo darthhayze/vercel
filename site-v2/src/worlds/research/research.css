@@ -1,0 +1,88 @@
+.world-research { --serif: 'Source Serif 4 Variable', Georgia, serif; --cobalt: #1f35f5; --paper: #fffefa; }
+.world-research ::selection { background: #ffe05c; color: #111; }
+.rr-wrap { width: min(100% - 2 * var(--pad), 82rem); margin-inline: auto; }
+.rr-head { padding-block: 3.5rem 2.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 4rem; }
+.rr-head h1 { font: 600 clamp(3.5rem, 7vw, 6rem)/1 var(--serif); letter-spacing: -.035em; grid-row: span 3; }
+.rr-lede { font: 500 clamp(1.5rem, 2.3vw, 2rem)/1.2 var(--serif); }
+.rr-head p { max-width: 40rem; }
+.rr-link { display: inline-flex; align-items: center; min-height: 44px; color: var(--cobalt); text-underline-offset: .25em; gap: .5rem; width: fit-content; }
+.rr-chapters { display: flex; flex-wrap: wrap; background: #e4e2d8; padding: .5rem; gap: .25rem; }
+.rr-chapters a { padding: .65rem 1.2rem; min-height: 44px; color: #111; text-decoration: none; }
+.rr-chapters a:hover, .rr-chapters a:focus-visible { color: white; background: var(--cobalt); }
+.rr-hint { margin-block: 1rem 3rem; color: var(--mute); font-size: .95rem; }
+.rr-chapter { scroll-margin-top: 5rem; margin-bottom: 4rem; }
+.rr-chapter-head { display: grid; grid-template-columns: 1fr 1.1fr; align-items: center; gap: 2rem; padding-block: 1rem 2rem; }
+.rr-chapter h2, .rr-readers h2 { font: 600 clamp(1.8rem, 3vw, 2.6rem)/1.12 var(--serif); letter-spacing: -.02em; }
+.rr-chapter-head p { margin-block: .75rem .25rem; color: var(--mute); }
+.rr-opening { width: 100%; height: auto; overflow: visible; }
+.rr-opening text { font: 19px var(--body); fill: #111; }
+.rr-opening .rr-wire { stroke: #4a4a44; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.rr-opening .glass, .rr-opening .rr-device { fill: #fffefa; stroke: #111; stroke-width: 2; stroke-linejoin: round; }
+.rr-opening .cap, .rr-opening .rr-dot { fill: #1f35f5; }
+.rr-opening .rr-liquid, .rr-opening .rr-gold { fill: #e2b52c; }
+.rr-opening .rr-screen { fill: #e4e8f6; }
+.rr-opening .rr-pad { fill: #ffd60a; stroke: #111; stroke-width: 2; }
+.rr-opening .rr-trace { fill: none; stroke: #1f35f5; stroke-width: 2; }
+.rr-spread { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(2rem, 7vw, 7rem); }
+.rr-paper-well { background: #e4e2d8; padding: 2rem; }
+.rr-paper-stack { position: sticky; top: 6rem; }
+.rr-paper { margin: 0 auto 2rem; max-width: 410px; }
+.rr-paper[hidden] { display: none; }
+.rr-page { position: relative; width: fit-content; margin: auto; background: var(--paper); }
+.rr-page img { display: block; width: 100%; height: auto; max-height: 65vh; object-fit: contain; }
+.rr-page svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.rr-page rect { fill: #ffd60a; fill-opacity: .23; stroke: #a17c00; stroke-width: .35; }
+.rr-paper figcaption { font-size: .85rem; margin-top: .5rem; display: flex; gap: .7rem; align-items: center; flex-wrap: wrap; }
+.rr-paper figcaption a { display: inline-flex; min-height: 44px; min-width: 44px; justify-content: center; align-items: center; color: var(--cobalt); }
+.rr-note { padding-block: 2rem; max-width: 32rem; scroll-margin-top: 7rem; }
+[data-enhanced] .rr-note { min-height: 55vh; display: flex; flex-direction: column; justify-content: center; }
+.rr-page-ref { font-size: .9rem; color: var(--mute); margin-bottom: .7rem; }
+.rr-note h3 { font: 600 clamp(1.6rem, 2.5vw, 2.2rem)/1.2 var(--serif); margin-bottom: 1rem; }
+.rr-note button { appearance: none; color: inherit; background: none; border: 0; padding: .25rem 0; text-align: left; font: inherit; min-height: 44px; cursor: pointer; }
+.rr-note button span { color: var(--cobalt); }
+.rr-note[data-active=true] button { text-decoration: underline; text-decoration-color: #dbaf00; text-underline-offset: .2em; }
+.rr-note > p:not(.rr-page-ref) { font: 400 clamp(1.125rem, 1.6vw, 1.3rem)/1.55 var(--serif); }
+.rr-note .rr-reader-entry { padding-block: 1rem; scroll-margin-top: 6rem; }
+.rr-boundary { color: var(--mute); max-width: 64rem; font-size: .95rem; }
+.rr-readers { padding-block: 3rem 5rem; }
+.rr-readers > p { margin: 1rem 0 2rem; }
+.world-research .docr-title, .world-research .gr-note-t { font-family: var(--serif); }
+@media (max-width: 700px) {
+  .rr-head { grid-template-columns: 1fr; gap: 1rem; padding-top: 2rem; }
+  .rr-head h1 { grid-row: auto; }
+  .rr-chapters a { padding-inline: .65rem; }
+  .rr-hint { margin-bottom: 1.5rem; }
+  .rr-chapter-head { grid-template-columns: 1fr; gap: 1rem; }
+  .rr-opening text { font-size: 23px; }
+  .rr-spread { grid-template-columns: 1fr; gap: 0; }
+  [data-enhanced] .rr-paper-well { position: sticky; top: 1rem; z-index: 2; }
+  .rr-paper-well { padding: 1rem; }
+  .rr-paper-stack { position: static; }
+  .rr-page img { max-height: 22vh; width: auto; max-width: 100%; }
+  .rr-paper { margin-bottom: 0; }
+  .rr-paper figcaption { justify-content: center; gap: .5rem; margin: 0; font-size: .8rem; }
+  [data-enhanced] .rr-note { min-height: 30vh; padding-block: 2rem; justify-content: flex-start; }
+  .rr-note { scroll-margin-top: 45vh; }
+  .rr-note > p:not(.rr-page-ref) { font-size: 1.125rem; }
+  .rr-chapter { margin-bottom: 2rem; }
+}
+
+/* Keep each source page beside its note when scroll enhancement is unavailable. */
+.rr-chapter:not([data-enhanced]) .rr-paper-well,
+.rr-chapter:not([data-enhanced]) .rr-paper-stack,
+.rr-chapter:not([data-enhanced]) .rr-marginalia { display: contents; }
+.rr-chapter:not([data-enhanced]) .rr-paper { grid-column: 1; background: #e4e2d8; padding: 1rem; margin: 0 0 2rem; }
+.rr-chapter:not([data-enhanced]) .rr-note { grid-column: 2; align-self: center; }
+.rr-chapter:not([data-enhanced]) :is(.rr-note,.rr-paper):nth-child(1) { grid-row: 1; }
+.rr-chapter:not([data-enhanced]) :is(.rr-note,.rr-paper):nth-child(2) { grid-row: 2; }
+.rr-chapter:not([data-enhanced]) :is(.rr-note,.rr-paper):nth-child(3) { grid-row: 3; }
+@media (max-width: 700px) {
+  .rr-chapter:not([data-enhanced]) :is(.rr-note,.rr-paper) { grid-column: 1; }
+  .rr-chapter:not([data-enhanced]) .rr-paper:nth-child(1) { grid-row: 1; }
+  .rr-chapter:not([data-enhanced]) .rr-note:nth-child(1) { grid-row: 2; }
+  .rr-chapter:not([data-enhanced]) .rr-paper:nth-child(2) { grid-row: 3; }
+  .rr-chapter:not([data-enhanced]) .rr-note:nth-child(2) { grid-row: 4; }
+  .rr-chapter:not([data-enhanced]) .rr-paper:nth-child(3) { grid-row: 5; }
+  .rr-chapter:not([data-enhanced]) .rr-note:nth-child(3) { grid-row: 6; }
+  .rr-chapter:not([data-enhanced]) .rr-page img { max-height: 55vh; }
+}

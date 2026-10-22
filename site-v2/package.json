@@ -1,0 +1,31 @@
+{
+  "name": "hamza-bme-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "node src/worlds/mass-spec/data.test.mjs",
+    "test:browser": "node scripts/browser-check.mjs",
+    "check:release": "npm run check && npm run build && node scripts/check-links.mjs && node scripts/seo-check.mjs && node src/content/voice-lint.mjs --dist && npm test"
+  },
+  "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/caveat": "^5.3.0",
+    "@fontsource-variable/instrument-sans": "5.3.0",
+    "@fontsource-variable/source-serif-4": "^5.3.1",
+    "astro": "7.4.1",
+    "motion": "^14.4.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "playwright": "^1.64.1",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=24 <27"
+  }
+}

@@ -1,0 +1,29 @@
+---
+// C (accent): a thin ECG line that draws itself as the page scrolls. CSS scroll-timeline (kit.css); a tiny script drives
+// the same offset where animation-timeline is unsupported. Reduced motion = fully drawn. Colour = currentColor.
+interface Props { position?: 'bottom' | 'top' | 'inline'; beats?: number }
+const { position = 'bottom', beats = 14 } = Astro.props;
+const seg = 1000 / beats;
+let d = 'M0,20';
+for (let i = 0; i < beats; i++) {
+  const x = i * seg;
+  d += `L${x + seg * .2},20 L${x + seg * .27},16 L${x + seg * .33},20 L${x + seg * .42},20 L${x + seg * .46},26 L${x + seg * .5},2 L${x + seg * .55},32 L${x + seg * .6},20 L${x + seg * .72},20 L${x + seg * .8},13 L${x + seg * .88},20 L${x + seg},20`;
+}
+---
+<div class:list={['sig', position === 'top' && 'top', position === 'inline' && 'inline']} data-sig aria-hidden="true">
+  <svg viewBox="0 0 1000 34" preserveAspectRatio="none"><path d={d} pathLength="1" /></svg>
+</div>
+<script>
+  if (!(CSS.supports('animation-timeline: scroll()')) && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const els = [...document.querySelectorAll<HTMLElement>('[data-sig]')].map((el) => ({ el, p: el.querySelector('path')! }));
+    const upd = () => {
+      for (const { el, p } of els) {
+        let t: number;
+        if (el.classList.contains('inline')) { const r = el.getBoundingClientRect(); t = (innerHeight - r.top) / (innerHeight * .8); }
+        else t = scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight);
+        p.style.strokeDashoffset = String(1 - Math.min(1, Math.max(0, t)));
+      }
+    };
+    addEventListener('scroll', upd, { passive: true }); addEventListener('resize', upd); upd();
+  }
+</script>

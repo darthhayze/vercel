@@ -1,0 +1,7 @@
+---
+// Pill button/link that leans toward the pointer (spring). Hover devices only; static otherwise.
+interface Props { href?: string; variant?: 'yellow' | 'ink' | 'cobalt' | 'ghost'; class?: string; type?: 'button' | 'submit' }
+const { href, variant = 'yellow', class: cls, type = 'button' } = Astro.props;
+const klass = ['btn', variant !== 'yellow' && variant, cls];
+---
+{href ? <a class:list={klass} href={href} data-magnetic><slot /></a> : <button class:list={klass} type={type} data-magnetic><slot /></button>}

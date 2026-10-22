@@ -1,0 +1,92 @@
+---
+// CodeExplorer: numbered code with clickable segment bands and a plain-English panel.
+// <CodeExplorer doc="ecg-arduino-source" />  reads src/content/docs/<doc>.code.json
+// {slug,title,language,pdf,lines:[{n,text}],segments:[{id,name,from,to,plain,why,tweak}]}
+// Highlighting is done here at build time (tiny C-like tokenizer). Without JS: code, then every segment's notes as a list.
+import '../../styles/docs.css';
+import { loadCode } from './load';
+import { tokenizeLines } from './highlight';
+export interface Props { doc: string; data?: any }
+const { doc, data } = Astro.props as Props;
+const d = data ?? loadCode(doc);
+if (!d) throw new Error(`CodeExplorer: no src/content/docs/${doc}.code.json`);
+const lines: { n: number; text: string }[] = d.lines ?? [];
+const segs: any[] = (d.segments ?? []).filter((s: any) => s && s.from <= s.to);
+const toks = tokenizeLines(lines.map((l) => l.text), d.language);
+const uid = `ce-${d.slug ?? doc}`;
+const langLabel = ({ arduino: 'Arduino C++', processing: 'Processing (Java)' } as Record<string, string>)[d.language] ?? d.language;
+const segOf = (n: number) => segs.findIndex((s) => n >= s.from && n <= s.to);
+// group consecutive lines into runs: a run is one segment or a gap
+type Run = { seg: number; items: number[] };
+const runs: Run[] = [];
+lines.forEach((l, idx) => {
+  const si = segOf(l.n);
+  const last = runs[runs.length - 1];
+  if (last && last.seg === si) last.items.push(idx); else runs.push({ seg: si, items: [idx] });
+});
+---
+<section class="docr ce" data-ce data-lang={d.language} aria-labelledby={`${uid}-t`}>
+  <header class="gr-head">
+    <div>
+      <p class="docr-kicker">{langLabel}</p>
+      <h3 class="docr-title" id={`${uid}-t`}>{d.title}</h3>
+      {segs.length > 0 && <p class="docr-intro">{segs.length} parts. Click a part name, or press <kbd>j</kbd> and <kbd>k</kbd>.</p>}
+    </div>
+    <p class="gr-links">
+      <button type="button" class="docr-btn" data-act="copy" data-js-only hidden>Copy</button>
+      {d.pdf && <a class="docr-btn" href={d.pdf} target="_blank" rel="noopener">Original PDF <span class="sr-only">(opens in a new tab)</span></a>}
+      <span class="sr-only" role="status" aria-live="polite" data-copystate></span>
+    </p>
+  </header>
+
+  {segs.length > 0 && (
+    <nav class="ce-map" aria-label="Code map" data-js-only hidden>
+      {segs.map((s, i) => (
+        <button type="button" class="ce-map-b" data-seg={s.id} data-span={s.to - s.from + 1} data-i={i % 2} aria-label={`${s.name}, lines ${s.from} to ${s.to}`} title={s.name}><span class="ce-map-n">{s.name}</span></button>
+      ))}
+    </nav>
+  )}
+
+  <div class="ce-stage">
+    <div class="ce-code" data-scroll tabindex="0" role="region" aria-label="Source code. Keys: j and k, or the up and down arrows, move between parts.">
+      {runs.map((r) => {
+        const s = r.seg >= 0 ? segs[r.seg] : null;
+        const body = r.items.map((idx) => (
+          <div class="ce-line" data-n={lines[idx].n}>
+            <span class="ce-n" aria-hidden="true">{lines[idx].n}</span>
+            <code class="ce-t">{toks[idx].length ? toks[idx].map((t) => (t.t === 'tx' ? t.s : <span class={`k-${t.t}`}>{t.s}</span>)) : '​'}</code>
+          </div>
+        ));
+        return s ? (
+          <div class="ce-seg" data-seg={s.id} data-i={r.seg % 2} data-from={s.from} data-to={s.to}>
+            <button type="button" class="ce-seg-h" aria-controls={`${uid}-${s.id}`}><span class="ce-seg-n">{r.seg + 1}</span><span class="ce-seg-name">{s.name}</span><span class="ce-seg-r">lines {s.from}&ndash;{s.to}</span></button>
+            {body}
+          </div>
+        ) : <div class="ce-gap">{body}</div>;
+      })}
+    </div>
+
+    {segs.length > 0 && (
+      <aside class="ce-side" aria-label="What this part does" data-side>
+        <ol class="ce-notes">
+          {segs.map((s, i) => (
+            <li class="ce-note" id={`${uid}-${s.id}`} data-seg={s.id}>
+              <p class="gr-kind"><span class="gr-kind-n">{i + 1}</span><span class="gr-badge">Part {i + 1} of {segs.length}</span><span class="gr-pg">lines {s.from}&ndash;{s.to}</span></p>
+              <h4 class="gr-note-t">{s.name}</h4>
+              <dl class="ce-dl">
+                <div><dt>Plain English</dt><dd>{s.plain}</dd></div>
+                <div><dt>Why this way</dt><dd>{s.why}</dd></div>
+                <div><dt>Tweaks</dt><dd>{s.tweak}</dd></div>
+              </dl>
+            </li>
+          ))}
+        </ol>
+        <div class="ce-step" data-js-only hidden>
+          <button type="button" class="docr-btn" data-act="prev" >Previous part</button>
+          <button type="button" class="docr-btn" data-act="next" >Next part</button>
+        </div>
+      </aside>
+    )}
+  </div>
+</section>
+<script>import '../../scripts/docs/code-explorer.ts';</script>

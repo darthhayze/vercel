@@ -1,0 +1,46 @@
+---
+// Home-card art for the Flex v2 world: 88 sample cards (8 rows by 11 columns) feed one microfluidic junction that releases droplets (GEMs).
+// Decorative only (aria-hidden): no text, no numbers shown. Same palette as the world.
+const cols = 11, rows = 8, px = 19, py = 17, gx = 20, gy = 51;
+const hot: Record<string, string> = { '1,2': 'l', '2,7': 'r', '4,4': 'v', '5,9': 'g', '6,1': 'r', '0,8': 'v', '3,0': 'g', '7,6': 'l' };
+const cards = Array.from({ length: rows * cols }, (_, i) => ({ r: Math.floor(i / cols), c: i % cols }));
+const rowY = (r: number) => gy + r * py + 6.5;
+const gems = [[386, 4], [420, 3], [450, 3]] as const;
+---
+<div class="fxt" aria-hidden="true" data-decor>
+  <svg viewBox="0 0 470 236" preserveAspectRatio="xMidYMid slice" focusable="false">
+    <rect class="bg" width="470" height="236" />
+    <g class="cards">{cards.map(({ r, c }) => <rect class={`cd ${hot[`${r},${c}`] ? 'h-' + hot[`${r},${c}`] : ''}`} x={gx + c * px} y={gy + r * py} width="15" height="13" rx="3.4" />)}</g>
+    <g class="streams">{Array.from({ length: rows }, (_, r) => <path class="st" d={`M${gx + cols * px - 2} ${rowY(r)} C 250 ${rowY(r)} 256 118 290 118`} />)}</g>
+    <g class="junction">
+      <rect class="chipb" x="284" y="74" width="72" height="88" rx="14" />
+      <path class="chn" d="M284 118H356" />
+      <path class="oilc" d="M320 74V118M320 162V118" />
+      <circle class="jn" cx="320" cy="118" r="5" />
+    </g>
+    <g class="gems">{gems.map(([x], k) => <g class={`g g${k}`}><circle class="gc" cx={x} cy="118" r={14 - k * 1.5} /><circle class="gb" cx={x - 4} cy="115" r={5 - k * 0.6} /><circle class={`gl ${k === 1 ? 'off' : ''}`} cx={x + 5} cy="122" r={4.4 - k * 0.5} /></g>)}</g>
+  </svg>
+</div>
+
+<style>
+  .fxt { width: 100%; height: 100%; min-height: 10rem; }
+  .fxt svg { width: 100%; height: 100%; display: block; }
+  .bg { fill: #17303A; }
+  .cd { fill: #36586A; }
+  .cd.h-l { fill: #E0806F; } .cd.h-r { fill: #4FB3B6; } .cd.h-v { fill: #B79BE6; } .cd.h-g { fill: #E9D8AF; }
+  .st { fill: none; stroke: #8FD3CF; stroke-width: 2.2; stroke-linecap: round; stroke-dasharray: 3 8; opacity: .8; }
+  .chipb { fill: #EEF2F3; stroke: #0E1D24; stroke-width: 3; }
+  .chn { stroke: #4FB3B6; stroke-width: 12; stroke-linecap: butt; fill: none; }
+  .oilc { stroke: #F2E6A8; stroke-width: 12; fill: none; }
+  .jn { fill: #fff; stroke: #0E1D24; stroke-width: 2; }
+  .gc { fill: #DFEBF4; stroke: #8FD3CF; stroke-width: 2.4; }
+  .gb { fill: #E9D8AF; stroke: #A58A45; stroke-width: 1.6; }
+  .gl { fill: #D9E6D8; stroke: #5F8260; stroke-width: 1.6; } .gl.off { opacity: 0; }
+  @keyframes fxt-flow { to { stroke-dashoffset: -22; } }
+  @keyframes fxt-drift { 0%, 100% { transform: translateX(-5px); } 50% { transform: translateX(5px); } }
+  @media (prefers-reduced-motion: no-preference) {
+    .st { animation: fxt-flow 1.6s linear infinite; }
+    .g { animation: fxt-drift 5s cubic-bezier(.45, 0, .55, 1) infinite; transform-box: fill-box; }
+    .g1 { animation-delay: -1.2s; } .g2 { animation-delay: -2.4s; }
+  }
+</style>

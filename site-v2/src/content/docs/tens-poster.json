@@ -1,0 +1,103 @@
+{
+ "slug": "tens-poster",
+ "title": "Systemic Analysis of TENS Devices to Guide Future Design Improvements",
+ "pdf": "/docs/tens-poster.pdf",
+ "pages": 1,
+ "size": [
+  1100,
+  825
+ ],
+ "coords": "x and y are percent of the page image, measured from the top left",
+ "startHere": [
+  1,
+  2,
+  3,
+  4,
+  6,
+  7,
+  8
+ ],
+ "intro": "Our one-page poster summarising the literature review.",
+ "hotspots": [
+  {
+   "page": 1,
+   "x": 28,
+   "y": 3,
+   "n": 1,
+   "title": "Title",
+   "kind": "what",
+   "note": "Our University of Cincinnati poster proposes TENS design improvements.",
+   "margin": true
+  },
+  {
+   "page": 1,
+   "x": 5,
+   "y": 26,
+   "n": 2,
+   "title": "Problem statement",
+   "kind": "what",
+   "note": "We identify the TENS user interface as a barrier to long-term use. The central column names loose wires, electrode placement and a separate controller as design problems.",
+   "margin": true
+  },
+  {
+   "page": 1,
+   "x": 30,
+   "y": 36,
+   "n": 3,
+   "title": "Garment concept",
+   "kind": "why",
+   "note": "We propose integrating a TENS system into a wearable garment.",
+   "margin": true
+  },
+  {
+   "page": 1,
+   "x": 92,
+   "y": 39,
+   "n": 4,
+   "title": "Proposed electrode placement",
+   "kind": "limit",
+   "note": "In the upper-right paragraph, we propose electrodes on the chest, upper back and trapezius. The garment image below illustrates the concept.",
+   "margin": true
+  },
+  {
+   "page": 1,
+   "x": 30,
+   "y": 48,
+   "n": 5,
+   "title": "Human and mechanical argument",
+   "kind": "why",
+   "note": "We intended the garment to reduce loose wires and repeated electrode placement. The poster reports no activity tests.",
+   "margin": true
+  },
+  {
+   "page": 1,
+   "x": 72,
+   "y": 56,
+   "n": 6,
+   "title": "Biological and electrical argument",
+   "kind": "limit",
+   "note": "We propose fixed electrode positions for more consistent placement. The poster reports no tests of placement or tolerance.",
+   "margin": true
+  },
+  {
+   "page": 1,
+   "x": 72,
+   "y": 66,
+   "n": 7,
+   "title": "Chemical argument",
+   "kind": "why",
+   "note": "We propose textile or dry electrodes to replace disposable hydrogel pads. The poster reports no measurements of skin tolerance or durability.",
+   "margin": true
+  },
+  {
+   "page": 1,
+   "x": 17,
+   "y": 79,
+   "n": 8,
+   "title": "The systems diagram",
+   "kind": "what",
+   "note": "The same interaction diagram as in the review, shrunk to fit the poster. The full-size version is on page 6 of the review.",
+   "margin": true
+  }
+ ]
+}

@@ -1,0 +1,432 @@
+[
+  {
+    "id": "ls-recordings",
+    "claim": "Source recordings checked in the SPRSound snapshot",
+    "value": "6,567",
+    "type": "measured",
+    "source": "master-resume.pdf, LungScope section (v0.11.3 validation report); site/public/resume/Hamza_Al_Halabi_Resume_Extended_3page.pdf",
+    "date_checked": "2026-10-20",
+    "caveat": "One SPRSound snapshot, from the validation report in the résumé. Counts only; no accuracy claim.",
+    "case": "lungscope"
+  },
+  {
+    "id": "ls-annotations",
+    "claim": "Event annotations checked",
+    "value": "24,578",
+    "type": "measured",
+    "source": "master-resume.pdf, LungScope section (v0.11.3 validation report); site/public/resume/Hamza_Al_Halabi_Resume_Extended_3page.pdf",
+    "date_checked": "2026-10-20",
+    "caveat": "One SPRSound snapshot, from the validation report in the résumé. Counts only; no accuracy claim.",
+    "case": "lungscope"
+  },
+  {
+    "id": "ls-canonical",
+    "claim": "Canonical recordings kept after resolving one conflicting duplicate",
+    "value": "6,566",
+    "type": "measured",
+    "source": "master-resume.pdf, LungScope section (v0.11.3 validation report); site/public/resume/Hamza_Al_Halabi_Resume_Extended_3page.pdf",
+    "date_checked": "2026-10-20",
+    "caveat": "Source aliases and annotations are kept. One SPRSound snapshot, from the validation report in the résumé. Counts only; no accuracy claim.",
+    "case": "lungscope"
+  },
+  {
+    "id": "ls-eligible",
+    "claim": "Recordings eligible for supervised training",
+    "value": "5,881",
+    "type": "measured",
+    "source": "master-resume.pdf, LungScope section (v0.11.3 validation report); site/public/resume/Hamza_Al_Halabi_Resume_Extended_3page.pdf",
+    "date_checked": "2026-10-20",
+    "caveat": "One SPRSound snapshot, from the validation report in the résumé. Counts only; no accuracy claim.",
+    "case": "lungscope"
+  },
+  {
+    "id": "ls-subjects",
+    "claim": "Known subjects among the eligible recordings",
+    "value": "854",
+    "type": "measured",
+    "source": "master-resume.pdf, LungScope section (v0.11.3 validation report); site/public/resume/Hamza_Al_Halabi_Resume_Extended_3page.pdf",
+    "date_checked": "2026-10-20",
+    "caveat": "One SPRSound snapshot, from the validation report in the résumé. Counts only; no accuracy claim.",
+    "case": "lungscope"
+  },
+  {
+    "id": "ls-split-train",
+    "claim": "Train split, counted in subjects",
+    "value": "598",
+    "type": "measured",
+    "source": "master-resume.pdf, LungScope section (v0.11.3 validation report); site/public/resume/Hamza_Al_Halabi_Resume_Extended_3page.pdf",
+    "date_checked": "2026-10-20",
+    "caveat": "Split by subject. One SPRSound snapshot, from the validation report in the résumé. Counts only; no accuracy claim.",
+    "case": "lungscope"
+  },
+  {
+    "id": "ls-split-val",
+    "claim": "Validation split, counted in subjects",
+    "value": "128",
+    "type": "measured",
+    "source": "master-resume.pdf, LungScope section (v0.11.3 validation report); site/public/resume/Hamza_Al_Halabi_Resume_Extended_3page.pdf",
+    "date_checked": "2026-10-20",
+    "caveat": "Split by subject. One SPRSound snapshot, from the validation report in the résumé. Counts only; no accuracy claim.",
+    "case": "lungscope"
+  },
+  {
+    "id": "ls-split-test",
+    "claim": "Test split, counted in subjects",
+    "value": "128",
+    "type": "measured",
+    "source": "master-resume.pdf, LungScope section (v0.11.3 validation report); site/public/resume/Hamza_Al_Halabi_Resume_Extended_3page.pdf",
+    "date_checked": "2026-10-20",
+    "caveat": "Split by subject; 598 + 128 + 128 = 854. One SPRSound snapshot, from the validation report in the résumé. Counts only; no accuracy claim.",
+    "case": "lungscope"
+  },
+  {
+    "id": "ls-overlap",
+    "claim": "Subjects or identical PCM audio shared between splits",
+    "value": "0",
+    "type": "measured",
+    "source": "master-resume.pdf, LungScope section (v0.11.3 validation report); site/public/resume/Hamza_Al_Halabi_Resume_Extended_3page.pdf",
+    "date_checked": "2026-10-20",
+    "caveat": "From the project's v0.11.3 validation report; I did not re-run it.",
+    "case": "lungscope"
+  },
+  {
+    "id": "arch-growth",
+    "claim": "Room for up to 10% volumetric foot growth",
+    "value": "10%",
+    "type": "target",
+    "source": "site/public/docs/arch-final-report.pdf, sections 1 and requirements table",
+    "date_checked": "2026-10-20",
+    "caveat": "Design target. The report lists tensile-strain testing and compression mapping as planned methods and gives no result.",
+    "case": "arch-support"
+  },
+  {
+    "id": "arch-grf",
+    "claim": "Target ground-reaction load",
+    "value": "150 N",
+    "type": "target",
+    "source": "site/public/docs/arch-final-report.pdf, requirements table",
+    "date_checked": "2026-10-20",
+    "caveat": "Design target. Our static test used a 30 lb load for 1 minute, which does not verify 150 N.",
+    "case": "arch-support"
+  },
+  {
+    "id": "arch-thickness",
+    "claim": "Midfoot thickness under 8 mm",
+    "value": "< 8 mm",
+    "type": "target",
+    "source": "site/public/docs/arch-final-report.pdf, requirements table",
+    "date_checked": "2026-10-20",
+    "caveat": "Design target. The report lists caliper measurement as the planned method and gives no measured thickness.",
+    "case": "arch-support"
+  },
+  {
+    "id": "arch-age",
+    "claim": "Target users: children aged 5 to 7 with symptomatic pes planus",
+    "value": "5 to 7 years",
+    "type": "cited",
+    "source": "site/public/docs/arch-final-report.pdf, problem statement; master-resume.pdf, Pediatric Arch Support",
+    "date_checked": "2026-10-20",
+    "caveat": "The intended population. No pediatric clinical study was run.",
+    "case": "arch-support"
+  },
+  {
+    "id": "arch-static",
+    "claim": "Static load tests, insert unaffected (30 lb for 1 minute)",
+    "value": "3 of 3",
+    "type": "measured",
+    "source": "site/public/docs/arch-final-report.pdf, Verification Testing / Results",
+    "date_checked": "2026-10-20",
+    "caveat": "Small bench test on one prototype. It gives no statistical or clinical result.",
+    "case": "arch-support"
+  },
+  {
+    "id": "arch-impact-pass",
+    "claim": "Impact tests, insert unaffected (30 lb dropped from 1 ft)",
+    "value": "2 of 3",
+    "type": "measured",
+    "source": "site/public/docs/arch-final-report.pdf, Verification Testing / Results",
+    "date_checked": "2026-10-20",
+    "caveat": "Small bench test on one prototype.",
+    "case": "arch-support"
+  },
+  {
+    "id": "arch-impact-fail",
+    "claim": "Third impact test: insert slightly damaged, gel partly contained, slight leakage",
+    "value": "1 of 3",
+    "type": "failed",
+    "source": "site/public/docs/arch-final-report.pdf, Verification Testing / Results; master-resume.pdf",
+    "date_checked": "2026-10-20",
+    "caveat": "The report says slight damage and slight leakage, with no rupture. The pass criterion was an insert that stays fully intact. The result points at gel containment.",
+    "case": "arch-support"
+  },
+  {
+    "id": "arch-v2",
+    "claim": "Prototype iteration we built",
+    "value": "V2 (beta)",
+    "type": "measured",
+    "source": "site/public/docs/arch-final-report.pdf, Prototype journey; master-resume.pdf",
+    "date_checked": "2026-10-20",
+    "caveat": "The final report calls V2 a functional alpha; the résumé calls it a beta. V1 used cardboard and foam.",
+    "case": "arch-support"
+  },
+  {
+    "id": "arch-v3",
+    "claim": "V3 built",
+    "value": "0 built",
+    "type": "ongoing",
+    "source": "site/public/docs/arch-final-report.pdf, Technical Memo; master-resume.pdf",
+    "date_checked": "2026-10-20",
+    "caveat": "V3 (custom-molded hybrid inserts, reinforced pouch) was planned and handed to a future team. It was not built.",
+    "case": "arch-support"
+  },
+  {
+    "id": "ms-reduction",
+    "claim": "Analysis-time reduction from the Excel/VBA mass-spec macro",
+    "value": "80%",
+    "type": "cited",
+    "source": "master-resume.pdf, Research Student II and Mass-Spectrometry Data Automation",
+    "date_checked": "2026-10-20",
+    "caveat": "Historical résumé claim; no baseline timing or measurement method is on file.",
+    "case": "mass-spec"
+  },
+  {
+    "id": "ms-samples",
+    "claim": "Samples processed with the mass-spec macro",
+    "value": "Mainly human samples",
+    "type": "cited",
+    "source": "owner statement 2026-10-22",
+    "date_checked": "2026-10-22",
+    "caveat": "The macro also supported samples from the same mouse study as the Flex v2 work. The 70+ animal-study sample figure belongs to the placement overall, not the macro.",
+    "case": "mass-spec"
+  },
+  {
+    "id": "ecg-rate",
+    "claim": "Nominal sampling rate from a 10 ms loop delay",
+    "value": "about 100 Hz",
+    "type": "target",
+    "source": "site/public/docs/ecg-arduino-source.pdf (delay(10)); master-resume.pdf",
+    "date_checked": "2026-10-20",
+    "caveat": "Nominal: the 10 ms delay plus conversion and serial time. I did not measure the actual rate.",
+    "case": "ecg"
+  },
+  {
+    "id": "ecg-baud",
+    "claim": "Serial speed between Arduino and Processing",
+    "value": "9600 baud",
+    "type": "cited",
+    "source": "site/public/docs/ecg-arduino-source.pdf (Serial.begin(9600))",
+    "date_checked": "2026-10-20",
+    "caveat": "",
+    "case": "ecg"
+  },
+  {
+    "id": "ecg-threshold",
+    "claim": "Beat-detection threshold in the Processing monitor",
+    "value": "450",
+    "type": "cited",
+    "source": "site/public/docs/ecg-processing-source.pdf (threshold = 450)",
+    "date_checked": "2026-10-20",
+    "caveat": "A raw ADC count hard-coded in the source: a fixed threshold with no adaptive detection.",
+    "case": "ecg"
+  },
+  {
+    "id": "ecg-input",
+    "claim": "Analog input used on the Ninetales board",
+    "value": "A1",
+    "type": "cited",
+    "source": "site/public/docs/ecg-arduino-source.pdf (ECG_PIN = A1)",
+    "date_checked": "2026-10-20",
+    "caveat": "",
+    "case": "ecg"
+  },
+  {
+    "id": "jh-providers",
+    "claim": "API providers configured in the collector",
+    "value": "8",
+    "type": "measured",
+    "source": "JobHub repository (private), branch feat/landing-feature-demos @ c65956d",
+    "date_checked": "2026-10-21",
+    "caveat": "Count of provider definitions in one source file; the collector rule allows official public APIs only.",
+    "case": "jobhub"
+  },
+  {
+    "id": "jh-tables",
+    "claim": "Database tables in the accounts database",
+    "value": "28",
+    "type": "measured",
+    "source": "JobHub repository (private), branch feat/landing-feature-demos @ c65956d",
+    "date_checked": "2026-10-21",
+    "caveat": "Count of CREATE TABLE statements in schema.sql. The job-data database adds 19 more.",
+    "case": "jobhub"
+  },
+  {
+    "id": "paper-oba",
+    "claim": "Participants with obesity and no associated metabolic disorder (paper)",
+    "value": "27",
+    "type": "cited",
+    "source": "site/public/docs/ijms-26-02262.pdf, Abstract",
+    "date_checked": "2026-10-20",
+    "caveat": "Reported in the paper; I contributed to sample collection and processing.",
+    "case": "research"
+  },
+  {
+    "id": "paper-lhc",
+    "claim": "Lean healthy controls (paper)",
+    "value": "15",
+    "type": "cited",
+    "source": "site/public/docs/ijms-26-02262.pdf, Abstract",
+    "date_checked": "2026-10-20",
+    "caveat": "Reported by the paper.",
+    "case": "research"
+  },
+  {
+    "id": "paper-proteins",
+    "claim": "Proteins measured on an Olink panel (paper)",
+    "value": "184",
+    "type": "cited",
+    "source": "site/public/docs/ijms-26-02262.pdf, Abstract",
+    "date_checked": "2026-10-20",
+    "caveat": "Panel size as reported by the paper.",
+    "case": "research"
+  },
+  {
+    "id": "paper-deps",
+    "claim": "Differentially expressed proteins (paper)",
+    "value": "24",
+    "type": "cited",
+    "source": "site/public/docs/ijms-26-02262.pdf, Abstract",
+    "date_checked": "2026-10-20",
+    "caveat": "The paper reports 13 lower and 11 higher proteins in the obesity group.",
+    "case": "research"
+  },
+  {
+    "id": "preprint-metabolites",
+    "claim": "Serum metabolites kept after quality control (preprint)",
+    "value": "711",
+    "type": "cited",
+    "source": "site/public/docs/metabolites-transcriptome-preprint-original.pdf, Methods",
+    "date_checked": "2026-10-20",
+    "caveat": "Preprint, not peer-reviewed. Reported differences were not corrected for multiple testing and remain exploratory.",
+    "case": "research"
+  },
+  {
+    "id": "itri-samples",
+    "claim": "Endocrine research samples processed at iTRI",
+    "value": "50+",
+    "type": "cited",
+    "source": "master-resume.pdf, Clinical Research Assistant",
+    "date_checked": "2026-10-20",
+    "caveat": "Résumé figure; no sample log on file.",
+    "case": "research"
+  },
+  {
+    "id": "itri-trained",
+    "claim": "Incoming team members I trained",
+    "value": "4",
+    "type": "cited",
+    "source": "master-resume.pdf, Clinical Research Assistant",
+    "date_checked": "2026-10-20",
+    "caveat": "Résumé figure.",
+    "case": "research"
+  },
+  {
+    "id": "ra-community",
+    "claim": "Residents in my Resident Advisor community",
+    "value": "about 60",
+    "type": "cited",
+    "source": "master-resume.pdf, Resident Advisor",
+    "date_checked": "2026-10-20",
+    "caveat": "Approximate figure from earlier résumé records.",
+    "case": "also"
+  },
+  {
+    "id": "ra-attendance",
+    "claim": "Cumulative attendance at events I planned",
+    "value": "over 100",
+    "type": "cited",
+    "source": "master-resume.pdf, Resident Advisor",
+    "date_checked": "2026-10-20",
+    "caveat": "Figure from earlier résumé records.",
+    "case": "also"
+  },
+  {
+    "id": "first-global",
+    "claim": "FIRST Global Challenge world events attended for Qatar",
+    "value": "2 (2022, 2023)",
+    "type": "cited",
+    "source": "master-resume.pdf, FIRST Robotics",
+    "date_checked": "2026-10-20",
+    "caveat": "Geneva, Switzerland, 2022; Singapore, 2023. Documented in résumé.",
+    "case": "also"
+  },
+  {
+    "id": "live-well-start",
+    "claim": "Live Well co-op start",
+    "value": "Aug 2026",
+    "type": "ongoing",
+    "source": "master-resume.pdf, Professional Experience",
+    "date_checked": "2026-10-20",
+    "caveat": "Ongoing; no end date set.",
+    "case": "now"
+  },
+  {
+    "id": "flex-half",
+    "claim": "Share of the Cincinnati Children's placement spent on Flex v2 work",
+    "value": "About half",
+    "type": "cited",
+    "source": "owner statement 2026-10-21",
+    "date_checked": "2026-10-21",
+    "caveat": "Owner's estimate; no time log.",
+    "case": "flex-v2"
+  },
+  {
+    "id": "flex-role",
+    "claim": "Prepared the protocol, samples and custom probes, and ran the data analysis for Flex v2",
+    "value": "Protocol, samples, custom probes and analysis",
+    "type": "cited",
+    "source": "owner statement 2026-10-22",
+    "date_checked": "2026-10-22",
+    "caveat": "Owner statement for the Flex v2 work at Cincinnati Children's Research Foundation.",
+    "case": "flex-v2"
+  },
+  {
+    "id": "flex-samples",
+    "claim": "Samples run through the full Flex v2 protocol",
+    "value": "88",
+    "type": "cited",
+    "source": "owner statement 2026-10-22",
+    "date_checked": "2026-10-22",
+    "caveat": "Tissue details and study results are not published.",
+    "case": "flex-v2"
+  },
+  {
+    "id": "flex-cell-ranger",
+    "claim": "Software I used to analyze the Flex v2 sequencing data",
+    "value": "Cell Ranger",
+    "type": "cited",
+    "source": "owner statement 2026-10-22",
+    "date_checked": "2026-10-22",
+    "caveat": "Tissue details and study results are not published.",
+    "case": "flex-v2"
+  },
+  {
+    "id": "flex-illumina",
+    "claim": "Sequencing platform for the Flex v2 mouse study",
+    "value": "Illumina",
+    "type": "cited",
+    "source": "owner statement 2026-10-22",
+    "date_checked": "2026-10-22",
+    "caveat": "Tissue details and study results are not published.",
+    "case": "flex-v2"
+  },
+  {
+    "id": "flex-mouse-study",
+    "claim": "Study context for the Flex v2 samples",
+    "value": "Mouse study",
+    "type": "cited",
+    "source": "owner statement 2026-10-22",
+    "date_checked": "2026-10-22",
+    "caveat": "Tissue details and study results are not published.",
+    "case": "flex-v2"
+  }
+]

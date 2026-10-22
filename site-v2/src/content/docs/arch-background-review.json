@@ -1,0 +1,101 @@
+{
+ "slug": "arch-background-review",
+ "title": "Pediatric arch support: background review",
+ "pdf": "/docs/arch-background-review.pdf",
+ "pages": 7,
+ "coords": "x and y are percent of the page image, measured from the top left",
+ "startHere": [1, 2, 5, 6, 8, 9, 10],
+ "intro": "Our seven-page review of flat feet, existing treatments and adjustable-insole requirements.",
+ "hotspots": [
+  {
+   "page": 1,
+   "x": 30,
+   "y": 14,
+   "n": 1,
+   "title": "The problem",
+   "kind": "what",
+   "note": "The review frames the problem as a device for growing children aged 5 to 7. It sets two design targets: up to 10% volumetric foot growth and a 150 N ground-reaction load."
+  },
+  {
+   "page": 1,
+   "x": 33,
+   "y": 50,
+   "n": 2,
+   "title": "Typical arch against flat arch",
+   "kind": "what",
+   "note": "Figure 1 sets a typical arch beside a flat one: the footprint fills in and the ankle leans. The image is credited to Cleveland Clinic (source 3). We did not draw it."
+  },
+  {
+   "page": 2,
+   "x": 45,
+   "y": 91,
+   "n": 3,
+   "title": "Orthotics",
+   "kind": "why",
+   "note": "Our background review discusses orthotics for children with symptomatic flat feet. We aimed for an adjustable sleeve."
+  },
+  {
+   "page": 3,
+   "x": 55,
+   "y": 55,
+   "n": 4,
+   "title": "What the device must not disturb",
+   "kind": "why",
+   "note": "Tables of foot structures and the gait cycle, each with a line on what the device must leave alone. 'Flexible and soft enough to disperse forces' pushed us toward gel and fabric over plastic."
+  },
+  {
+   "page": 4,
+   "x": 45,
+   "y": 40,
+   "n": 5,
+   "title": "Orthotics evidence",
+   "kind": "limit",
+   "note": "Two of the three papers found weak or uneven evidence for orthotics. The 2018 review included 11 of 606 studies; it did not test our sleeve."
+  },
+  {
+   "page": 4,
+   "x": 45,
+   "y": 83,
+   "n": 6,
+   "title": "Design requirements",
+   "kind": "why",
+   "note": "The review lists concerns about stiffness, muscle use and outgrowing the insole. We used these to draft requirements."
+  },
+  {
+   "page": 5,
+   "x": 45,
+   "y": 18,
+   "n": 7,
+   "title": "Patients, providers, payers",
+   "kind": "what",
+   "note": "Users sorted into patients, providers and payers: a parent has to put it on a small child, a clinician has to demonstrate it quickly, a payer wants it safe. I coordinated the clinical-contact side."
+  },
+  {
+   "page": 6,
+   "x": 50,
+   "y": 20,
+   "n": 8,
+   "title": "Two products already on sale",
+   "kind": "what",
+   "note": "We compared two existing products by price, features and fit as the foot grows."
+  },
+  {
+   "page": 6,
+   "x": 50,
+   "y": 90,
+   "n": 9,
+   "title": "Our column in the benchmark",
+   "kind": "limit",
+   "note": "The last column rates our sleeve 'High' for adaptability and comfort. That is design intent from the design review. Neither was measured."
+  },
+  {
+   "page": 7,
+   "x": 50,
+   "y": 25,
+   "n": 10,
+   "title": "Sleeve proposal",
+   "kind": "limit",
+   "note": "We proposed an adjustable sleeve based on the literature and product comparison. Costs and clinical benefit were not tested."
+  }
+ ]
+}

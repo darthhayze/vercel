@@ -1,0 +1,20 @@
+---
+import HomeLayout from '../layouts/HomeLayout.astro';
+import ScrollSignal from '../components/kit/ScrollSignal.astro';
+import Hero from '../components/sp/Hero.astro';
+import Work from '../components/sp/Work.astro';
+import About from '../components/sp/About.astro';
+import SkillsBanner from '../components/sp/SkillsBanner.astro';
+import Contact from '../components/sp/Contact.astro';
+import copy from '../content/copy.json';
+---
+<HomeLayout title="Hamza Al Halabi | Biomedical engineering" description={copy.home.headline + ' ' + copy.home.sub}>
+  <ScrollSignal position="bottom" />
+  <main id="main" tabindex="-1">
+    <Hero />
+    <Work />
+    <SkillsBanner />
+    <About />
+  </main>
+  <Contact />
+</HomeLayout>

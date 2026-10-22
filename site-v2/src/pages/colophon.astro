@@ -1,0 +1,9 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHead from '../components/kit/PageHead.astro';
+import Colophon from '../components/Colophon.astro';
+---
+<SiteLayout title="Colophon" description="The fonts, licences and asset credits for this site.">
+  <PageHead title="Colophon" lede="Bricolage Grotesque, Instrument Sans and Caveat." field="cobalt" />
+  <section class="band f-paper"><Colophon full /></section>
+</SiteLayout>

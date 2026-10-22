@@ -1,0 +1,60 @@
+---
+import '../../styles/skills.css';
+
+// Two ticker-tape rows with different skill sets, from the master résumé and the project pages.
+const rows = [
+  {
+    id: 'lab',
+    items: [
+      ['LAB', 'Single-cell genomics'],
+      ['LAB', '10x Genomics Flex v2'],
+      ['LAB', 'Sample processing'],
+      ['LAB', 'Mass spectrometry'],
+      ['LAB', 'Proteomics'],
+      ['DATA', 'Cell Ranger'],
+      ['DATA', 'Illumina sequencing'],
+      ['DATA', 'Linux and HPC'],
+      ['DATA', 'R'],
+      ['DATA', 'GraphPad Prism'],
+      ['DATA', 'Excel VBA'],
+    ],
+  },
+  {
+    id: 'build',
+    items: [
+      ['BUILD', 'Arduino'],
+      ['BUILD', 'Processing'],
+      ['BUILD', 'Embedded signal acquisition'],
+      ['BUILD', 'Soldering'],
+      ['BUILD', 'CAD'],
+      ['BUILD', '3D printing'],
+      ['CODE', 'Python'],
+      ['CODE', 'JavaScript and TypeScript'],
+      ['CODE', 'Cloudflare Workers'],
+      ['CODE', 'SQL and D1'],
+      ['CODE', 'Astro'],
+    ],
+  },
+];
+---
+
+<section class="skillsband" aria-labelledby="skills-h">
+  <h2 id="skills-h" class="sk-sr">Skills</h2>
+  <ul class="sk-sr">
+    {rows.flatMap((r) => r.items.map(([, s]) => <li>{s}</li>))}
+  </ul>
+  {rows.map((r) => (
+    <div class={`sk-row sk-${r.id}`} aria-hidden="true">
+      <div class="sk-track">
+        {[0, 1].flatMap(() =>
+          r.items.map(([tag, s]) => (
+            <span class="sk-item">
+              <b class="sk-tag">{tag}</b>
+              <span class="sk-name">{s}</span>
+            </span>
+          ))
+        )}
+      </div>
+    </div>
+  ))}
+</section>

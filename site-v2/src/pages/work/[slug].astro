@@ -1,0 +1,13 @@
+---
+// World router: /work/<slug>/ renders src/worlds/<slug>/World.astro when it exists, else the fallback built from cases.json.
+import { cases } from '../../lib/data';
+import Fallback from '../../worlds/_Fallback.astro';
+const modules = import.meta.glob('../../worlds/*/World.astro', { eager: true }) as Record<string, { default: any }>;
+export function getStaticPaths() {
+  return cases.map((c: any) => ({ params: { slug: c.id }, props: { c } }));
+}
+const { slug } = Astro.params;
+const { c } = Astro.props;
+const World = modules[`../../worlds/${slug}/World.astro`]?.default ?? Fallback;
+---
+<World slug={slug} c={c} />

@@ -1,0 +1,38 @@
+name: Portfolio checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: portfolio-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: site-v2
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: site-v2/package-lock.json
+      - run: npm ci
+      - run: npm audit --audit-level=high
+      - run: npm run check:release
+      - run: npx playwright install --with-deps firefox chromium
+      - run: npm run test:browser
+      - run: npm run test:browser
+        env:
+          BROWSER: chromium
+      - run: node scripts/layout-lint.mjs --out qa/release/layout --shots 0
+      - uses: actions/upload-artifact@v7.0.2
+        if: always()
+        with:
+          name: layout-report
+          path: site-v2/qa/release/layout/
+          if-no-files-found: ignore

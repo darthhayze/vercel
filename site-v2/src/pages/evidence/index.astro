@@ -1,0 +1,263 @@
+---
+// /evidence: project figures, grouped by case. Source and check date are shown once per group unless rows differ.
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { ledger, fmtDate, type LedgerRow } from '../../lib/data';
+
+// One name per project, the same order as the home page.
+const CASE_LABEL: Record<string, string> = {
+  'flex-v2': 'Single-cell Flex v2', 'mass-spec': 'Mass-spec macro', lungscope: 'LungScope', ecg: 'ECG board', 'arch-support': 'Pediatric arch support',
+  jobhub: 'JobHub', research: 'Research', also: 'Other figures from my résumé', now: 'Current co-op',
+};
+const CASE_ORDER = Object.keys(CASE_LABEL);
+const CASE_HREF = (c: string) => (['flex-v2', 'lungscope', 'arch-support', 'mass-spec', 'ecg', 'jobhub'].includes(c) ? `/work/${c}/` : c === 'research' ? '/research/' : '/#about');
+const OPEN_LABEL: Record<string, string> = { research: 'Open Research' };
+
+const PRIORITY: Record<string, number> = { measured: 0, cited: 1, ongoing: 2, target: 3, noted: 4 };
+// status vocabulary shown on the page: measured / cited / target / ongoing / noted
+const shown = (t: string) => (t === 'failed' ? 'noted' : t);
+// plain source notes in place of first-person caveats
+const NOTES: [RegExp, string][] = [
+  [/From the project's (v[\d.]+ )?validation report; I did not re-run it\./, 'Source: $1validation report.'],
+  [/From the project's validation report; I did not run the tests for this site\. They check software and corpus integrity only\./, 'Source: validation report. The tests cover software and corpus integrity.'],
+  [/ I did not measure the actual rate\./, ''],
+  [/Résumé figure; no sample log on file\./, 'Source: résumé.'],
+  [/^Résumé figure\.$/, 'Source: résumé.'],
+  [/Documented in résumé; no baseline timing or measurement method is on file\./, 'Documented in résumé; no baseline timing recorded.'],
+];
+const plain = (t: string) => NOTES.reduce((a, [re, to]) => a.replace(re, to), t);
+const caseOrder = [...new Set(ledger.map((r) => r.case))].sort((a, b) => CASE_ORDER.indexOf(a) - CASE_ORDER.indexOf(b));
+const rows = ledger.map((r) => ({ ...r, type: shown(r.type) as any, caveat: plain(r.caveat) })).sort((a, b) => caseOrder.indexOf(a.case) - caseOrder.indexOf(b.case) || PRIORITY[a.type] - PRIORITY[b.type]);
+
+const DOCS: Record<string, string> = {
+  'ijms-26-02262': 'IJMS paper', 'metabolites-transcriptome-preprint-original': 'Preprint', 'arch-final-report': 'Final report',
+  'ecg-arduino-source': 'Arduino source', 'ecg-processing-source': 'Processing source',
+};
+interface Part { text: string; href?: string }
+/** 'site/public/docs/ijms-26-02262.pdf, Abstract' -> { 'IJMS paper, Abstract', /docs/... }. Short link text, no file names. */
+function parts(source: string): Part[] {
+  return source.split(/;\s*/).map((s) => {
+    const d = s.match(/site\/public\/docs\/([\w-]+)\.pdf(.*)$/);
+    if (d) return { text: `${DOCS[d[1]] ?? d[1]}${d[2]}`.replace(/^(.*?),\s*/, '$1, '), href: `/docs/${d[1]}.pdf` };
+    if (/site\/public\/resume\//.test(s)) return { text: 'Résumé, 3 pages', href: '/resume/Hamza_Al_Halabi_Resume_Extended_3page.pdf' };
+    return { text: s.replace(/^master-resume\.pdf,?\s*/, 'Résumé, ').replace(/^Résumé, $/, 'Résumé') };
+  });
+}
+const key = (r: LedgerRow) => r.source;
+const groups = caseOrder.map((c) => {
+  const rs = rows.filter((r) => r.case === c);
+  const sameSrc = rs.every((r) => key(r) === key(rs[0]));
+  const sameDate = rs.every((r) => r.date_checked === rs[0].date_checked);
+  // a caveat sentence repeated on 3+ rows of a group is shown once under the group header
+  const sents = (t: string) => t.split(/(?<=\.)\s+/).filter(Boolean);
+  const tally = new Map<string, number>();
+  rs.forEach((r) => sents(r.caveat).forEach((x) => tally.set(x, (tally.get(x) ?? 0) + 1)));
+  const shared = [...tally].filter(([, n]) => n >= 3 && n >= rs.length * 0.6).map(([x]) => x);
+  const own = new Map(rs.map((r) => [r.id, sents(r.caveat).filter((x) => !shared.includes(x)).join(' ')]));
+  return { c, rs, sameSrc, sameDate, shared, own };
+});
+const types = ['measured', 'cited', 'target', 'ongoing', 'noted'] as const;
+const KEY: Record<string, string> = { measured: 'counted or tested in the work shown', cited: 'taken from a document', target: 'a design target', ongoing: 'in progress', noted: 'a recorded detail from a test or report' };
+const count = (t: string) => rows.filter((r) => r.type === t).length;
+---
+<SiteLayout title="Evidence ledger" description="Project figures with their type, source and check date, grouped by project.">
+  <header class="ev-head f-ink" aria-labelledby="page-title">
+    <div class="ev-head-in">
+      <div>
+        <h1 id="page-title" class="ev-h1">Evidence</h1>
+        <p class="ev-lede">{rows.length} project figures, each with its type, source and the date I last checked it.</p>
+      </div>
+    </div>
+    <div class="ev-strip" data-filter hidden>
+      <p id="ev-flabel" class="ev-flabel">Show</p>
+      <div class="ev-btns" role="group" aria-labelledby="ev-flabel">
+        <button type="button" data-type="all" aria-pressed="true">All <i>{rows.length}</i></button>
+        {types.map((t) => <button type="button" data-type={t} aria-pressed="false">{t} <i>{count(t)}</i></button>)}
+      </div>
+      <p class="ev-status" role="status" data-status>Showing all rows.</p>
+    </div>
+    <p class="ev-back" data-back hidden><a href="/" data-back-a>Back</a></p>
+    <nav class="ev-jump" aria-label="Jump to a case">
+      <p class="ev-jl">Jump to</p>
+      <ul>{groups.map((g) => <li><a href={`#g-${g.c}`}>{CASE_LABEL[g.c] ?? g.c}</a></li>)}</ul>
+    </nav>
+    <dl class="ev-legend" aria-label="Status key">
+      {types.map((t) => <div><dt><span class={`ev-st ev-st-${t}`}>{t}</span></dt><dd>{KEY[t]}</dd></div>)}
+    </dl>
+  </header>
+
+  <div class="ev-body f-paper" data-ledger>
+    {groups.map((g) => (
+      <section class="ev-group" data-group data-case={g.c} aria-labelledby={`g-${g.c}`}>
+        <header class="ev-ghead">
+          <h2 id={`g-${g.c}`}>{CASE_LABEL[g.c] ?? g.c}</h2>
+          <a class="ev-open" href={CASE_HREF(g.c)}>{g.c === 'also' || g.c === 'now' ? 'Open About' : OPEN_LABEL[g.c] ?? `Open ${CASE_LABEL[g.c] ?? g.c}`}<span aria-hidden="true"> &rarr;</span></a>
+          <p class="ev-gmeta">
+            {g.sameSrc && <span class="ev-src">{parts(g.rs[0].source).map((p, i) => <>{i > 0 && ', '}{p.href ? <a href={p.href}>{p.text}</a> : p.text}</>)}</span>}
+            {g.sameDate && <span class="ev-date">checked {fmtDate(g.rs[0].date_checked)}</span>}
+          </p>
+        </header>
+        {g.shared.length > 0 && <p class="ev-gnote">{g.shared.join(' ')}</p>}
+        <ul class="ev-rows">
+          {g.rs.map((r) => (
+            <li id={`ledger-${r.id}`} class="ev-row" data-row-type={r.type}>
+              <p class="ev-val">{r.value}</p>
+              <div class="ev-main">
+                <p class="ev-claim">{r.claim}</p>
+                {g.own.get(r.id) && <details class="ev-det" open><summary>Note</summary><p class="ev-cav">{g.own.get(r.id)}</p></details>}
+                {(!g.sameSrc || !g.sameDate) && (
+                  <p class="ev-rsrc">
+                    {!g.sameSrc && parts(r.source).map((p, i) => <>{i > 0 && ', '}{p.href ? <a href={p.href}>{p.text}</a> : p.text}</>)}
+                    {!g.sameDate && <span class="ev-date"> checked {fmtDate(r.date_checked)}</span>}
+                  </p>
+                )}
+              </div>
+              <p class="ev-chip"><span class={`ev-st ev-st-${r.type}`}>{r.type}</span></p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+</SiteLayout>
+
+<style is:global>
+  .ev-head { padding: clamp(2.5rem, 6vw, 5rem) var(--pad) clamp(2rem, 4vw, 3rem); background: var(--ink); color: var(--paper); --focus: var(--yellow); }
+  .ev-head-in { display: grid; gap: 1.5rem 3rem; grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
+  .ev-h1 { font: 800 clamp(3.6rem, 12vw, 10rem)/.85 var(--display); font-stretch: 72%; letter-spacing: -.045em; color: var(--yellow); }
+  .ev-lede { font-size: 1.375rem; line-height: 1.35; max-width: 34ch; margin-top: 1.4rem; color: var(--paper); }
+  .ev-strip { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1.4rem; margin-top: 2.2rem; padding-top: 1.4rem; border-top: 2px solid rgb(255 255 255 / .25); }
+  .ev-strip[hidden] { display: none; }
+  .ev-flabel { font: 700 1.125rem/1 var(--display); color: var(--yellow); max-width: none; }
+  .ev-btns { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .ev-btns button { min-height: 44px; padding: 0 1.1rem; border: 2px solid var(--paper); border-radius: 99px; background: transparent; color: var(--paper); font: 700 1.0625rem/1 var(--display); cursor: pointer; }
+  .ev-btns button i { font-style: normal; opacity: .7; margin-left: .3rem; }
+  .ev-btns button:hover { background: rgb(255 255 255 / .14); }
+  .ev-btns button[aria-pressed='true'] { background: var(--yellow); border-color: var(--yellow); color: var(--ink); }
+  .ev-status { font-size: 1rem; color: var(--paper2); max-width: none; }
+  .ev-legend { display: flex; flex-wrap: wrap; gap: .6rem 1.8rem; margin-top: 1.4rem; font-size: 1.0625rem; color: var(--paper); }
+  .ev-legend > div { display: flex; align-items: center; gap: .6rem; }
+  .ev-legend dd { margin: 0; }
+  .ev-jump { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; width: 100%; margin-top: 1.8rem; padding-top: 1.2rem; border-top: 2px solid rgb(255 255 255 / .25); }
+  .ev-jl { font: 700 1.125rem/1 var(--display); color: var(--yellow); max-width: none; }
+  .ev-jump ul { display: flex; flex-wrap: wrap; gap: .5rem; flex: 1; }
+  .ev-jump a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1.1rem; border: 2px solid var(--paper); border-radius: 99px; color: var(--paper); font: 700 1.0625rem/1 var(--display); text-decoration: none; }
+  .ev-jump a:hover { background: var(--yellow); border-color: var(--yellow); color: var(--ink); }
+  .ev-st { font: 600 .9375rem/1 var(--body); white-space: nowrap; }
+  .ev-st-measured { color: var(--paper); }
+  .ev-st-cited { color: var(--paper); }
+  .ev-st-target { color: var(--yellow); }
+  .ev-st-ongoing { color: var(--yellow); }
+  .ev-st-noted { color: var(--paper); }
+  .ev-body .ev-st-measured { color: var(--ink); }
+  .ev-body .ev-st-cited { color: var(--ink); }
+  .ev-body .ev-st-target { color: var(--ink); }
+  .ev-body .ev-st-ongoing { color: var(--cobalt); }
+  .ev-body .ev-st-noted { color: #3d3d38; }
+
+  .ev-body { padding: clamp(1.5rem, 4vw, 3rem) var(--pad) clamp(3rem, 7vw, 6rem); display: grid; gap: clamp(2rem, 4vw, 3rem); max-width: 90rem; margin-inline: auto; width: 100%; }
+  .ev-group[hidden] { display: none; }
+  .ev-ghead { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .3rem 2rem; padding: .85rem 1.1rem; background: var(--ink); color: var(--yellow); border-bottom: 4px solid var(--yellow); }
+  .ev-ghead h2 { font: 800 clamp(1.5rem, 3vw, 2.2rem)/1 var(--display); font-stretch: 80%; letter-spacing: -.02em; }
+  .ev-open { display: inline-flex; align-items: center; min-height: 44px; margin-left: auto; font: 700 1.0625rem/1 var(--display); color: var(--yellow); text-decoration: underline; text-underline-offset: .2em; }
+  .ev-back { margin-top: 1.4rem; max-width: none; }
+  .ev-back a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1.2rem; background: var(--yellow); color: var(--ink); border-radius: 99px; font: 800 1.125rem/1 var(--display); text-decoration: none; }
+  .ev-back[hidden] { display: none; }
+  .ev-gmeta { display: flex; flex-wrap: wrap; gap: .1rem 1.4rem; font-size: 1.0625rem; color: var(--paper); max-width: none; }
+  .ev-gmeta a, .ev-rsrc a { color: var(--yellow); font-weight: 600; }
+  .ev-gnote { padding: .6rem 1.1rem; background: var(--yellow); color: var(--ink); font-size: 1.0625rem; line-height: 1.4; max-width: none; border: 2px solid var(--ink); border-top: 0; border-bottom: 0; }
+  .ev-rows { border: 2px solid var(--ink); border-top: 0; background: var(--white); }
+  .ev-row { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr) 8.5rem; gap: .3rem 1.4rem; align-items: start; padding: .9rem 1.1rem; border-top: 1px solid rgb(17 17 17 / .18); scroll-margin-top: 5rem; }
+  .ev-row:first-child { border-top: 0; }
+  .ev-row:target { background: var(--yellow); }
+  .ev-val { font: 800 clamp(1.5rem, 2.2vw, 2rem)/1.05 var(--display); font-stretch: 80%; letter-spacing: -.02em; color: var(--ink); max-width: none; }
+  .ev-claim { font-size: 1.125rem; line-height: 1.35; font-weight: 600; max-width: 52ch; }
+  .ev-cav { font-size: 1.0625rem; line-height: 1.4; color: #3d3d38; margin-top: .25rem; max-width: 62ch; }
+  .ev-det > summary { display: none; }
+  .ev-rsrc { font-size: 1.0625rem; margin-top: .3rem; color: #3d3d38; max-width: none; }
+  .ev-rsrc a, .ev-body a { color: var(--cobalt); }
+  .ev-rsrc a { display: inline-block; padding-block: .75rem; }
+  .ev-ghead a { color: inherit; }
+  .ev-gmeta a { color: var(--yellow); }
+  .ev-chip { justify-self: end; max-width: none; }
+  .ev-body .ev-row:target .ev-rsrc a { color: var(--cobalt); }
+  @media (max-width: 48rem) {
+    .ev-head-in { grid-template-columns: minmax(0, 1fr); }
+        .ev-head { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+    .ev-h1 { font-size: 3.4rem; }
+    .ev-lede { font-size: 1.125rem; margin-top: .6rem; line-height: 1.3; }
+        .ev-strip { margin-top: 1rem; padding-top: .9rem; }
+    .ev-status, .ev-flabel { display: none; }
+    .ev-btns button { min-height: 44px; padding: 0 .9rem; font-size: 1rem; }
+    .ev-body { gap: 1.4rem; }
+      .ev-row { grid-template-columns: minmax(0, 1fr) auto; gap: .1rem .8rem; padding: .4rem .8rem .45rem; }
+    .ev-val { grid-column: 1; grid-row: 1; font-size: 1.4rem; line-height: 1; }
+    .ev-chip { grid-column: 2; grid-row: 1; align-self: center; }
+    .ev-main { grid-column: 1 / -1; grid-row: 2; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 1rem; }
+    .ev-claim { flex: 1 0 100%; }
+    .ev-det { flex: 0 0 auto; }
+    .ev-det[open] { flex: 1 0 100%; }
+    .ev-rsrc { flex: 1 1 auto; min-width: 0; }
+    .ev-cav { font-size: 1rem; line-height: 1.35; margin-top: .15rem; }
+    .ev-claim { font-size: 1.0625rem; line-height: 1.25; }
+    .ev-rsrc { font-size: 1rem; margin-top: .15rem; }
+    .ev-gnote { padding: .5rem .8rem; font-size: 1rem; }
+    .ev-legend { display: none; }
+    .ev-jump { margin-top: 1rem; padding-top: .8rem; }
+    .ev-jl { display: none; }
+    .ev-jump a { min-height: 44px; padding: 0 .9rem; font-size: 1rem; }
+    .ev-det > summary { display: list-item; cursor: pointer; font-size: 1rem; color: var(--cobalt); font-weight: 600; min-height: 44px; }
+    .ev-ghead { padding: .5rem .8rem; }
+    .ev-body { padding-bottom: 2rem; }
+  }
+</style>
+
+<script>
+  // on small screens the caveats start folded to keep the list short; they stay one tap away
+  if (matchMedia('(max-width: 48rem)').matches) document.querySelectorAll<HTMLDetailsElement>('.ev-det').forEach((d) => (d.open = false));
+  const root = document.querySelector<HTMLElement>('[data-ledger]');
+  const bar = document.querySelector<HTMLElement>('[data-filter]');
+  if (root && bar) {
+    bar.hidden = false;
+    const btns = bar.querySelectorAll<HTMLButtonElement>('button[data-type]');
+    const rows = root.querySelectorAll<HTMLElement>('[data-row-type]');
+    const groups = root.querySelectorAll<HTMLElement>('[data-group]');
+    const status = bar.querySelector<HTMLElement>('[data-status]')!;
+    const apply = (type: string) => {
+      btns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.type === type)));
+      rows.forEach((r) => { r.hidden = type !== 'all' && r.dataset.rowType !== type; });
+      groups.forEach((g) => { g.hidden = ![...g.querySelectorAll<HTMLElement>('[data-row-type]')].some((r) => !r.hidden); });
+      status.textContent = type === 'all' ? 'Showing all rows.' : `Showing ${type} rows only.`;
+    };
+    btns.forEach((b) => b.addEventListener('click', () => apply(b.dataset.type!)));
+    // a way back for whoever came from a project: #ledger-<row> or #from-<slug> in the URL
+    const backBox = document.querySelector<HTMLElement>('[data-back]');
+    const backA = document.querySelector<HTMLAnchorElement>('[data-back-a]');
+    const HREF: Record<string, string> = { research: '/research/' };
+    const showBack = () => {
+      if (!backBox || !backA) return;
+      const h = decodeURIComponent(location.hash.slice(1));
+      let slug = '';
+      const f = h.match(/^from-([a-z0-9-]+?)(?:[-:](ledger-.+))?$/);
+      if (f) slug = f[1];
+      else if (h.startsWith('ledger-')) slug = document.getElementById(h)?.closest<HTMLElement>('[data-group]')?.dataset.case ?? '';
+      const g = slug && root.querySelector<HTMLElement>(`[data-group][data-case="${slug}"]`);
+      if (!g || slug === 'also' || slug === 'now') { backBox.hidden = true; return; }
+      const name = g.querySelector('h2')?.textContent ?? slug;
+      backA.href = HREF[slug] ?? `/work/${slug}/`;
+      backA.textContent = `\u2190 Back to ${name}`;
+      backBox.hidden = false;
+    };
+    const reveal = () => {
+      showBack();
+      if (/^#from-/.test(location.hash)) {
+        const m = decodeURIComponent(location.hash.slice(1)).match(/[-:](ledger-.+)$/);
+        const g = m ? document.getElementById(m[1]) : null;
+        if (g && m) history.replaceState(null, '', '#' + m[1]);
+        else { const sl = location.hash.slice(6); document.getElementById('g-' + sl)?.scrollIntoView(); }
+      }
+      const t = location.hash && document.getElementById(location.hash.slice(1));
+      if (t && root.contains(t)) { if (t.hidden || t.closest('[hidden]')) apply('all'); t.scrollIntoView(); }
+    };
+    addEventListener('hashchange', reveal); reveal();
+  }
+</script>

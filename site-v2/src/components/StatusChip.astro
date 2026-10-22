@@ -1,0 +1,14 @@
+---
+interface Props { status: 'measured' | 'target' | 'cited' | 'failed' | 'ongoing' }
+const { status } = Astro.props;
+---
+<span class:list={['status-chip', `status-${status}`]}>
+  <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7">
+    {status === 'measured' && <circle cx="8" cy="8" r="5" fill="currentColor" stroke="none" />}
+    {status === 'target' && <path d="M8 2 14 13H2Z" />}
+    {status === 'cited' && <path d="M3 3h10v10H3Z" />}
+    {status === 'failed' && <path d="m3 3 10 10M13 3 3 13" />}
+    {status === 'ongoing' && <circle cx="8" cy="8" r="5" stroke-dasharray="22 9" />}
+  </svg>
+  {status}
+</span>

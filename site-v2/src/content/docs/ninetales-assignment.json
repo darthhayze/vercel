@@ -1,0 +1,109 @@
+{
+ "slug": "ninetales-assignment",
+ "title": "Ninetales soldering and testing guide",
+ "pdf": "/docs/ninetales-assignment.pdf",
+ "pages": 16,
+ "startHere": [1, 5, 6, 7, 8, 9],
+ "intro": "Start with the board photo, the electrode table and the testing page.",
+ "hotspots": [
+  {
+   "page": 1,
+   "x": 0.5,
+   "y": 0.62,
+   "n": 1,
+   "title": "Figure 1: the Ninetales board",
+   "note": "This is the course board with its fox drawing in the silkscreen. It is the board in my ECG chain. The photo shows the soldered board only. It does not show the ECG circuit or my wiring.",
+   "kind": "what"
+  },
+  {
+   "page": 9,
+   "x": 0.5,
+   "y": 0.27,
+   "n": 2,
+   "title": "Part V, step 3: the order",
+   "note": "Resistors, then capacitors, op amps, headers, jacks, LEDs, and the stackable headers last. Short, low parts first so the tall ones do not get in the way.",
+   "kind": "what"
+  },
+  {
+   "page": 9,
+   "x": 0.5,
+   "y": 0.76,
+   "n": 3,
+   "title": "Steps 9 and 10: someone checks first",
+   "note": "Instructors inspect the soldering before they hand out the sensor cables and electrodes. A bad joint is easier to find before any signal goes through it.",
+   "kind": "why"
+  },
+  {
+   "page": 8,
+   "x": 0.68,
+   "y": 0.78,
+   "n": 4,
+   "title": "Figure 5: headers that stack on the Arduino",
+   "note": "The board plugs on top of the Arduino through long stackable headers. That is the physical link between the board and my analogRead. The guide warns not to cut the pins.",
+   "kind": "what"
+  },
+  {
+   "page": 10,
+   "x": 0.5,
+   "y": 0.16,
+   "n": 5,
+   "title": "Table 3: where the electrodes go",
+   "note": "For an ECG: red on the palm side of the left wrist, blue on the palm side of the right wrist, black on the right ankle or lower left abdomen. The table also lists EMG and EOG placements.",
+   "kind": "what"
+  },
+  {
+   "page": 10,
+   "x": 0.5,
+   "y": 0.62,
+   "n": 6,
+   "title": "Figure 6: cables and the ECG channel",
+   "note": "Figure 6A is the sensor cable set. Figure 6B shows it plugged into the ECG channel next to a sheet of electrode pads. The picture comes from the guide. It is not a photo of my session.",
+   "kind": "what"
+  },
+  {
+   "page": 10,
+   "x": 0.5,
+   "y": 0.81,
+   "n": 7,
+   "title": "Testing step 1: unplug from the wall",
+   "note": "Highlighted on the page: disconnect your computer from the wall outlet, and anything else wall-powered, while you test. The leads touch your skin.",
+   "kind": "why"
+  },
+  {
+   "page": 11,
+   "x": 0.5,
+   "y": 0.22,
+   "n": 8,
+   "title": "Steps 3 and 4: two example sketches",
+   "note": "Test EXAMPLE01_Blink.ino first, then EXAMPLE03_MultiSample.ino, and show each to an instructor. The guide says to test the ECG on all three channels at once for convenience.",
+   "kind": "what"
+  },
+  {
+   "page": 11,
+   "x": 0.75,
+   "y": 0.85,
+   "n": 9,
+   "title": "Figure 7B: filtered example",
+   "note": "Figure 7B marks R waves, the tall spikes. This is the guide's example of a filtered trace. It is not my recording.",
+   "kind": "what"
+  },
+  {
+   "page": 12,
+   "x": 0.5,
+   "y": 0.29,
+   "n": 10,
+   "title": "Figure 7 caption: 60 Hz noise",
+   "note": "The caption says the filtered ECG should have little 60 Hz noise and look like B. Sampling straight from the instrumentation amplifier would look more like C, with the noise.",
+   "kind": "why"
+  },
+  {
+   "page": 12,
+   "x": 0.5,
+   "y": 0.37,
+   "n": 11,
+   "title": "Course examples",
+   "note": "Figure 7 contains course examples. My Arduino sketch and Processing monitor are below.",
+   "kind": "limit"
+  }
+ ]
+}

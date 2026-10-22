@@ -1,0 +1,75 @@
+---
+// WORLD: FLEX V2. A scroll-driven explainer of the Flex v2 workflow in twelve stages, drawn as flat vector lab graphics.
+// Every stage is a sticky SVG scene. The SVG is authored in its final frame, so no JS and reduced motion both show finished stages.
+// player.ts scrubs the stage with scroll and adds Play, Pause and Replay. Illustrative throughout: no study data.
+import WorldShell from '../../components/kit/WorldShell.astro';
+import { row } from '../../lib/data';
+import { ledger as ledgerCards } from './molecules';
+import { STAGES } from './stages';
+import StageExplainer from '../../components/stage/StageExplainer.astro';
+import './flex.css';
+interface Props { slug: string; c: any }
+const { slug, c } = Astro.props;
+const half = row('flex-half');
+const heroCards = ledgerCards(0, 0, 30, 26, 38, 34, (r, k) => {
+  const hot = (r === 1 && k === 3) ? 'card hot-l' : (r === 4 && k === 8) ? 'card hot-r' : (r === 6 && k === 2) ? 'card hot-v' : (r === 2 && k === 9) ? 'card hot-g' : 'card';
+  return { cls: hot };
+});
+const closeCards = ledgerCards(0, 0, 22, 19, 28, 25);
+const extra = [
+  ['Fixation of cells and nuclei for GEM-X Flex (10x Genomics, CG000782)', 'https://www.10xgenomics.com/support/flex-gene-expression/documentation/steps/sample-prep/fixation-of-cells-and-nuclei-for-gem-x-flex-gene-expression'],
+  ['Tissue fixation and dissociation for GEM-X Flex (10x Genomics, CG000783)', 'https://www.10xgenomics.com/support/flex-gene-expression/documentation/steps/sample-prep/tissue-fixation-and-dissociation-for-gem-x-flex-gene-expression'],
+  ['Flex gene expression product page (10x Genomics)', 'https://www.10xgenomics.com/products/flex-gene-expression'],
+  ['Official how-it-works video (10x Genomics)', 'https://www.10xgenomics.com/videos/qsn1e6sv29'],
+  ['Cell Ranger: analysing Flex v2 with multi (10x Genomics)', 'https://www.10xgenomics.com/support/software/cell-ranger/latest/analysis/running-pipelines/cr-flexv2-multi'],
+  ['Cell Ranger: the multi pipeline (10x Genomics)', 'https://www.10xgenomics.com/support/software/cell-ranger/latest/analysis/cr-multi'],
+  ['Cell Ranger: Flex algorithm overview (10x Genomics)', 'https://www.10xgenomics.com/support/software/cell-ranger/latest/algorithms-overview/cr-flex-frp-algorithm'],
+  ['Cell Ranger: Flex output files (10x Genomics)', 'https://www.10xgenomics.com/support/software/cell-ranger/latest/tutorials/outputs/cr-flex-outputs-frp'],
+  ['Cell Ranger: matrix formats (10x Genomics)', 'https://www.10xgenomics.com/support/software/cell-ranger/latest/analysis/outputs/cr-outputs-mex-matrices'],
+  ['Sequencing by synthesis (Illumina)', 'https://www.illumina.com/science/technology/next-generation-sequencing/sequencing-technology.html'],
+  ['Next-generation sequencing glossary (Illumina)', 'https://emea.illumina.com/science/technology/next-generation-sequencing/beginners/tutorials/glossary.html'],
+];
+---
+<WorldShell slug={slug} title={c.title} description={c.summary}>
+  <header class="fxh">
+    <div class="fxh-in">
+      <div class="fxh-text">
+        <p class="fxh-where">Cincinnati Children's Research Foundation · {c.period}</p>
+        <h1>Single-cell Flex v2</h1>
+        <p class="fxh-lede">About half of my placement was single-cell gene expression with 10x Genomics Flex v2.</p>
+        <dl class="fxh-facts">
+          <div><dt>I prepared</dt><dd>the protocol, the samples and the custom probes</dd></div>
+          <div><dt>I ran</dt><dd>88 samples through the full workflow, for a mouse study</dd></div>
+          <div><dt>I analysed</dt><dd>the data with Cell Ranger. Sequencing used Illumina machines.</dd></div>
+        </dl>
+        <p class="fxh-go"><a class="fx-btn" href="#demo">Follow one run, stage by stage <span aria-hidden="true">↓</span></a><a class="fxh-src" href={`/evidence/#ledger-${half.id}`}>My account; no lab log</a></p>
+      </div>
+      <svg class="fxh-art" viewBox="0 0 416 270" aria-hidden="true" data-decor focusable="false" set:html={heroCards} />
+    </div>
+  </header>
+
+  <StageExplainer stages={STAGES} demoId="demo" railLabel="Walkthrough stages" footnote="Illustrative Flex v2 workflow." />
+
+  <section class="fxc" aria-labelledby="close-h">
+    <div class="fxc-in">
+      <div>
+        <h2 id="close-h">What I did</h2>
+        <p class="fxc-say">I prepared the protocol, samples and custom probes, and analysed the sequencing data with Cell Ranger.</p>
+      </div>
+      <svg class="fxc-art" viewBox="0 0 306 200" aria-hidden="true" data-decor focusable="false" set:html={closeCards} />
+    </div>
+  </section>
+
+  <section class="fxs" aria-labelledby="src-h">
+    <h2 id="src-h" class="sr-only">Sources</h2>
+    <details>
+      <summary>Sources</summary>
+      <ul>
+        {c.sections.sources.map((s: any) => <li><a href={s.href} rel="noopener">{s.label}</a></li>)}
+        {extra.map(([label, href]) => <li><a href={href} rel="noopener">{label}</a></li>)}
+      </ul>
+      <p>I drew these diagrams using the linked 10x Genomics and Illumina workflow descriptions.</p>
+    </details>
+  </section>
+</WorldShell>
+

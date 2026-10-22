@@ -1,0 +1,55 @@
+---
+// STORY MODE frame. Wraps a project world's content (used by WorldShell, so every /work/<slug>/ and /research/ page gets it).
+// Reads src/content/story.json; if the slug is missing the frame is skipped and the world renders standalone.
+// Modes: #quick / #explore, remembered in sessionStorage (see public/story-boot.js + src/scripts/story.ts). No JS = both sections stacked.
+//
+// VIEW TRANSITION NAMING CONTRACT: the story header carries view-transition-name: win-<slug> (rules in src/styles/story.css).
+// The home page mini window for the same project must carry the SAME name (win-flex-v2, win-mass-spec, win-lungscope, win-ecg,
+// win-arch-support, win-jobhub, win-research) and the home must load story.css (it holds `@view-transition { navigation: auto }`).
+import story from '../../content/story.json';
+import { getWorld } from '../../worlds';
+import StoryQuick from './StoryQuick.astro';
+import StoryNext from './StoryNext.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
+import '../../styles/story.css';
+interface Props { slug: string }
+const { slug } = Astro.props;
+const data: any = story;
+const order: string[] = data.order ?? [];
+const p = data.projects?.[slug];
+const idx = order.indexOf(slug);
+const on = !!p && idx >= 0;
+const href = (s: string) => (s === 'research' ? '/research/' : `/work/${s}/`);
+const nameOf = (s: string) => data.projects?.[s]?.title ?? getWorld(s)?.title ?? s;
+const known = (s: string) => !!(data.projects?.[s] || getWorld(s));
+const prev = on && idx > 0 ? order[idx - 1] : null;
+const DEMO: Record<string, string> = { 'flex-v2': '#pl', 'mass-spec': '#ms-sheet', lungscope: '#ls-leak', ecg: '#trace', 'arch-support': '[data-lab]', jobhub: '#tour', research: '#documents' };
+const next = on && idx < order.length - 1 ? order[idx + 1] : null;
+---
+{on ? (
+  <div class="story" data-slug={slug} data-story-root data-prev={prev ? href(prev) : ''} data-next={next ? href(next) : '/#contact'}>
+    <script is:inline src="/story-boot.js"></script>
+    <header class="story-head">
+      <Breadcrumbs />
+      <nav class="story-strip" aria-label="Story navigation">
+        <span class="story-pn">
+          {prev && known(prev) ? <a class="story-btn" href={href(prev)} rel="prev" data-story-link><span aria-hidden="true">←</span> <span class="story-dir">Previous</span> <b>{nameOf(prev)}</b></a> : <span></span>}
+          {next && known(next) ? <a class="story-btn" href={href(next)} rel="next" data-story-link><span class="story-dir">Next</span> <b>{nameOf(next)}</b> <span aria-hidden="true">→</span></a> : <a class="story-btn" href="/#contact"><span class="story-dir">Next</span> <b>Contact</b> <span aria-hidden="true">→</span></a>}
+        </span>
+        <div class="story-view">
+          <span class="story-vl" id="story-vl">View:</span>
+          <div class="story-mode" role="group" aria-labelledby="story-vl">
+            <a class="story-seg" href="#quick" data-story-set="quick">Quick read</a>
+            <a class="story-seg" href="#explore" data-story-set="explore">Explore details <small>demos, documents</small></a>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <StoryQuick slug={slug} title={p.title} beats={p.quick} skills={p.window.skills} demo={DEMO[slug]} />
+    <div class="story-explore" id="explore" tabindex="-1">
+      <slot />
+    </div>
+    <StoryNext slug={slug} />
+    <script>import '../../scripts/story.ts';</script>
+  </div>
+) : <slot />}

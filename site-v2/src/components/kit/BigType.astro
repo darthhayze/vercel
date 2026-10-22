@@ -1,0 +1,6 @@
+---
+// Huge, tight, bleeding display type. `as` picks the element (keep one h1 per page).
+interface Props { as?: 'h1' | 'h2' | 'h3' | 'p' | 'div'; size?: 'xl' | 'l' | 's' | 'm'; bleed?: boolean; id?: string; class?: string }
+const { as: Tag = 'h2', size = 'l', bleed = false, id, class: cls } = Astro.props;
+---
+<Tag id={id} class:list={['big', size === 'xl' && 'xl', size === 'm' && 'm', size === 's' && 's', bleed && 'bleed', cls]}><slot /></Tag>

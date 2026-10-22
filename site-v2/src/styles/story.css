@@ -1,0 +1,114 @@
+/* STORY MODE. Uses the world's palette variables (--ground --fg --panel --acc --on-acc --acc2 --mute --focus).
+   View transitions: cross-document. The home mini window for a project must use the same view-transition-name (win-<slug>). */
+@view-transition { navigation: auto; }
+@media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
+::view-transition-group(*) { animation-duration: .45s; animation-timing-function: cubic-bezier(.2,.7,.2,1); }
+@media (prefers-reduced-motion: reduce) { ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; } }
+.story[data-slug="flex-v2"] .story-head { view-transition-name: win-flex-v2; }
+.story[data-slug="mass-spec"] .story-head { view-transition-name: win-mass-spec; }
+.story[data-slug="lungscope"] .story-head { view-transition-name: win-lungscope; }
+.story[data-slug="ecg"] .story-head { view-transition-name: win-ecg; }
+.story[data-slug="arch-support"] .story-head { view-transition-name: win-arch-support; }
+.story[data-slug="jobhub"] .story-head { view-transition-name: win-jobhub; }
+.story[data-slug="research"] .story-head { view-transition-name: win-research; }
+
+.story { background: var(--ground); color: var(--fg); --story-pad: clamp(1rem, 4vw, 3rem); }
+.story :focus-visible { outline: 3px solid var(--focus, var(--fg)); outline-offset: 3px; }
+
+/* ---- strip: one slim in-flow row at desktop, three compact rows on a phone ---- */
+.story-head { background: var(--panel); color: var(--fg); border-bottom: 2px solid var(--acc); }
+.story-strip { padding: .5rem var(--story-pad); display: flex; flex-wrap: wrap; gap: .4rem 1rem; align-items: center; }
+.story-count { margin: 0; font: 600 .9rem/1 'Instrument Sans Variable', system-ui, sans-serif; color: var(--mute); white-space: nowrap; }
+.story-pn { display: flex; gap: .5rem; margin-inline: auto; min-width: 0; }
+.story-btn { display: inline-flex; align-items: center; gap: .4em; min-height: 44px; padding: .3rem .85rem; border: 2px solid var(--fg); border-radius: 999px; color: var(--fg); background: transparent; text-decoration: none; font: 600 .9rem/1.15 'Instrument Sans Variable', system-ui, sans-serif; }
+.story-btn b { font-weight: 700; }
+.story-btn:hover { background: var(--fg); color: var(--ground); }
+.story-dir { color: var(--mute); }
+.story-btn:hover .story-dir { color: inherit; }
+.story-view { display: flex; align-items: center; gap: .5rem; }
+.story-vl { font: 700 .9rem/1 'Instrument Sans Variable', system-ui, sans-serif; color: var(--mute); }
+.story-mode { display: inline-flex; border: 2px solid var(--fg); border-radius: 999px; overflow: hidden; }
+.story-seg { display: inline-flex; align-items: baseline; gap: .45em; min-height: 44px; align-items: center; padding: 0 1rem; color: var(--fg); text-decoration: none; font: 700 .9rem/1 'Instrument Sans Variable', system-ui, sans-serif; border-left: 2px solid var(--fg); }
+.story-seg:first-child { border-left: 0; }
+.story-seg small { font: 500 .78rem/1 'Instrument Sans Variable', system-ui, sans-serif; color: var(--mute); }
+.story-seg:hover { background: var(--ground); }
+.story-seg[aria-current="true"] { background: var(--acc); color: var(--on-acc); }
+.story-seg[aria-current="true"] small { color: inherit; }
+.story-seg:focus-visible { outline-offset: -5px; }
+
+/* mode switching: only when the boot script has set data-story, so no-JS shows both stacked */
+html[data-story="quick"] .story-explore { position: relative; height: 0; overflow: hidden; contain: paint; visibility: hidden; }
+html[data-story="explore"] .story-quick { display: none; }
+
+/* ---- quick read: the tile art, one paragraph, two or three fact lines. Composition differs per project. ---- */
+.story-quick { padding: clamp(1.5rem, 4vw, 3.5rem) var(--story-pad) clamp(2rem, 5vw, 4rem); max-width: 78rem; margin: 0 auto; }
+.story-qh { margin: 0 0 clamp(1.2rem, 3vw, 2rem); font: 800 clamp(2rem, 4.5vw, 3.4rem)/1.05 'Bricolage Grotesque Variable', system-ui, sans-serif; }
+.story-qgrid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center; }
+.story-beats { display: grid; gap: 1.25rem; align-content: start; justify-items: start; }
+.story-lead { margin: 0; font-size: clamp(1.15rem, 1.5vw, 1.35rem); line-height: 1.5; max-width: 46ch; text-wrap: pretty; }
+.story-facts { margin: 0; display: grid; gap: .7rem; max-width: 46ch; width: 100%; }
+.story-fact { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: .15rem 1rem; align-items: baseline; padding-top: .7rem; border-top: 2px solid color-mix(in srgb, var(--fg) 22%, transparent); }
+.story-fact dt { font: 700 .95rem/1.35 'Instrument Sans Variable', system-ui, sans-serif; color: var(--mute); }
+.story-fact dd { margin: 0; font-size: 1.05rem; line-height: 1.4; }
+.story-go { margin-top: .4rem; background: var(--acc); color: var(--on-acc); border-color: var(--acc); font-size: 1.05rem; min-height: 48px; }
+.story-go:hover { background: var(--fg); color: var(--ground); border-color: var(--fg); }
+/* per-project composition */
+.story[data-slug="mass-spec"] .story-qgrid, .story[data-slug="ecg"] .story-qgrid, .story[data-slug="jobhub"] .story-qgrid, .story[data-slug="research"] .story-qgrid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); }
+.story[data-slug="mass-spec"] .story-mini, .story[data-slug="ecg"] .story-mini, .story[data-slug="jobhub"] .story-mini, .story[data-slug="research"] .story-mini { order: 2; justify-self: end; }
+.story[data-slug="arch-support"] .story-qgrid { grid-template-columns: minmax(0, 1fr) minmax(0, .8fr); }
+.story[data-slug="arch-support"] .story-lead { font-size: clamp(1.25rem, 1.9vw, 1.6rem); }
+
+/* the miniature reuses the home window (src/components/sp/Mini.astro) and sits flat: no collage placement, no morph name */
+.story .win { grid-column: auto !important; grid-row: auto !important; margin: 0 !important; view-transition-name: none; pointer-events: none; }
+.story-mini { max-width: 38rem; width: 100%; }
+.story-mini .win .wart { min-height: 0; }
+.story-mini .w-lungscope .wart { min-height: 16rem; }
+.story-mini .w-mass-spec .wart { min-height: 11rem; }
+
+.story-explore { scroll-margin-top: 0; }
+.story-explore:focus { outline: none; }
+/* the strip is the one way back; drop the worlds' own "back to work" crumbs */
+.story .story-explore .crumb, .story .story-explore .fx-crumb { display: none; }
+
+/* ---- handoff ---- */
+.story-end { padding: clamp(2rem, 5vw, 4rem) var(--story-pad); background: var(--panel); border-top: 2px solid var(--acc); }
+.story-directory { max-width: 78rem; margin-inline: auto; }
+.story-directory h2 { margin: 0 0 1rem; font: 800 clamp(1.8rem, 4vw, 3rem)/1.1 'Bricolage Grotesque Variable', system-ui, sans-serif; }
+.story-directory ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 2rem; }
+.story-directory a { display: flex; justify-content: space-between; align-items: center; gap: 1rem; min-height: 56px; padding-block: .65rem; border-bottom: 1px solid var(--mute); color: inherit; font-weight: 600; text-decoration: none; }
+.story-directory a:hover { text-decoration: underline; }
+.story-directory a[aria-current="page"] { font-weight: 800; }
+.story-keys { display: none; margin: .8rem 0 0; color: var(--mute); font-size: .9rem; }
+@media (hover: hover) and (pointer: fine) { .story-keys { display: block; } }
+
+/* ---- slim footer (story pages) ---- */
+.contact-slim { padding: 1rem var(--pad) 1.2rem; display: grid; gap: .2rem; }
+.contact-slim .cs-row { display: flex; flex-wrap: wrap; gap: 0 1.4rem; margin: 0; font-size: .95rem; }
+.contact-slim .cs-row a { display: inline-flex; align-items: center; min-width: 44px; min-height: 44px; font-weight: 600; }
+.contact-slim .cs-mail { font-weight: 800; font-size: 1.1rem; min-height: 44px; }
+
+@media (max-width: 800px) {
+  .story-qgrid, .story[data-slug] .story-qgrid { grid-template-columns: 1fr; }
+  .story-mini, .story[data-slug] .story-mini { max-width: none; order: 0; justify-self: stretch; }
+}
+@media (max-width: 600px) {
+  .story-directory ul { grid-template-columns: 1fr; }
+  .story-strip { gap: .15rem .5rem; }
+  .story-pn > span:empty { display: none; }
+  .story-count { order: 2; margin-left: auto; }
+  .story-pn { order: 3; width: 100%; margin: 0; gap: .4rem; }
+  .story-pn > * { flex: 1 1 0; min-width: 0; }
+  .story-pn .story-btn { justify-content: center; }
+  .story-dir { display: none; }
+  .story-btn { min-height: 44px; padding: .15rem .6rem; font-size: .85rem; }
+  .story-btn b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .story-pn .story-btn:last-child { justify-content: center; }
+  .story-view { order: 4; width: 100%; }
+  .story-mode { flex: 1; }
+  .story-seg { flex: 1; justify-content: center; padding: 0 .4rem; min-height: 44px; font-size: .85rem; }
+  .story-seg small { display: none; }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: auto; } }
+
+/* Keep the arch miniature clear of the quick-read heading. */
+.story-mini .w-arch-support .tape { display: none; }

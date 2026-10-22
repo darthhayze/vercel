@@ -1,0 +1,162 @@
+.world-mass-spec .ms-world { --ms-line: #c7d5cc; --ms-blue: #285f92; --ms-green: #17653e; --ms-faint: #edf4ee; color: #162b20; background: #e4eee6; }
+.ms-world ::selection { background: #bfe0c8; color: #162b20; }
+.ms-world { accent-color: #17653e; }
+.ms-intro { padding: clamp(2rem, 4vw, 4rem) clamp(1rem, 4vw, 4rem) 2rem; display: grid; grid-template-columns: 1.2fr 1fr; gap: .8rem 3rem; align-items: end; }
+.ms-intro h1 { font: 800 clamp(2.8rem, 6vw, 5.5rem)/.98 var(--display); letter-spacing: -.04em; max-width: 12ch; grid-row: span 3; }
+.ms-intro > p { max-width: 55ch; font-size: 1.125rem; line-height: 1.45; }
+.ms-intro .ms-hint { font-weight: 650; font-size: 1rem; }
+.ms-intro .ms-note { color: #445c4c; font-size: .875rem; }
+.ms-workbook { padding: 0 clamp(0rem, 2vw, 2rem) 3rem; }
+.ms-sheet { background: #fff; margin-bottom: clamp(2rem, 6vw, 5rem); border: 1px solid #9fb6a5; scroll-margin-top: 1rem; }
+.ms-filebar { display: flex; justify-content: space-between; gap: 1rem; padding: .65rem 1.25rem; background: #17653e; color: white; font: 500 .875rem/1.4 var(--body); }
+.ms-filebar span:first-child { font-family: var(--mono); }
+.ms-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.25rem; background: #f3f7f3; }
+.ms-toolbar h2 { font: 700 clamp(1.5rem, 2.6vw, 2.5rem)/1.1 var(--display); letter-spacing: -.025em; }
+.ms-run { display: inline-flex; align-items: center; justify-content: center; gap: 1.2rem; border: 1px solid #17653e; border-radius: 2px; background: #17653e; color: white; font: 650 1rem/1.2 var(--body); min-height: 44px; padding: .7rem 1rem; flex-shrink: 0; cursor: pointer; }
+.ms-run:hover { background: #103f2a; }
+.ms-world [hidden] { display: none; }
+.ms-formula { display: grid; grid-template-columns: 64px 48px 1fr; border-block: 1px solid var(--ms-line); align-items: stretch; background: white; font-size: 1rem; line-height: 1.4; }
+.ms-formula > * { padding: .65rem .85rem; }
+.ms-formula .ms-address { text-align: center; font-family: var(--mono); border-right: 1px solid var(--ms-line); }
+.ms-fx { color: #56705e; font-style: italic; text-align: center; border-right: 1px solid var(--ms-line); }
+.ms-grid-scroll { overflow-x: auto; scrollbar-color: #6c927a #e3ede4; scrollbar-width: thin; }
+.ms-grid { border-collapse: collapse; width: 100%; min-width: 880px; table-layout: fixed; font: 400 1rem/1.4 var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+.ms-grid th, .ms-grid td { border: 1px solid var(--ms-line); padding: .65rem .8rem; height: 46px; white-space: nowrap; }
+.ms-grid th { font-weight: 500; background: #eaf1eb; color: #162b20; text-transform: none; letter-spacing: 0; }
+.ms-grid th:first-child { width: 44px; }
+.ms-grid td:nth-child(2), .ms-grid thead tr:nth-child(2) th:nth-child(2) { text-align: left; }
+.ms-grid .ms-rownum, .ms-letters th { text-align: center; color: #496350; background: #f1f5f1; font-size: .8125rem; }
+.ms-grid .ms-letters th { height: 30px; padding: .25rem; }
+.ms-grid .ms-selected { position: relative; outline: 2px solid #17653e; outline-offset: -2px; background: #e6f4e9; }
+.ms-selected::after { content: ''; position: absolute; width: 6px; height: 6px; bottom: 0; right: 0; background: #17653e; }
+.ms-grouped td:nth-child(n+3):nth-child(-n+5), .ms-grouped thead tr:nth-child(2) th:nth-child(n+3):nth-child(-n+5) { background: #eaf5ed; }
+.ms-grouped td:nth-child(n+6), .ms-grouped thead tr:nth-child(2) th:nth-child(n+6) { background: #edf2fa; }
+.ms-grid .ms-flag { background: #fff0ca; color: #684700; }
+.ms-table-note, .ms-group-key { padding: .9rem 1.25rem; color: #445c4c; font-size: .9375rem; line-height: 1.5; }
+.ms-group-key { display: flex; flex-wrap: wrap; gap: .5rem 2rem; }
+.ms-group-key span:last-child { color: #285f92; }
+.ms-tabs { display: flex; flex-wrap: wrap; align-items: stretch; background: #eaf1eb; border-top: 1px solid var(--ms-line); padding-inline: .5rem; gap: 0 .25rem; }
+.ms-tabs a { display: flex; align-items: center; padding: .6rem .85rem; min-height: 44px; border-bottom: 3px solid transparent; text-decoration: none; font: 500 .875rem/1.3 var(--mono); }
+.ms-tabs a[aria-current] { background: white; border-bottom-color: #17653e; color: #17653e; font-weight: 700; }
+.ms-tabs a:hover { background: #d6e5d9; }
+.ms-chart-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, .4fr); gap: clamp(1rem, 3vw, 3rem); padding: clamp(1rem, 3vw, 3rem); }
+.ms-chart svg { width: 100%; display: block; overflow: visible; }
+.ms-axis-y { display: flex; justify-content: space-between; gap: 1rem; font-size: .9375rem; }
+.ms-axis-y span { color: #445c4c; }
+.ms-gridline { stroke: #dce5de; stroke-width: 1; }
+.ms-axis { fill: none; stroke: #56705e; stroke-width: 1.5; }
+.ms-zero { stroke: #bdcfc2; stroke-width: 1; }
+.ms-cut { fill: none; stroke: #6a7759; stroke-width: 1.5; stroke-dasharray: 6 6; }
+.ms-tick { fill: #445c4c; font: 22px var(--body); }
+.ms-point { fill: #fff; stroke: #718677; stroke-width: 1.6; cursor: pointer; }
+.ms-point.ms-up { fill: #17653e; stroke: #17653e; }
+.ms-point.ms-down { fill: #285f92; stroke: #285f92; }
+.ms-point:hover, .ms-point:focus { outline: none; stroke: #111; stroke-width: 4; r: 9; }
+.ms-point[data-inspected] { stroke: #111; stroke-width: 3; r: 8; }
+.ms-chart figcaption { text-align: center; font-size: .9375rem; }
+.ms-plot-key { display: flex; justify-content: center; flex-wrap: wrap; gap: .5rem 1.5rem; margin-top: 1rem; font-size: .875rem; }
+.ms-plot-key span { display: flex; align-items: center; gap: .5rem; }
+.ms-plot-key span::before { content: ''; width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid #718677; }
+.ms-key-up::before { background: #17653e; }
+.ms-key-down::before { background: #285f92; }
+.ms-inspector { align-self: center; padding: 1.25rem; background: #f1f6f2; }
+.ms-inspector h3 { font: 700 1.25rem/1.2 var(--body); }
+.ms-inspect-hint { font-size: .875rem; line-height: 1.5; margin-block: .75rem 1rem; color: #445c4c; }
+.ms-readout > div { display: flex; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--ms-line); padding: .5rem 0; font-size: .9375rem; }
+.ms-readout dd { font-family: var(--mono); font-weight: 600; }
+.ms-controls { margin-top: 1.5rem; }
+.ms-controls label { display: flex; justify-content: space-between; align-items: center; gap: .5rem; font-size: .875rem; }
+.ms-controls output { font-family: var(--mono); }
+.ms-controls input { width: 100%; min-height: 44px; display: block; margin: 0 0 .75rem; }
+.ms-controls p, .ms-inspector noscript p { font-size: .875rem; line-height: 1.5; }
+.ms-lab { display: grid; grid-template-columns: 1.1fr 1fr 1fr; align-items: center; gap: clamp(1rem, 3vw, 3rem); padding: 2rem; --stg-c1: #17653e; --stg-c4: #285f92; }
+.ms-lab svg { display: block; width: 100%; }
+.ms-lab h3 { font: 650 1rem/1.3 var(--body); text-align: center; }
+.ms-lab p { font: 400 1rem/1.5 var(--body); margin-top: .75rem; }
+.ms-rack { fill: #eef4ef; fill-opacity: .85; stroke: #6d8775; stroke-width: 2; }
+.ms-screen-grid { stroke: #82ac8f; stroke-width: 1; }
+.ms-mini-plot { stroke: #e7f2e9; fill: none; stroke-width: 2; }
+.ms-mini-dot { fill: #bfe0c8; }
+.ms-housing { fill: #e8efe9; stroke: #375843; stroke-width: 2; }
+.ms-instrument-line { fill: none; stroke: #6d8775; stroke-width: 2; }
+.ms-display { fill: #163e2a; }
+.ms-spectrum { fill: none; stroke: #bfe0c8; stroke-width: 2; }
+.ms-port { fill: white; stroke: #375843; stroke-width: 2; }
+.ms-light { fill: #17653e; }
+.ms-close { padding: 1.5rem 2rem; border-top: 1px solid var(--ms-line); font-size: .9375rem; line-height: 1.5; }
+.ms-close p { max-width: 80ch; margin-bottom: .75rem; }
+.ms-close a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 650; }
+@media (max-width: 800px) {
+  .ms-intro { grid-template-columns: 1fr; gap: 1rem; }
+  .ms-intro h1 { max-width: none; grid-row: auto; }
+  .ms-chart-layout { grid-template-columns: 1fr; }
+  .ms-lab { grid-template-columns: 1fr 1fr; }
+  .ms-samples { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: center; }
+  .ms-samples h3 { grid-row: 1; }
+  .ms-samples svg { grid-row: 2; }
+  .ms-lab p { font-size: .9375rem; }
+}
+@media (max-width: 500px) {
+  .ms-intro { padding: 2rem 1rem 1.5rem; }
+  .ms-intro h1 { font-size: 3rem; max-width: 10ch; }
+  .ms-workbook { padding-inline: .5rem; }
+  .ms-toolbar { flex-wrap: wrap; padding: 1rem; }
+  .ms-toolbar h2 { width: 100%; font-size: 1.6rem; }
+  .ms-run { font-size: .9375rem; }
+  .ms-formula { grid-template-columns: 44px 32px 1fr; font-size: .875rem; }
+  .ms-formula > * { padding: .6rem .4rem; }
+  .ms-filebar { padding-inline: 1rem; font-size: .8125rem; }
+  .ms-tabs { padding-inline: .25rem; }
+  .ms-tabs a { padding-inline: .6rem; font-size: .75rem; }
+  .ms-chart-layout { padding: 1rem .6rem; }
+  .ms-tick { font-size: 26px; }
+  .ms-axis-y { font-size: .8125rem; }
+  .ms-plot-key { gap: .5rem 1rem; font-size: .75rem; }
+  .ms-lab { grid-template-columns: 1fr; padding: 1.25rem; gap: 1.5rem; }
+  .ms-samples { display: block; }
+  .ms-samples svg { margin-block: .5rem 1.5rem; }
+  .ms-lab-computer svg, .ms-instrument svg { max-width: 300px; margin-inline: auto; }
+  .ms-close { padding: 1.25rem; }
+}
+@media (prefers-reduced-motion: reduce) { .ms-world *, .ms-world *::before, .ms-world *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+.ms-lab .lq-sage { fill: #83b28d; }
+.ms-lab .lq-blue { fill: #8aadd0; }
+.ms-scroll-hint { display: none; padding: .65rem 1rem 0; color: #445c4c; font-size: .8125rem; }
+@media (max-width: 900px) { .ms-scroll-hint { display: block; } }
+#ms-flags .ms-grid { min-width: 0; font-size: .875rem; }
+#ms-stats .ms-grid { min-width: 650px; }
+.world-mass-spec .ms-lab rect.scr { fill: #163e2a; width: 184px; height: 104px; display: inline; max-height: none; }
+
+/* One workbook stays on the bench while the macro advances with page scroll. */
+.ms-scroll-story { height: 600svh; position: relative; padding-bottom: 0; }
+.ms-scroll-story .ms-stage { position: sticky; top: 1rem; height: calc(100svh - 2rem); display: grid; }
+.ms-scroll-story .ms-sheet { grid-area: 1 / 1; min-width: 0; min-height: 0; margin: 0; height: 100%; display: flex; flex-direction: column; visibility: hidden; pointer-events: none; }
+.ms-scroll-story .ms-sheet[data-ms-active] { visibility: visible; pointer-events: auto; }
+.ms-scroll-story .ms-filebar, .ms-scroll-story .ms-toolbar, .ms-scroll-story .ms-formula, .ms-scroll-story .ms-tabs { flex-shrink: 0; }
+.ms-scroll-story .ms-sheet-body { flex: 1; min-height: 0; overflow: auto; overscroll-behavior-x: contain; }
+.ms-scroll-story .ms-tabs { margin-top: auto; }
+.ms-scroll-story .ms-chart-layout { padding: 1rem; gap: 1.25rem; }
+.ms-scroll-story .ms-chart { max-width: 650px; width: 100%; margin-inline: auto; }
+.ms-scroll-story .ms-grid { min-width: 700px; }
+.ms-scroll-story .ms-grid th, .ms-scroll-story .ms-grid td { padding-block: .45rem; height: 38px; }
+.ms-scroll-story .ms-lab { padding: 1.25rem; }
+@media (min-width: 801px) {
+  .ms-scroll-story .ms-chart-layout { height: 100%; align-items: center; }
+}
+@media (max-width: 800px) {
+  .ms-scroll-story .ms-chart-layout { grid-template-columns: minmax(0, 1fr); }
+  .ms-scroll-story .ms-inspector { padding: .75rem; }
+  .ms-scroll-story .ms-readout { display: flex; flex-wrap: wrap; gap: .5rem 1rem; }
+  .ms-scroll-story .ms-readout > div { flex: 1; gap: .5rem; white-space: nowrap; }
+  .ms-scroll-story .ms-controls { margin-top: .75rem; }
+  .ms-scroll-story .ms-toolbar { padding: .75rem; gap: .65rem; }
+  .ms-scroll-story .ms-toolbar h2 { font-size: 1.35rem; }
+  .ms-scroll-story .ms-run { min-height: 44px; padding: .5rem .75rem; }
+}
+@media (max-width: 500px) {
+  .ms-scroll-story .ms-lab { grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1rem; }
+  .ms-scroll-story .ms-samples { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+  .ms-scroll-story .ms-samples h3 { grid-row: 1; font-size: .875rem; }
+  .ms-scroll-story .ms-samples svg { grid-row: 2; margin: 0; }
+  .ms-scroll-story .ms-lab p { font-size: .875rem; }
+}

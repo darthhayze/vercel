@@ -1,0 +1,29 @@
+<div class="analytics-footer">
+  <a href="#analytics-consent" data-analytics-settings>Analytics settings</a>
+  <a href="/privacy/">Privacy</a>
+  <a href="/terms/">Terms</a>
+  <p data-consent-status role="status"></p>
+</div>
+<section class="analytics-consent" id="analytics-consent" aria-labelledby="analytics-heading" data-transient hidden>
+  <h2 id="analytics-heading" class="sr">Optional analytics</h2>
+  <p>Count visits with Google Analytics? <a href="/privacy/">Privacy</a></p>
+  <div class="analytics-actions"><button type="button" data-consent="accepted">Accept</button><button type="button" data-consent="declined">Decline</button></div>
+</section>
+<script>import '../scripts/consent';</script>
+<style>
+  .analytics-footer { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; padding: .5rem var(--pad); background: var(--ink); color: var(--paper); font-size: .875rem; }
+  .analytics-footer a { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
+  .analytics-footer a:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+  /* A compact card pinned to the bottom-left corner. It sits over the page edge, not in the flow, and goes away on a choice. */
+  .analytics-consent { position: fixed; left: max(.75rem, env(safe-area-inset-left)); bottom: max(.75rem, env(safe-area-inset-bottom)); z-index: 70; display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .75rem; width: min(25rem, calc(100vw - 1.5rem)); padding: .5rem .65rem; background: var(--paper); color: var(--ink); border: 2px solid var(--ink); border-radius: 1rem; box-shadow: 3px 3px 0 var(--ink); font-size: .875rem; line-height: 1.3; }
+  .analytics-consent[hidden] { display: none; }
+  p { margin: 0; max-width: none; flex: 1 1 9rem; }
+  p a { font-weight: 700; }
+  /* stage pages keep a sticky step rail down the left edge: sit to its right so the card never covers a stage control */
+  @media (min-width: 48rem) { :global(body:has(.stg-rail)) .analytics-consent { left: 5.5rem; } }
+  .analytics-actions { display: flex; gap: .4rem; flex: 0 0 auto; }
+  button { min-height: 44px; min-width: 44px; padding: .3rem .9rem; border: 2px solid var(--ink); border-radius: 99px; background: var(--yellow); color: var(--ink); font: 800 .9375rem/1 var(--body); cursor: pointer; }
+  button + button { background: var(--paper); }
+  button:hover { background: var(--ink); color: var(--yellow); }
+  button:focus-visible, p a:focus-visible { outline: 3px solid var(--cobalt, #1F35F5); outline-offset: 2px; }
+</style>

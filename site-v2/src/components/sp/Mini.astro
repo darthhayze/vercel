@@ -1,0 +1,128 @@
+---
+// A project's live miniature window: the container (night panel, spreadsheet, scope bezel, blueprint, laptop, droplet, paper)
+// plus its tile art. Used by the home Work grid (with the full text block in the slot) and by the story pages
+// (quick read and the next-project handoff, with a slim slot). Decorative parts are aria-hidden.
+// Styles: src/styles/work.css (every art rule is scoped under .win so worlds never collide).
+import jh from '../../content/jobhub.json';
+import FlexTile from './FlexTile.astro';
+import { outlineD, soleD, fasciaD, passes } from '../../worlds/arch-support/foot';
+import '../../styles/work.css';
+interface Props { slug: string; as?: 'article' | 'div'; id?: string; labelledby?: string; class?: string }
+const { slug, as: Tag = 'div', id, labelledby, class: extra } = Astro.props;
+const shot = jh.media[0];
+
+let seed = 11; const rnd = () => (seed = (seed * 1664525 + 1013904223) % 4294967296) / 4294967296;
+// LungScope: breath-shaped bars (decorative) and a dot row split three ways.
+const NB = 70;
+const bars = Array.from({ length: NB }, (_, i) => {
+  const env = Math.abs(Math.sin((i / NB) * Math.PI * 2.5)) ** 1.3;
+  return Math.max(8, (env * 0.82 + 0.12) * (0.45 + rnd() * 0.55) * 230);
+});
+const grp = [0, 1, 2].flatMap((g) => Array.from({ length: g === 0 ? 20 : 5 }, (_, i) => ({ g, i })));
+let dx = 0;
+const dotPos = grp.map(({ g, i }) => { if (i === 0) dx += g === 0 ? 0 : 14; const x = dx; dx += 13; return { g, x }; });
+
+// Arch support: medial foot profile, arch contour and slicer toolpath, drawn with the arch-support world's own geometry.
+const AH = 0.72;
+const AOUT = outlineD(AH), ASOLE = soleD(AH), AFASC = fasciaD(AH);
+const APASS = passes(AH).filter((p) => p.on);
+
+// Mass-spec: worksheet cells + volcano scatter
+const vol = Array.from({ length: 46 }, () => { const x = (rnd() - 0.5) * 2; const y = Math.abs(x) ** 1.4 * 3 * (0.4 + rnd() * 0.9) + rnd() * 0.3; return { x, y, hot: Math.abs(x) > 0.62 && y > 1.1 }; });
+const COLS = 'ABCDEF';
+---
+<Tag class:list={['win', `w-${slug}`, extra]} id={id} aria-labelledby={labelledby}>
+{slug === 'flex-v2' && (<>
+  <div class="wart" aria-hidden="true" data-decor><FlexTile /></div>
+  <slot />
+</>)}
+
+{slug === 'mass-spec' && (<>
+  <div class="sh-title"><span class="sh-file" aria-hidden="true">macro.xlsm</span><span class="sh-fx" aria-hidden="true">fx =T.TEST( … )</span></div>
+  <div class="sh-cols" aria-hidden="true"><i></i>{[...COLS].map((c) => <i>{c}</i>)}</div>
+  <div class="sh-body">
+    <div class="sh-rows" aria-hidden="true">{[1,2,3,4,5,6,7].map((r) => <i>{r}</i>)}</div>
+    <div class="sh-main"><slot /></div>
+    <div class="wart" aria-hidden="true" data-decor>
+      <svg viewBox="0 0 300 190" preserveAspectRatio="xMidYMid slice" focusable="false" data-illustrative>
+        {[0, 1, 2, 3, 4, 5, 6, 7].map((r) => <g>
+          {[0, 1, 2].map((c) => <rect class={r === 3 && c === 2 ? 'ms-cell hot' : 'ms-cell'} x={10 + c * 44} y={29 + r * 20} width={14 + ((r * 7 + c * 11) % 4) * 6} height="6" rx="2" />)}
+        </g>)}
+        <rect class="msel" x="4" y="22" width="42" height="20" />
+        <line class="ms-ax" x1="150" x2="292" y1="170" y2="170" /><line class="ms-ax" x1="222" x2="222" y1="20" y2="170" />
+        <g class="volc">
+          {vol.map((d) => <circle class={d.hot ? 'vd hot' : 'vd'} cx={222 + d.x * 62} cy={168 - d.y * 40} r={d.hot ? 4.5 : 3.2} />)}
+        </g>
+      </svg>
+    </div>
+  </div>
+</>)}
+
+{slug === 'lungscope' && (<>
+  <div class="wart" aria-hidden="true" data-decor>
+    <svg viewBox="0 0 600 540" preserveAspectRatio="xMidYMid slice" focusable="false">
+      <g class="wave">
+        {bars.map((h, i) => <rect class={`b b${i % 8} ${i % 5 === 0 ? 'v' : ''}`} x={112 + i * 5.4} y={230 - h} width="4.4" height={h * 2} rx="2.2" />)}
+      </g>
+      <g class="splitdots">
+        {dotPos.map((d) => <circle class={`ld ld${d.g}`} cx={d.x + 112} cy="490" r="5" />)}
+      </g>
+      <text class="ls-t" x="110" y="468">train</text><text class="ls-t" x="398" y="468">val</text><text class="ls-t" x="476" y="468">test</text>
+    </svg>
+  </div>
+  <slot />
+</>)}
+
+{slug === 'ecg' && (<>
+  <div class="screen" aria-hidden="true" data-decor>
+    <svg viewBox="0 0 400 230" focusable="false">
+      <rect class="scope-bezel" x="8" y="8" width="384" height="150" rx="12" />
+      <rect class="scope-glass" x="20" y="20" width="324" height="126" rx="5" />
+      <path class="grid" d="M20 51H344M20 83H344M20 115H344M60 20V146M100 20V146M140 20V146M180 20V146M220 20V146M260 20V146M300 20V146" />
+      <path class="trace" pathLength="100" d="M24 102H44Q50 102 54 94T64 102H84L90 107L97 44L104 125L111 102H126Q138 82 150 102H200Q206 102 210 94T220 102H240L246 107L253 44L260 125L267 102H282Q294 82 306 102H340" />
+      <circle class="scope-knob" cx="368" cy="58" r="12" /><circle class="scope-knob" cx="368" cy="111" r="12" />
+      <path class="probe-lead" d="M366 146C392 201 308 230 272 201M34 146C8 199 80 226 127 200" />
+      <g class="pcb">
+        <rect class="pcb-base" x="116" y="172" width="168" height="48" rx="5" />
+        <path class="pcb-track" d="M126 185H156V207H178M274 185H246V207H222M145 172V193H178M256 220V199H222" />
+        <rect class="pcb-chip" x="178" y="182" width="44" height="28" rx="2" />
+        <path class="pcb-pin" d="M182 176V182M194 176V182M206 176V182M218 176V182M182 210V216M194 210V216M206 210V216M218 210V216" />
+        <circle class="pcb-pad" cx="127" cy="200" r="4" /><circle class="pcb-pad" cx="272" cy="201" r="4" />
+      </g>
+    </svg>
+  </div>
+  <slot />
+</>)}
+
+{slug === 'arch-support' && (<>
+  <span class="tape t-left"></span><span class="tape tp-r"></span>
+  <div class="wart" aria-hidden="true" data-decor>
+    <svg viewBox="100 0 880 470" preserveAspectRatio="xMidYMid meet" focusable="false" data-illustrative>
+      <g class="ar-reg">
+        <path d="M130 52 V24 H158 M950 52 V24 H922 M130 438 V466 H158 M950 438 V466 H922" />
+      </g>
+      <path class="ar-floor" d="M150 400 H930" />
+      <path class="ar-fill" d={`${AOUT} Z`} />
+      <g class="ar-tps">{APASS.map((q) => <line class="ar-tp" x1={q.x1} x2={q.x2} y1={q.y} y2={q.y} pathLength="1" />)}</g>
+      <path class="ar-out" d={AOUT} />
+      <path class="ar-fasc" d={AFASC} />
+      <path class="ar-arch" d={ASOLE} pathLength="1" />
+    </svg>
+  </div>
+  <slot />
+</>)}
+
+{slug === 'jobhub' && (<>
+  <div class="laptop">
+    <div class="lid"><div class="lscreen"><img src={shot.file} width="1440" height="900" alt={shot.alt} loading="lazy" decoding="async" /></div></div>
+    <div class="lbase" aria-hidden="true"></div>
+  </div>
+  <slot />
+</>)}
+
+{slug === 'research' && (<>
+  <span class="tape t-yellow"></span>
+  <div class="page"><img src="/docs-pages/ijms-26-02262/p-01.webp" width="1100" height="1556" alt="First page of the 2025 journal paper on metabolically healthy obesity." loading="lazy" decoding="async" /></div>
+  <slot />
+</>)}
+</Tag>

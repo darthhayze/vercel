@@ -1,0 +1,457 @@
+{
+  "language": "processing",
+  "lines": [
+    {
+      "n": 1,
+      "text": "// This Processing code has been written by Univeristy Of Cincinnati Student Hamza Al Halabi [Alhalaha] for use in Circuits BME2081C for Summer of 2026 No Artificial intelligence was used for this program with the unique exception of line 32 to obtain the correct hospital monitor pitch This Code runs in parallel with the arduino code to provide the visual and audible outputs Code is fully commented to allow for easy navigation to essential chunck loops such as line trace, bpm tracking, sound initialization, et as well explain certain functionalities Enjoy!"
+    },
+    {
+      "n": 2,
+      "text": ""
+    },
+    {
+      "n": 3,
+      "text": "import processing.serial.*;"
+    },
+    {
+      "n": 4,
+      "text": "import processing.sound.*; // Import the Sound library"
+    },
+    {
+      "n": 5,
+      "text": ""
+    },
+    {
+      "n": 6,
+      "text": "Serial myPort;"
+    },
+    {
+      "n": 7,
+      "text": "SinOsc beepSound; // Create the sine wave oscillator"
+    },
+    {
+      "n": 8,
+      "text": ""
+    },
+    {
+      "n": 9,
+      "text": "int ecgValue = 0;"
+    },
+    {
+      "n": 10,
+      "text": ""
+    },
+    {
+      "n": 11,
+      "text": "// Variables for the scrolling line int xPos = 0; float previousX = 0; float previousY = 0;"
+    },
+    {
+      "n": 12,
+      "text": ""
+    },
+    {
+      "n": 13,
+      "text": "// Threshold and Visual settings int threshold = 450; int flashTimer = 0;"
+    },
+    {
+      "n": 14,
+      "text": ""
+    },
+    {
+      "n": 15,
+      "text": "// BPM Calculation Variables boolean isPeak = false; long lastBeatTime = 0; float currentBPM = 0;"
+    },
+    {
+      "n": 16,
+      "text": ""
+    },
+    {
+      "n": 17,
+      "text": "void setup() {"
+    },
+    {
+      "n": 18,
+      "text": "  size(1000, 500);"
+    },
+    {
+      "n": 19,
+      "text": "  background(5, 10, 5);"
+    },
+    {
+      "n": 20,
+      "text": ""
+    },
+    {
+      "n": 21,
+      "text": "    // Initialize the beep sound beepSound = new SinOsc(this); beepSound.freq(700); // 700 Hz is a standard clinical monitor pitch beepSound.play(); beepSound.amp(0.0); // Start it muted"
+    },
+    {
+      "n": 22,
+      "text": ""
+    },
+    {
+      "n": 23,
+      "text": "    printArray(Serial.list());"
+    },
+    {
+      "n": 24,
+      "text": ""
+    },
+    {
+      "n": 25,
+      "text": "    try {"
+    },
+    {
+      "n": 26,
+      "text": "      String portName = Serial.list()[12];"
+    },
+    {
+      "n": 27,
+      "text": "      myPort = new Serial(this, portName, 9600);"
+    },
+    {
+      "n": 28,
+      "text": "      myPort.bufferUntil('\\n');"
+    },
+    {
+      "n": 29,
+      "text": "      println(\"SUCCESS: Connected to \" + portName);"
+    },
+    {
+      "n": 30,
+      "text": "    } catch (Exception e) {"
+    },
+    {
+      "n": 31,
+      "text": "      println(\"CRITICAL ERROR: Could not connect to the COM port!\");"
+    },
+    {
+      "n": 32,
+      "text": "      println(\"Close the Arduino Serial Monitor and try again.\");"
+    },
+    {
+      "n": 33,
+      "text": "    }"
+    },
+    {
+      "n": 34,
+      "text": "}"
+    },
+    {
+      "n": 35,
+      "text": ""
+    },
+    {
+      "n": 36,
+      "text": "void draw() {"
+    },
+    {
+      "n": 37,
+      "text": "  // ========================================== 1. DRAW TRACE AREA (WITH ERASE BAR & GRID) ========================================== float traceWidth = width - 280;"
+    },
+    {
+      "n": 38,
+      "text": ""
+    },
+    {
+      "n": 39,
+      "text": "    // Erase the path ahead of the drawing line noStroke(); fill(5, 10, 5); rect(xPos, 0, 40, height);"
+    },
+    {
+      "n": 40,
+      "text": ""
+    },
+    {
+      "n": 41,
+      "text": "  // Draw faint clinical grid lines stroke(15, 30, 15); strokeWeight(1); for (int i = 0; i < height; i += 50) { line(xPos, i, xPos + 40, i); } for (int i = 0; i < traceWidth; i += 50) { if (i >= xPos && i < xPos + 40) { line(i, 0, i, height); } }"
+    },
+    {
+      "n": 42,
+      "text": ""
+    },
+    {
+      "n": 43,
+      "text": "  // ========================================== 2. THRESHOLD, BPM, AND AUDIO LOGIC ========================================== if (ecgValue >= threshold && !isPeak) { flashTimer = 10; isPeak = true; beepSound.amp(0.4); // Turn the beep volume up when threshold is crossed"
+    },
+    {
+      "n": 44,
+      "text": ""
+    },
+    {
+      "n": 45,
+      "text": "    long currentTime = millis();"
+    },
+    {
+      "n": 46,
+      "text": "    long timeInterval = currentTime - lastBeatTime;"
+    },
+    {
+      "n": 47,
+      "text": ""
+    },
+    {
+      "n": 48,
+      "text": "    // Filter noise: Calculate only if interval is between 300ms (200 BPM) and 2000ms (30 BPM) if (timeInterval > 300 && timeInterval < 2000) { currentBPM = 60000.0 / timeInterval; } lastBeatTime = currentTime; }"
+    },
+    {
+      "n": 49,
+      "text": ""
+    },
+    {
+      "n": 50,
+      "text": "  if (ecgValue < threshold - 20) {"
+    },
+    {
+      "n": 51,
+      "text": "    isPeak = false; // Reset lock"
+    },
+    {
+      "n": 52,
+      "text": "  }"
+    },
+    {
+      "n": 53,
+      "text": ""
+    },
+    {
+      "n": 54,
+      "text": "  // ========================================== 3. DRAW RIGHT-SIDE VITALS PANEL ========================================== noStroke(); fill(15, 20, 15); rect(traceWidth, 0, 280, height);"
+    },
+    {
+      "n": 55,
+      "text": ""
+    },
+    {
+      "n": 56,
+      "text": "  // Panel Border Line stroke(30, 60, 30); strokeWeight(3); line(traceWidth, 0, traceWidth, height);"
+    },
+    {
+      "n": 57,
+      "text": ""
+    },
+    {
+      "n": 58,
+      "text": "  // Beating Heart Icon & Audio Mute Logic if (flashTimer > 0) { fill(255, 40, 40); // Bright Red Flash flashTimer--;"
+    },
+    {
+      "n": 59,
+      "text": ""
+    },
+    {
+      "n": 60,
+      "text": "    // Mute the beep the moment the flash finishes if (flashTimer == 0) { beepSound.amp(0.0); } } else { fill(60, 15, 15); // Dim Red Rest } ellipse(traceWidth + 50, 60, 25, 25); Label fill(200); textSize(20); text(\"ECG / EKG\", traceWidth + 80, 67);"
+    },
+    {
+      "n": 61,
+      "text": ""
+    },
+    {
+      "n": 62,
+      "text": "// MASSIVE BPM DISPLAY fill(0, 255, 100); // Neon Green text textSize(24); text(\"HR\", traceWidth + 30, 160);"
+    },
+    {
+      "n": 63,
+      "text": ""
+    },
+    {
+      "n": 64,
+      "text": "textSize(80); // Giant clinical font"
+    },
+    {
+      "n": 65,
+      "text": "if (currentBPM > 0) {"
+    },
+    {
+      "n": 66,
+      "text": "  text(int(currentBPM), traceWidth + 80, 180);"
+    },
+    {
+      "n": 67,
+      "text": "} else {"
+    },
+    {
+      "n": 68,
+      "text": "  text(\"--\", traceWidth + 80, 180);"
+    },
+    {
+      "n": 69,
+      "text": "}"
+    },
+    {
+      "n": 70,
+      "text": ""
+    },
+    {
+      "n": 71,
+      "text": "textSize(20);"
+    },
+    {
+      "n": 72,
+      "text": "text(\"bpm\", traceWidth + 210, 180);"
+    },
+    {
+      "n": 73,
+      "text": ""
+    },
+    {
+      "n": 74,
+      "text": "// DYNAMIC LEVEL INDICATOR String levelText = \"ANALYZING...\"; color levelColor = color(100);"
+    },
+    {
+      "n": 75,
+      "text": ""
+    },
+    {
+      "n": 76,
+      "text": "if (currentBPM > 0) {"
+    },
+    {
+      "n": 77,
+      "text": "  if (currentBPM < 60) {"
+    },
+    {
+      "n": 78,
+      "text": "    levelText = \"LOW (BRADYCARDIA)\";"
+    },
+    {
+      "n": 79,
+      "text": "    levelColor = color(255, 255, 100); // Yellow"
+    },
+    {
+      "n": 80,
+      "text": "  } else if (currentBPM <= 99) {"
+    },
+    {
+      "n": 81,
+      "text": "    levelText = \"NORMAL RESTING\";"
+    },
+    {
+      "n": 82,
+      "text": "    levelColor = color(100, 200, 255); // Cyan"
+    },
+    {
+      "n": 83,
+      "text": "  } else if (currentBPM <= 139) {"
+    },
+    {
+      "n": 84,
+      "text": "    levelText = \"ACTIVE\";"
+    },
+    {
+      "n": 85,
+      "text": "    levelColor = color(255, 150, 0);   // Orange"
+    },
+    {
+      "n": 86,
+      "text": "  } else {"
+    },
+    {
+      "n": 87,
+      "text": "    levelText = \"ELEVATED\";"
+    },
+    {
+      "n": 88,
+      "text": "    levelColor = color(255, 50, 50);   // Red"
+    },
+    {
+      "n": 89,
+      "text": "  }"
+    },
+    {
+      "n": 90,
+      "text": "}"
+    },
+    {
+      "n": 91,
+      "text": ""
+    },
+    {
+      "n": 92,
+      "text": "fill(levelColor);"
+    },
+    {
+      "n": 93,
+      "text": "textSize(22);"
+    },
+    {
+      "n": 94,
+      "text": "text(levelText, traceWidth + 30, 240);"
+    },
+    {
+      "n": 95,
+      "text": ""
+    },
+    {
+      "n": 96,
+      "text": "// Debug/Raw Data at the bottom of the panel fill(0, 150, 50); textSize(14); text(\"RAW SIGNAL: \" + ecgValue, traceWidth + 30, height - 50); text(\"THRESHOLD: \" + threshold, traceWidth + 30, height - 30);"
+    },
+    {
+      "n": 97,
+      "text": ""
+    },
+    {
+      "n": 98,
+      "text": "// ========================================== 4. DRAW THE ECG TRACE ========================================== float mappedY = map(ecgValue, 300, 600, height - 40, 40);"
+    },
+    {
+      "n": 99,
+      "text": ""
+    },
+    {
+      "n": 100,
+      "text": "stroke(0, 255, 50); // Bright Hospital Green"
+    },
+    {
+      "n": 101,
+      "text": "strokeWeight(3);"
+    },
+    {
+      "n": 102,
+      "text": ""
+    },
+    {
+      "n": 103,
+      "text": "if (xPos > 0 && xPos < traceWidth) {"
+    },
+    {
+      "n": 104,
+      "text": "  line(previousX, previousY, xPos, mappedY);"
+    },
+    {
+      "n": 105,
+      "text": "}"
+    },
+    {
+      "n": 106,
+      "text": ""
+    },
+    {
+      "n": 107,
+      "text": "previousX = xPos;"
+    },
+    {
+      "n": 108,
+      "text": "previousY = mappedY;"
+    },
+    {
+      "n": 109,
+      "text": "    xPos += 3; // Speed of the scan line"
+    },
+    {
+      "n": 110,
+      "text": ""
+    },
+    {
+      "n": 111,
+      "text": "    // Wrap around when it hits the panel if (xPos >= traceWidth) { xPos = 0; previousX = 0; } }"
+    },
+    {
+      "n": 112,
+      "text": ""
+    },
+    {
+      "n": 113,
+      "text": "// Automatically triggers whenever Arduino sends data void serialEvent(Serial myPort) { String inString = myPort.readStringUntil('\\n'); if (inString != null) { inString = trim(inString); try { ecgValue = int(inString); } catch (NumberFormatException e) {} } }"
+    }
+  ]
+}

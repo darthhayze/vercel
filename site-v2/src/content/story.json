@@ -1,0 +1,223 @@
+{
+  "order": [
+    "flex-v2",
+    "mass-spec",
+    "lungscope",
+    "ecg",
+    "arch-support",
+    "jobhub",
+    "research"
+  ],
+  "projects": {
+    "flex-v2": {
+      "title": "Single-cell Flex v2",
+      "window": {
+        "line": "Wet-lab single-cell genomics and bioinformatics. I prepared the protocol, samples and custom probes, ran 88 samples through the full Flex v2 workflow for a mouse study, and analyzed the sequencing data with Cell Ranger.",
+        "skills": [
+          "Single-cell genomics",
+          "Protocol development",
+          "Bioinformatics"
+        ]
+      },
+      "quick": [
+        {
+          "h": "Summary",
+          "t": "Single-cell gene expression sequencing with 10x Genomics Flex v2 took about half of my placement at Cincinnati Children's Research Foundation. I prepared the protocol, the samples and the custom probes, ran 88 samples through the full protocol for a mouse study, and analyzed the sequencing data with Cell Ranger."
+        },
+        {
+          "h": "Where",
+          "t": "Cincinnati Children's Research Foundation, Research Student II, August 2025 to May 2026"
+        },
+        {
+          "h": "Sequencing",
+          "t": "Illumina machines"
+        },
+        {
+          "h": "Analysis",
+          "t": "Cell Ranger"
+        }
+      ],
+      "exploreLabel": "Step a probe through"
+    },
+    "mass-spec": {
+      "title": "Mass-spec macro",
+      "window": {
+        "line": "Data-analysis programming for a lab. I wrote an Excel/VBA pipeline to reshape raw high-resolution mass-spec exports into analysis-ready tables, run t-tests and draw volcano plots, so a bench scientist can review results without hand-formatting.",
+        "skills": [
+          "VBA",
+          "Statistics",
+          "Lab data processing"
+        ]
+      },
+      "quick": [
+        {
+          "h": "Summary",
+          "t": "An Excel/VBA macro turns raw high-resolution mass-spec exports into tidy tables, t-tests and volcano plots. I wrote the macro, ran samples, and operated and calibrated a Thermo Fisher Velos Pro mass spectrometer. I used it mainly for human samples. It also supported samples from the same mouse study as the Flex v2 work."
+        },
+        {
+          "h": "Tools",
+          "t": "Excel and VBA"
+        },
+        {
+          "h": "Instrument",
+          "t": "Thermo Fisher Velos Pro"
+        },
+        {
+          "h": "Output",
+          "t": "Tidy tables, t-tests and volcano plots"
+        }
+      ],
+      "exploreLabel": "Run the macro"
+    },
+    "lungscope": {
+      "title": "LungScope",
+      "window": {
+        "line": "Data engineering for machine learning. LungScope splits public lung-sound recordings by subject and checks for overlap, so a model is evaluated on people it has not heard. I built it with AI assistance under my requirements, data contracts and review.",
+        "skills": [
+          "Data engineering",
+          "ML data integrity",
+          "AI-assisted development"
+        ]
+      },
+      "quick": [
+        {
+          "h": "Summary",
+          "t": "A local prototype that sorts public lung-sound recordings into training, validation and test groups by subject. I wrote the requirements, the data contracts and the release checklist, then reviewed and tested the AI-generated code."
+        },
+        {
+          "h": "Data",
+          "t": "5,881 eligible recordings from 854 known subjects"
+        },
+        {
+          "h": "Check",
+          "t": "0 subjects shared between splits, from the project report"
+        },
+        {
+          "h": "Build",
+          "t": "AI-assisted, under my requirements and review"
+        }
+      ],
+      "exploreLabel": "Split a subject"
+    },
+    "ecg": {
+      "title": "ECG board",
+      "window": {
+        "line": "Embedded systems and signal acquisition. I soldered the Ninetales board, read the analog input with an Arduino, and wrote the Processing monitor that plots the trace and estimates heart rate from the gaps between beats.",
+        "skills": [
+          "Embedded",
+          "Signal processing",
+          "Serial communication"
+        ]
+      },
+      "quick": [
+        {
+          "h": "Summary",
+          "t": "An ECG board with an Arduino that sends samples over serial to a Processing monitor. I soldered and tested the board, connected the probes, and wrote the monitor, which draws a scrolling trace and estimates heart rate from the time between threshold crossings."
+        },
+        {
+          "h": "Hardware",
+          "t": "Ninetales board and an Arduino"
+        },
+        {
+          "h": "Software",
+          "t": "An Arduino sketch and a Processing monitor"
+        },
+        {
+          "h": "Context",
+          "t": "A classroom monitor"
+        }
+      ],
+      "exploreLabel": "Follow the signal chain"
+    },
+    "arch-support": {
+      "title": "Pediatric arch support",
+      "window": {
+        "line": "Medical-device design under constraints. Our team turned clinical needs for children aged 5 to 7 into an adjustable sewn sleeve with a gel insert, a design brief and a verification plan. My part: clinical contact, research and system analysis.",
+        "skills": [
+          "Device design",
+          "Requirements",
+          "Verification planning"
+        ]
+      },
+      "quick": [
+        {
+          "h": "Summary",
+          "t": "A sewn arch sleeve with a gel insert, designed by our team for children aged 5 to 7 with flat feet. I researched existing treatments, drew the system diagram, helped with the analysis and drafted the verification matrix. The team built a V2 prototype (beta), a design brief and a verification plan."
+        },
+        {
+          "h": "Course",
+          "t": "BME 3050 Medical Device Design, University of Cincinnati, summer 2026"
+        },
+        {
+          "h": "My part",
+          "t": "Clinical contact, research and system analysis"
+        },
+        {
+          "h": "Built",
+          "t": "V2 prototype, design brief, verification plan"
+        }
+      ],
+      "exploreLabel": "Raise the arch"
+    },
+    "jobhub": {
+      "title": "JobHub",
+      "window": {
+        "line": "Full-stack and AI application development. JobHub runs on Cloudflare Workers with account-scoped data, two databases, budgeted job collectors and a bounded language-model layer. I direct the product and review the code; an AI coding assistant writes much of it.",
+        "skills": [
+          "Full-stack",
+          "AI integration",
+          "Data architecture"
+        ]
+      },
+      "quick": [
+        {
+          "h": "Summary",
+          "t": "A private, account-based job-search tool. It finds jobs, matches roles, prepares résumés from evidence and plans your calendar. I defined the product and its data rules, directed an AI coding assistant to build it, and reviewed the output."
+        },
+        {
+          "h": "Runs on",
+          "t": "Cloudflare Workers"
+        },
+        {
+          "h": "Data",
+          "t": "Two databases with account-scoped data, 28 tables in the accounts database"
+        },
+        {
+          "h": "Layers",
+          "t": "Budgeted job collectors and a bounded language-model layer"
+        }
+      ],
+      "exploreLabel": "Follow a posting"
+    },
+    "research": {
+      "title": "Research",
+      "window": {
+        "line": "Biomedical data work in a research team. I contributed to sample collection and processing for a peer-reviewed proteomics paper (2025) and a metabolomics and transcriptomics preprint (2024).",
+        "skills": [
+          "Proteomics",
+          "Sample processing",
+          "Scientific writing"
+        ]
+      },
+      "quick": [
+        {
+          "h": "Summary",
+          "t": "A 2025 paper in the International Journal of Molecular Sciences and a 2024 preprint, both on metabolically healthy obesity. I am a listed author on both and helped with sample collection and processing, as the contribution statements credit. The paper reports 24 of 184 measured proteins differing between 27 participants with obesity and 15 lean controls."
+        },
+        {
+          "h": "Paper",
+          "t": "Proteomics, 2025"
+        },
+        {
+          "h": "Preprint",
+          "t": "Metabolomics and transcriptomics, 2024"
+        },
+        {
+          "h": "My part",
+          "t": "Sample collection and processing"
+        }
+      ],
+      "exploreLabel": "Read both papers"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+---
+// Wraps a project world: the shared bar + footer stay; ground, ink, accents and accent face come from the
+// registry palette (served as /worlds/<slug>.css). Slot = the world's <main> content.
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { getWorld } from '../../worlds';
+import StoryFrame from './StoryFrame.astro';
+import story from '../../content/story.json';
+interface Props {
+  slug: string;
+  title?: string;
+  description?: string;
+  /** extra body classes for the world's own CSS scope */
+  theme?: string;
+}
+const { slug, title, description, theme } = Astro.props;
+const wd = getWorld(slug);
+const storyOn = !!(story as any).projects?.[slug] && (story as any).order?.includes(slug);
+if (!wd) throw new Error(`WorldShell: unknown world "${slug}". Add it to src/worlds/index.ts`);
+---
+<SiteLayout title={title ?? wd.title} description={description} bodyClass={['world', `world-${slug}`, theme].filter(Boolean).join(' ')} paletteHref={`/worlds/${slug}.css`} themeColor={wd.ogColor} story={storyOn}>
+  <Fragment slot="head"><slot name="head" /></Fragment>
+  <StoryFrame slug={slug}><slot /></StoryFrame>
+</SiteLayout>

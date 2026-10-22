@@ -1,0 +1,28 @@
+---
+import { tube } from '../../components/stage/glyphs/lab';
+const { kind } = Astro.props;
+const lab = kind === 'proteins' || kind === 'metabolites';
+---
+<svg class="rr-opening" viewBox="0 0 600 190" role="img" aria-label={lab ? 'Teaching illustration: a sample, a measurement and a group comparison.' : 'Teaching illustration: a controller sends pulses to skin electrodes, informing a garment proposal.'}>
+  <path class="rr-wire" d="M103 82H213m-10-7 10 7-10 7M363 82H467m-10-7 10 7-10 7" />
+  {lab ? <>
+    <g set:html={tube(40, 24, {s: .9, liq:'rr-liquid'})} />
+    <rect class="rr-device" x="224" y="28" width="126" height="108" rx="8" />
+    <rect class="rr-screen" x="241" y="44" width="92" height="55" rx="3" />
+    <path class="rr-trace" d={kind === 'proteins' ? 'M250 85h12V68h9v17h12V55h9v30h12V72h9v13h12' : 'M250 82h12l7-23 7 23h13l8-31 8 31h17'} />
+    <circle class="rr-dot" cx="255" cy="117" r="5" /><path class="rr-wire" d="M274 117h54" />
+    <path class="rr-wire" d="M477 30v101h92" />
+    <circle class="rr-dot" cx="495" cy="102" r="5" /><circle class="rr-dot" cx="512" cy="87" r="5" /><circle class="rr-dot" cx="500" cy="78" r="5" />
+    <circle class="rr-gold" cx="543" cy="59" r="5" /><circle class="rr-gold" cx="553" cy="78" r="5" /><circle class="rr-gold" cx="535" cy="91" r="5" />
+  </> : <>
+    <rect class="rr-device" x="21" y="33" width="72" height="99" rx="8" /><rect class="rr-screen" x="34" y="47" width="46" height="32" rx="3" />
+    <path class="rr-trace" d="M39 65h8l4-10 6 18 5-8h12" /><circle class="rr-dot" cx="57" cy="104" r="8" />
+    <rect class="rr-pad" x="231" y="47" width="44" height="68" rx="16" /><rect class="rr-pad" x="297" y="47" width="44" height="68" rx="16" />
+    <path class="rr-wire" d="M253 47V29h66v18" />
+    <path class="rr-device" d="m494 28-24 16 12 30 15-7v68h55V67l15 7 12-30-24-16q-30 22-61 0Z" />
+    <rect class="rr-pad" x="504" y="76" width="12" height="20" rx="4" /><rect class="rr-pad" x="534" y="76" width="12" height="20" rx="4" />
+  </>}
+  <text x="59" y="173" text-anchor="middle">{lab ? 'Sample' : 'Controller'}</text>
+  <text x="287" y="173" text-anchor="middle">{lab ? (kind === 'proteins' ? 'Protein assay' : 'Profiling') : 'Electrodes'}</text>
+  <text x="525" y="173" text-anchor="middle">{lab ? 'Comparison' : 'Garment'}</text>
+</svg>

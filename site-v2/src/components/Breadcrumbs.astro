@@ -1,0 +1,23 @@
+---
+import story from '../content/story.json';
+const path = ['/404', '/404/'].includes(Astro.url.pathname) ? '/404.html' : Astro.url.pathname;
+const slug = path.split('/').filter(Boolean).at(-1) ?? '';
+const project = (story.projects as Record<string, { title: string }>)[slug];
+const labels: Record<string, string> = { research: 'Research', evidence: 'Evidence', colophon: 'Colophon', privacy: 'Privacy', terms: 'Terms', '404': 'Page not found', '404.html': 'Page not found' };
+const items = [{ name: 'Hamza Al Halabi', url: '/' }];
+if (path !== '/') items.push({ name: project?.title ?? labels[slug] ?? slug, url: path });
+const schema = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: items.map((item, i) => ({ '@type': 'ListItem', position: i + 1, name: item.name, item: new URL(item.url, 'https://hamza-bme.tech').href })) };
+---
+{path !== '/' && <>
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol>{items.map((item, i) => <li>{i === items.length - 1 ? <span aria-current="page">{item.name}</span> : <a href={item.url}>{item.name}</a>}</li>)}</ol>
+  </nav>
+  <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')} />
+</>}
+<style>
+  .breadcrumbs { background: var(--yellow); color: var(--ink); padding: .6rem var(--pad); font-size: .875rem; border-bottom: 2px solid var(--ink); }
+  ol { display: flex; flex-wrap: wrap; align-items: center; column-gap: .65rem; }
+  li { display: flex; align-items: center; gap: .65rem; }
+  li + li::before { content: '/'; color: var(--ink); }
+  a { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; font-weight: 700; }
+</style>

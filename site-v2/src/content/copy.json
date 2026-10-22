@@ -1,0 +1,36 @@
+{
+  "_note": "Copy used by pages and components. Project lines are 14 words or fewer, margin notes 12 or fewer, about 70 or fewer.",
+  "home": {
+    "headline": "I'm Hamza Al Halabi. I build biomedical prototypes and software for lab data.",
+    "sub": "Biomedical engineering student at the University of Cincinnati. Co-op at Live Well Collaborative since August 2026."
+  },
+  "projects": {
+    "lungscope": {
+      "line": "Prepares lung-sound recordings for training, with 854 known subjects kept in separate splits."
+    },
+    "arch-support": {
+      "line": "Our team bench-tested a sewn arch sleeve with gel pads."
+    },
+    "ecg": {
+      "line": "I soldered the board and wrote its Processing monitor.",
+      "lede": "I soldered an ECG board and wrote the Processing monitor that draws its trace.",
+      "detail": "The Arduino loop includes a 10 ms delay, giving a nominal rate near 100 Hz. Processing draws the latest reading and estimates rate from flagged threshold crossings."
+    },
+    "mass-spec": {
+      "line": "An Excel/VBA macro that turns mass-spec exports into t-tests and volcano plots."
+    },
+    "jobhub": {
+      "line": "A private job-search tool that does not submit applications for you."
+    }
+  },
+  "notes": {
+    "heroTrace": "synthetic squiggle, not a real recording",
+    "lungscopeAudio": "browser-generated noise, not a lung recording",
+    "stampSynthetic": "synthetic, not a recording"
+  },
+  "contact": {
+    "hello": "Email is fastest.",
+    "button": "Email me"
+  },
+  "about": "I'm studying biomedical engineering at the University of Cincinnati and on co-op at Live Well Collaborative. My projects include an ECG monitor, a pediatric arch sleeve and software for lab data. Other work includes GRASP Studio."
+}

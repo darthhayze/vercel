@@ -1,0 +1,10 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHead from '../components/kit/PageHead.astro';
+import Magnetic from '../components/kit/Magnetic.astro';
+---
+<SiteLayout title="Page not found" description="That page does not exist." noindex>
+  <PageHead title="Not here." lede="The link may be old. Try the home page or the evidence ledger.">
+    <p class="actions"><Magnetic href="/" variant="ink">Back to the home page</Magnetic> <Magnetic href="/evidence/" variant="ghost">Evidence ledger</Magnetic></p>
+  </PageHead>
+</SiteLayout>

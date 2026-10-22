@@ -1,0 +1,26 @@
+---
+// Shared close (inner pages; also holds the full link row): ink field, yellow type, the address at full width. Same markup as the home contact block.
+import { site } from '../lib/data';
+interface Props { slim?: boolean }
+const { slim = false } = Astro.props;
+---
+{slim ? (
+<footer class="contact contact-slim" id="contact" aria-labelledby="contact-h">
+  <h2 id="contact-h" class="sr">Contact</h2>
+  <p class="cs-row"><a class="cs-mail" href={site.links.email}>{site.email}</a><a href={site.links.linkedin}>LinkedIn ↗</a><a href={site.links.resume1}>Résumé</a></p>
+  <nav class="flinks cs-row" aria-label="Site"><a href="/#work">Work</a><a href="/research/">Research</a><a href="/evidence/">Evidence</a><a href="/#about">About</a><a href="/colophon/">Colophon</a></nav>
+</footer>
+) : (
+<footer class="contact" id="contact" aria-labelledby="contact-h">
+  <h2 id="contact-h" class="sr">Contact</h2>
+  <a class="mail" href={site.links.email}>{site.email}</a>
+  <ul class="clinks">
+    <li><a class="btn" href={site.links.email} data-magnetic>Email me</a></li>
+    <li><a href={site.links.linkedin}>LinkedIn ↗</a></li>
+    <li><a href={site.links.resume1}>Résumé, 1 page</a></li>
+    <li><a href={site.links.resume3}>Résumé, 3 pages</a></li>
+  </ul>
+  <nav class="flinks" aria-label="Site"><ul><li><a href="/#work">Work</a></li><li><a href="/research/">Research</a></li><li><a href="/evidence/">Evidence</a></li><li><a href="/#about">About</a></li><li><a href="/#contact">Contact</a></li></ul></nav>
+  <div class="foot"><span>{site.name}, biomedical engineering</span><a href="/evidence/">Evidence</a><a href="/colophon/">Colophon</a></div>
+</footer>
+)}

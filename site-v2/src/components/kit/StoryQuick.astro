@@ -1,0 +1,29 @@
+---
+// QUICK READ: the project's tile art at a larger size, one plain paragraph and two or three fact lines, in the world's palette.
+// story.json `quick`: first entry = the paragraph, the rest = fact lines (label + value). Each project gets its own composition
+// (art side, art banner or text-led) through data-slug rules in story.css, so the seven pages do not share one template.
+import Mini from '../sp/Mini.astro';
+interface Beat { h: string; t: string }
+interface Props { slug: string; title: string; beats: Beat[]; skills: string[]; demo?: string }
+const { slug, title, beats, demo } = Astro.props;
+const [lead, ...facts] = beats;
+---
+<section class="story-quick" id="quick" aria-labelledby="quick-h">
+  <h2 class="story-qh" id="quick-h">{title}</h2>
+  <div class="story-qgrid">
+    <div class="story-mini" aria-hidden="true">
+      <Mini slug={slug} />
+    </div>
+    <div class="story-beats">
+      <p class="story-lead">{lead.t}</p>
+      {facts.length > 0 && (
+        <dl class="story-facts">
+          {facts.map((f) => (
+            <div class="story-fact"><dt>{f.h}</dt><dd>{f.t}</dd></div>
+          ))}
+        </dl>
+      )}
+      <a class="story-btn story-go" href="#explore" data-story-set="explore" data-story-demo={demo}>Explore details <span aria-hidden="true">↓</span></a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,16 @@
+---
+// Shared text block for one Work window: title, description, skills, two labelled buttons.
+// Each window styles this block in its own world (see styles/work.css).
+const { slug, p, quick, explore } = Astro.props;
+---
+<div class="wtxt">
+  <header class="whead">
+    <h3 id={`wt-${slug}`}><a href={quick}>{p.title}</a></h3>
+  </header>
+  <p class="wline">{p.window.line}</p>
+  <p class="wskills"><small>{p.window.skills.join(' · ')}</small></p>
+  <div class="wbtns">
+    <a class="wb q" href={quick}>Quick read<span class="sr"> of {p.title}</span></a>
+    <a class="wb e" href={explore}>Explore details<span class="sr"> of {p.title}</span></a>
+  </div>
+</div>

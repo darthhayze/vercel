@@ -1,0 +1,31 @@
+{
+  "name": "Hamza Al Halabi",
+  "domain": "https://hamza-bme.tech",
+  "title": "Hamza Al Halabi | Biomedical engineering",
+  "thesis": "I build biomedical prototypes and software for lab data.",
+  "sub": "Biomedical Engineering, University of Cincinnati · Product Development Co-op, Live Well Collaborative · Expected 2028",
+  "role": "Biomedical Engineering Co-op",
+  "email": "alhalaha@mail.uc.edu",
+  "links": {
+    "linkedin": "https://www.linkedin.com/in/alhalabihamza",
+    "email": "mailto:alhalaha@mail.uc.edu",
+    "resume1": "/resume/Hamza_Al_Halabi_Resume_1page.pdf",
+    "resume3": "/resume/Hamza_Al_Halabi_Resume_Extended_3page.pdf"
+  },
+  "education": {
+    "degree": "B.S. Biomedical Engineering",
+    "school": "University of Cincinnati",
+    "expected": "2028"
+  },
+  "tools": {
+    "product": "SolidWorks, Siemens NX, Fusion 360, Blender, FDM/SLA printing, silicone casting",
+    "code": "Python, MATLAB, R, C/C++, JavaScript, Excel/VBA, Linux/HPC, Arduino, Processing",
+    "lab": "High-resolution mass spectrometry, PBMC isolation, Illumina data analysis, KiCad, LTspice"
+  },
+  "privacy": "No analytics, no cookies, no tracking.",
+  "lastVerified": "2026-10-20",
+  "_unverified": [
+    "Phone number deliberately omitted from site and public PDFs (master lists 513-266-7451); owner to confirm.",
+    "Site contact email follows the owner instruction and master (alhalaha@mail.uc.edu). Old public résumés used hamzauniversity2@gmail.com, which also appears in the IJMS paper author list."
+  ]
+}

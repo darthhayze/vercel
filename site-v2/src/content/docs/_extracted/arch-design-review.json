@@ -1,0 +1,123 @@
+{
+  "pages": 15,
+  "size": [
+    1100,
+    619
+  ],
+  "page_text": [
+    "PEDIATRIC ARCH SUPPORT\nFinal Design Review | Group 11\n\n\n\nPrepared By: Thomas Barnett, Levi Willgruber, Hamza Al Halabi\n\nDepartment: Biomedical Engineering\n\nDate: 8 August 2026",
+    "  PROBLEM STATEMENT\n\n\nOBJECTIVE\nTo design a positionally adaptable orthopedic device for growing\nchildren (ages 5-7) with symptomatic pediatric pes planus (flat\nfoot).\n\nCLINICAL NEED\n   • Alleviate medial longitudinal arch discomfort.\n   • Accommodate rapid volumetric foot growth.\n   • Provide a low-cost, non-invasive alternative to rigid orthotics.",
+    "  CLINICAL BACKGROUND & APPROACH\n\n\n\nANATOMY OF PES PLANUS                                                  SYMPTOM TRACKING\nCharacterized by the collapse of the Medial Longitudinal Arch           • Excessive pronation during gait cycle.\n(MLA). In children aged 5-7, the foot is in a critical developmental    • Plantar fasciitis risk in early childhood.\nphase.                                                                  • Muscle fatigue in the Tibialis Posterior.\n\nVALMASSY FORMULA\nThe Resting Calcaneal Stance Position (RCSP) typically corrects by\napproximately 1° per year until age 7.",
+    " COMPETITIVE BENCHMARKING\n\n\n\n\nCriteria         Rigid Orthotics        OTC Insoles   Group 11 Solution\n\n\nAdaptability     None (Fixed)           Minimal       High (Sleeve)\n\nComfort          Low (Rigid Plastic)    Moderate      High (Gel/Fabric)\n\nCost             $200+ (Custom)         $15 - $30     $18-$24\n\nGrowth Scaling   Requires Replacement   Disposable    Modular Inserts",
+    " USER NEEDS & DESIGN INPUTS\n\n\n\n\nUser Need                           Design Input (Requirement)                    Verification Method\n\n\nWithstands impacts in daily play.   Must withstand an impact force of 3600 lbs.   Impact Testing\n\nScales with foot size.              Sleeve elasticity allow 10% volume growth.    Tensile Testing\n\nAlleviate Arch Pain.                Support 150N ground reaction force (GRF).     FMEA / Load Testing\n\nLow profile in shoes.               Total thickness < 8mm in midfoot area.        Caliper Measure",
+    "DESIGN RATIONALE\n\n\n\n\nMATERIAL SELECTION                HYBRID SUPPORT                        HUMAN FACTORS\nBleached Muslin was selected to   Gel-adhesive sandwich construction:   Familiar design allows children to put\nensure the shape of the pattern   Soft gel for immediate comfort        on the insert themselves, as if it were\naccurately fit into place.        surrounded by adhesive to encase      a regular sock.\n                                  and deform with the gel.",
+    "PROTOTYPE JOURNEY\n\n\n\n\nV1: PROOF OF CONCEPT                     V2: FUNCTIONAL ALPHA                     V3: FINAL BETA\nCardboard and foam inserts in            Gel pads in compression sleeves.         Custom-molded hybrid inserts with\nstandard socks.                                                                   reinforced pouch.\n                                         Lesson: Improved stability; identified\nLesson: Verified the lift required but   the need for a dedicated pad             Lesson: Ready for biomechanical\nfailed on stability.                     pocket. Need to refine insert            validation.\n                                         topography.",
+    " FINAL DESIGN DETAILS\n\nASSEMBLY OVERVIEW\n • Sleeve: Breathable Muslin.\n • Strap: Elastic Band\n • Pocket: Reinforced internal stitching.\n • Insert: Gel-Adhesive Combination.",
+    "  ENGINEERING ANALYSIS\n\n\n\nARCH BIOMECHANICS                                                      MATERIAL STRESS\nModeled as a Windlass Mechanism. The tension (T) in the plantar        Tensile stress (σ) on the sleeve during a 10% strain (ε) cycle to\nfascia is related to the ground reaction force (F_g) and arch height   ensure safe elastic limits:\n(h):\n\n\n\n\n                                                                       Calculated Elastic Modulus (E) for the textile blend: 10-\n   (L = Foot length, h = Arch height)\n                                                                       100 MPa. Based on stitch vs cross stretch",
+    " RISK ANALYSIS (FMEA)\n\n\n\n\nFailure Mode               Effect                            Severity   Mitigation\n\n\nPad Slippage               Loss of arch support              Medium     Non-slip pocket lining\n\nMaterial Tearing           Device failure                    High       Industrial Sewing\n\nCirculatory Constriction   Pain / Numbness                   Extreme    Limited compression gradient\n\nHygiene (Sweat)            Skin irritation                   Low        Antimicrobial mesh choice\n\nPad Burst                  Loss of support, Device Failure   High       Reinforcing gel casing",
+    "    VERIFICATION TESTING\nPROCEDURE                                                      Success Criteria\n\n•   Place the insert and Sleeve on a flat, supported           In both the static loading and impact testing the insert\n\n    surface                                                    must remain fully intact. This means no gel should\n\n•   Place a 30lbs dumbbell on the insert for 1 minute          seam outside the pouch, no stitching should come\n\n•   Drop the 30lbs dumbbell on the insert from a               undone, and none of the fabric should tear.\n\n    distance of 1 foot\nRational                                                        RESULTS\n•   The purpose of this test is to see if the insert is able     Test             Pass Fail       Comments\n    to withstand the forces it will be exposed to during         Static #1          X                    Insert Unaffected\n    normal use.\n                                                                 Static #2          X                    Insert Unaffected\n•   A 1 minute static hold is used to simulate the insert\n    being used at rest.\n                                                                 Static #3          X                    Insert Unaffected\n•   The drop test simulated how the insert reacts in             Impact #1          X                    Insert Unaffected\n    high-impact situations, such as sports.                      Impact #2          X                    Insert Unaffected\n                                                                 Impact #3                           Insert slightly damaged,\n                                                                                            X          but contained, slight\n                                                                                                              leakage",
+    "VERIFICATION TESTING",
+    " NEXT STEPS & LEARNINGS\n\n\n\n\nKEY LEARNINGS                                                       FUTURE IMPROVEMENTS\n  • Adhesive may struggle to contain gel after loading               • TPU printed encasement\n  • Sleeve tension and elasticity must be balanced against tissue    • 3D Scan-to-Print workflow for custom inserts.\n    compression limits.                                              • Flexible elastic fabric integration\n  • The \"Growing Child\" constraint is a material science             • Longitudinal gait analysis with actual pediatric subjects.\n   problem.",
+    "QUESTIONS?\n       Design Review | Group 11\n\n\n\n\nThomas Barnett | Levi Willgruber | Hamza Al Halabi\n\n\n          UNIVERSITY OF CINCINNATI",
+    "IMAGE SOURCES\n\n\n\n\n   https://www.ceas.uc.edu/content/ceas/admissions/visit/jcr:content/main/image.img.jpeg/1626381200958/campus.jpeg\n\n   Source: www.ceas.uc.edu\n\n\n   https://pediatricfootankle.com/nitropack_static/hVYDHzsLFMZdqvgqzxZsadAURYWOSfeQ/assets/images/optimized/rev-5702a19/pediatricfootankle.com/wp-\n   content/uploads/Flat-Feet-image-side-by-side-normal-vs-flat-feet-condition-in-children-1024x683.png\n\n   Source: www.pediatricfootankle.com"
+  ],
+  "headings": [
+    {
+      "page": 1,
+      "text": "PEDIATRIC ARCH SUPPORT"
+    },
+    {
+      "page": 2,
+      "text": "PROBLEM STATEMENT"
+    },
+    {
+      "page": 2,
+      "text": "OBJECTIVE"
+    },
+    {
+      "page": 2,
+      "text": "CLINICAL NEED"
+    },
+    {
+      "page": 3,
+      "text": "CLINICAL BACKGROUND & APPROACH"
+    },
+    {
+      "page": 3,
+      "text": "ANATOMY OF PES PLANUS                                                  SYMPTOM TRACKING"
+    },
+    {
+      "page": 3,
+      "text": "VALMASSY FORMULA"
+    },
+    {
+      "page": 4,
+      "text": "COMPETITIVE BENCHMARKING"
+    },
+    {
+      "page": 5,
+      "text": "USER NEEDS & DESIGN INPUTS"
+    },
+    {
+      "page": 6,
+      "text": "DESIGN RATIONALE"
+    },
+    {
+      "page": 6,
+      "text": "MATERIAL SELECTION                HYBRID SUPPORT                        HUMAN FACTORS"
+    },
+    {
+      "page": 7,
+      "text": "PROTOTYPE JOURNEY"
+    },
+    {
+      "page": 7,
+      "text": "V1: PROOF OF CONCEPT                     V2: FUNCTIONAL ALPHA                     V3: FINAL BETA"
+    },
+    {
+      "page": 8,
+      "text": "FINAL DESIGN DETAILS"
+    },
+    {
+      "page": 8,
+      "text": "ASSEMBLY OVERVIEW"
+    },
+    {
+      "page": 9,
+      "text": "ENGINEERING ANALYSIS"
+    },
+    {
+      "page": 9,
+      "text": "ARCH BIOMECHANICS                                                      MATERIAL STRESS"
+    },
+    {
+      "page": 10,
+      "text": "RISK ANALYSIS (FMEA)"
+    },
+    {
+      "page": 11,
+      "text": "VERIFICATION TESTING"
+    },
+    {
+      "page": 12,
+      "text": "VERIFICATION TESTING"
+    },
+    {
+      "page": 13,
+      "text": "NEXT STEPS & LEARNINGS"
+    },
+    {
+      "page": 13,
+      "text": "KEY LEARNINGS                                                       FUTURE IMPROVEMENTS"
+    },
+    {
+      "page": 14,
+      "text": "UNIVERSITY OF CINCINNATI"
+    },
+    {
+      "page": 15,
+      "text": "IMAGE SOURCES"
+    }
+  ],
+  "figures": []
+}

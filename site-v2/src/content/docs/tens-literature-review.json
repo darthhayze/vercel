@@ -1,0 +1,142 @@
+{
+ "slug": "tens-literature-review",
+ "title": "Wearable TENS systems: literature review",
+ "pdf": "/docs/tens-literature-review.pdf",
+ "pages": 9,
+ "size": [
+  1100,
+  1424
+ ],
+ "coords": "x and y are percent of the page image, measured from the top left",
+ "startHere": [
+  1,
+  3,
+  7,
+  8,
+  10,
+  11
+ ],
+ "intro": "A nine-page literature review of TENS pain-relief units, split into five systems. It ends with the case for a wearable garment.",
+ "hotspots": [
+  {
+   "page": 1,
+   "x": 14,
+   "y": 16,
+   "n": 1,
+   "title": "Human systems",
+   "kind": "what",
+   "note": "The review begins with the person using a portable TENS unit: placing skin electrodes and adjusting stimulation settings. Later sections cover biological, mechanical, electrical and chemical systems.",
+   "margin": true
+  },
+  {
+   "page": 2,
+   "x": 15,
+   "y": 17,
+   "n": 2,
+   "title": "Proposed pain mechanisms",
+   "kind": "what",
+   "note": "The review discusses gate control and endogenous opioid signalling as proposed mechanisms for TENS pain relief.",
+   "margin": true
+  },
+  {
+   "page": 2,
+   "x": 15,
+   "y": 29,
+   "n": 3,
+   "title": "Tolerance and one animal study",
+   "kind": "limit",
+   "note": "The review cites a rodent study in which pain relief diminished with repeated use and differed by pain model. This does not establish an effect in people.",
+   "margin": true
+  },
+  {
+   "page": 3,
+   "x": 15,
+   "y": 86,
+   "n": 4,
+   "title": "Electrical: 3 to 9 volts becomes about 100 to 150",
+   "kind": "why",
+   "note": "The review describes a circuit that shapes battery power into biphasic pulses and steps voltage up to about 100 to 150 V. These are circuit details cited from sources. We built and measured no device.",
+   "margin": true
+  },
+  {
+   "page": 4,
+   "x": 20,
+   "y": 75,
+   "n": 5,
+   "title": "Chemical: gel and adhesive",
+   "kind": "what",
+   "note": "The review describes a water-and-potassium-chloride gel that conducts current at the skin. It also discusses adhesion and skin irritation.",
+   "margin": true
+  },
+  {
+   "page": 5,
+   "x": 15,
+   "y": 45,
+   "n": 6,
+   "title": "Why the pads wear out",
+   "kind": "why",
+   "note": "The review says gel dries in air and adhesive picks up skin oils, so pads lose grip over time.",
+   "margin": true
+  },
+  {
+   "page": 6,
+   "x": 60,
+   "y": 51,
+   "n": 7,
+   "title": "The systems and interaction diagram",
+   "kind": "what",
+   "note": "The diagram follows the signal from user settings through the electronics and electrodes to the skin and nerves.",
+   "margin": true
+  },
+  {
+   "page": 7,
+   "x": 50,
+   "y": 18,
+   "n": 8,
+   "title": "Gaps the review found",
+   "kind": "limit",
+   "note": "Our review did not resolve long-term skin effects or how much declining effect comes from electrode wear versus nervous-system adaptation.",
+   "margin": true
+  },
+  {
+   "page": 7,
+   "x": 50,
+   "y": 58,
+   "n": 9,
+   "title": "Electrode wear",
+   "kind": "why",
+   "note": "Our review identifies long-wear electrode adhesion and skin tolerance as design questions.",
+   "margin": true
+  },
+  {
+   "page": 8,
+   "x": 50,
+   "y": 20,
+   "n": 10,
+   "title": "From review to design",
+   "kind": "why",
+   "note": "We focused on wires, pad placement and the separate controller. Our proposal puts electrodes and electronics into a garment.",
+   "margin": true
+  },
+  {
+   "page": 8,
+   "x": 15,
+   "y": 44,
+   "n": 11,
+   "title": "Textile or dry electrodes",
+   "kind": "limit",
+   "note": "We proposed textile or dry electrodes as alternatives to disposable hydrogel pads. The review reports no prototype measurements or clinical test of our garment.",
+   "margin": true
+  },
+  {
+   "page": 9,
+   "x": 15,
+   "y": 16,
+   "n": 12,
+   "title": "Reading base",
+   "kind": "limit",
+   "note": "The review cites eight sources, including patents, electrode-material studies and an animal study. The list starts on page 8 and continues here.",
+   "margin": true
+  }
+ ]
+}

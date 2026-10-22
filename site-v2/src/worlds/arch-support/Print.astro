@@ -1,0 +1,13 @@
+---
+// Wet-test footprint, sole view. Lateral edge stays put; the inner edge pulls in as the arch rises.
+import { printD, TOES } from './foot';
+interface Props { id: string; h: number; label: string; seq?: number }
+const { id, h, label, seq = 0 } = Astro.props;
+---
+<svg class="print" viewBox="0 0 236 420" role="img" aria-label={label} data-print-svg={id} focusable="false">
+  <path class="pr-fill" data-r="pfill" d={printD(h)} data-rise data-d={seq + 500} />
+  <path class="pr-line" data-r="pline" d={printD(h)} pathLength="1" data-draw data-d={seq} />
+  <g class="pr-toes">
+    {TOES.map((t, i) => <ellipse data-t={i} cx={t.cx} cy={t.cy} rx={t.rx} ry={t.ry} data-rise data-d={seq + 700 + i * 60} />)}
+  </g>
+</svg>

@@ -1,0 +1,21 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHead from '../components/kit/PageHead.astro';
+---
+<SiteLayout title="Terms of use" description="Terms for viewing and sharing Hamza Al Halabi’s biomedical engineering portfolio and project materials.">
+  <PageHead title="Terms of use" lede="Terms for viewing and sharing Hamza Al Halabi’s biomedical engineering portfolio and project materials." field="ink" />
+  <div class="band f-paper legal">
+    <section><h2>Purpose</h2><p>This website is a personal portfolio presenting academic, research, engineering, and design work by Hamza Al Halabi. It is provided for informational and professional-review purposes.</p></section>
+    <section><h2>Portfolio material</h2><p>Unless otherwise indicated, original portfolio layouts, project explanations, code presentations, and design material are presented as the author’s work or as work in which the author participated. Third-party publications, institutional names, trademarks, and referenced materials remain subject to their respective rights and licenses.</p></section>
+    <section><h2>No professional or medical advice</h2><p>Engineering and biomedical content on this site is educational and portfolio material. It is not medical advice, clinical guidance, regulatory approval, or a substitute for professional engineering review.</p></section>
+    <section><h2>Accuracy and availability</h2><p>Reasonable effort is made to keep project descriptions accurate, but portfolio content may be updated, reorganized, or removed. The site is provided without a guarantee that every file, external link, or interactive feature will remain continuously available.</p></section>
+    <section><h2>External services</h2><p>Links to external websites and services are provided for convenience. Their content and terms are controlled by those providers.</p></section>
+    <section><h2>Permitted use</h2><p>You may view and share the public portfolio URL for ordinary informational, recruiting, academic, and professional-review purposes. Republishing substantial original portfolio content as your own is not permitted.</p></section>
+    <section><h2>Contact</h2><p>Questions about these terms can be sent to <a href="mailto:alhalaha@mail.uc.edu">alhalaha@mail.uc.edu</a>.</p></section>
+    <p>Last updated <time datetime="2026-10-22">2026-10-22</time> · <a href="/privacy/">Privacy</a></p>
+  </div>
+</SiteLayout>
+<style>
+  .legal section { max-width: 65ch; margin-bottom: 2rem; }
+  .legal h2 { font: 700 1.5rem/1.2 var(--display); margin-bottom: .75rem; }
+</style>

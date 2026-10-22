@@ -1,0 +1,30 @@
+---
+// Beat 2. Work: seven windows, one per project, in story order. Each window is its own object
+// (night panel, blueprint sheet, oscilloscope, spreadsheet, laptop, droplet, paper sheet) with a live miniature,
+// a description, a plain skills line and two labelled buttons. Layout: a 12-column poster collage; LungScope is the hero.
+import story from '../../content/story.json';
+import Mini from './Mini.astro';
+import WinText from './WinText.astro';
+import '../../styles/story.css';
+import '../../styles/work.css';
+
+const P = (story as any).projects;
+const order: string[] = (story as any).order;
+const href = (slug: string, h: string) => (slug === 'research' ? `/research/#${h}` : `/work/${slug}/#${h}`);
+---
+<section class="work" id="work" aria-labelledby="work-h">
+  <div class="work-head">
+    <h2 id="work-h" class="big">Work</h2>
+  </div>
+
+  <div class="wins">
+    {order.map((slug) => {
+      const p = P[slug];
+      return (
+        <Mini slug={slug} as="article" id={`work-${slug}`} labelledby={`wt-${slug}`}>
+          <WinText slug={slug} p={p} quick={href(slug, 'quick')} explore={href(slug, 'explore')} />
+        </Mini>
+      );
+    })}
+  </div>
+</section>

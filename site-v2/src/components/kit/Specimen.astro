@@ -1,0 +1,22 @@
+---
+// A taped, rotated print. Draggable with Motion springs (pointer drag, thrown; Shift+arrows for keyboard).
+// Slot = the picture (img/video). With `href` it is a link and a drag does not trigger the click.
+interface Props {
+  href?: string;
+  /** degrees, integer -12..12 */
+  rot?: number;
+  caption?: string;
+  tape?: boolean;
+  drag?: boolean;
+  /** entrance animation (the drop) */
+  drop?: boolean;
+  class?: string;
+}
+const { href, rot = 0, caption, tape = true, drag = true, drop = false, class: cls } = Astro.props;
+const Tag = href ? 'a' : 'figure';
+---
+<Tag class:list={['spec', drop && 'drop', cls]} data-rot={rot} data-drag={drag ? '' : undefined} href={href} tabindex={drag && !href ? 0 : undefined}>
+  <slot />
+  {caption && <span class="cap">{caption}</span>}
+  {tape && <span class="tape" aria-hidden="true"></span>}
+</Tag>

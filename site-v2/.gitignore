@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.astro/
+.vercel
+.env*
+
+# Local visual experiments, captures and reference material.
+qa/
+ref/

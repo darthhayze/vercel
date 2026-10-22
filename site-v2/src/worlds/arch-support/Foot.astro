@@ -1,0 +1,72 @@
+---
+// Medial side view of a foot: arch contour, bones, plantar fascia, insert layers, callouts and one dimension line.
+// Teaching illustration, not a scan. variant "lab" = the raise-the-arch drawing, "build" = sleeve/pocket/insert/strap parts,
+// "plan" = the dashed V3 proposal. Every animated piece carries data-draw / data-rise and a delay (data-d, ms).
+import { fillD, outlineD, soleD, cavityD, fasciaD, bones, callouts, passes, dim, FLOOR, VB_W, VB_H } from './foot';
+interface Props { id: string; h?: number; label: string; variant?: 'lab' | 'build' | 'plan'; seq?: number }
+const { id, h = 0.7, label, variant = 'lab', seq = 0 } = Astro.props;
+const B = bones(h);
+const C = callouts(h);
+const P = passes(h);
+const D = dim(h);
+const buildLabels = [
+  { id: 'sleeve', n: 1, label: 'Sleeve', lx: 560, ly: 40, anchor: 'start', sx: 556, sy: 50, ex: 556, ey: 258, mx: 556, my: 34 },
+  { id: 'strap', n: 4, label: 'Strap', lx: 170, ly: 300, anchor: 'end', sx: 178, sy: 294, ex: 204, ey: 306, mx: 146, my: 288 },
+  { id: 'pocket', n: 2, label: 'Pocket', lx: 330, ly: 462, anchor: 'end', sx: 338, sy: 446, ex: 338, ey: 396, mx: 338, my: 450 },
+  { id: 'insert', n: 3, label: 'Insert', lx: 600, ly: 462, anchor: 'start', sx: 592, sy: 446, ex: 592, ey: 392, mx: 592, my: 450 },
+];
+const COS = variant === 'build' ? buildLabels : variant === 'lab' ? C : [];
+---
+<svg class={`foot foot--${variant}`} viewBox={`0 0 ${VB_W} ${VB_H}`} role="img" aria-label={label} data-foot={id} data-variant={variant} focusable="false">
+  <path class="foot-floor" data-r="floor" d={`M0 ${FLOOR} H${VB_W}`} />
+  <path class="foot-fill" data-r="fill" d={fillD(h)} data-rise data-d={seq} />
+
+  {variant === 'build' && (
+    <g class="bf-sleeve" data-part="sleeve">
+      <path class="bf-sleeve-body" data-r="sleeve" data-draw pathLength="1" d={outlineD(h)} />
+    </g>
+  )}
+
+  <g class="foot-tp" data-r="tpg">
+    {P.map((p, i) => (
+      <line class:list={['tp', !p.on && 'is-off']} data-r="tp" data-i={i} x1={p.x1} x2={p.x2} y1={p.y} y2={p.y} pathLength={variant !== "plan" ? "1" : undefined} data-draw={variant !== "plan" ? "" : undefined} data-rise={variant === 'plan' ? '' : undefined} data-d={seq + 700 + i * 34} />
+    ))}
+  </g>
+  {variant === 'build' && <circle class="bf-nozzle" data-r="nozzle" r="7" cx="470" cy="395" />}
+
+  <path class="foot-out" data-r="out" d={outlineD(h)} pathLength={variant !== "plan" ? "1" : undefined} data-draw={variant !== "plan" ? "" : undefined} data-rise={variant === 'plan' ? '' : undefined} data-d={seq + 120} />
+  {variant !== 'build' && <path class="foot-arch" data-r="arch" d={soleD(h)} pathLength={variant === 'lab' ? '1' : undefined} data-draw={variant === 'lab' ? '' : undefined} data-rise={variant === 'plan' ? '' : undefined} data-d={seq + 520} />}
+  {variant === 'plan' && <path class="foot-pouch" data-r="pouch" d={cavityD(h)} data-rise data-d={seq + 900} />}
+  {variant === 'build' && <path class="bf-pocket" data-r="pocket" data-draw pathLength="1" d={cavityD(h)} />}
+  {variant === 'build' && <path class="bf-strap" data-r="strap" data-draw pathLength="1" d="M226 226 C214 268 196 300 198 350 C200 388 218 400 252 400" />}
+  {variant === 'lab' && <path class="foot-fascia" data-r="fascia" d={fasciaD(h)} pathLength="1" data-draw data-d={seq + 900} />}
+
+  {variant === 'lab' && (
+    <g class="foot-bones">
+      {B.map((b, i) => (
+        <g data-rise data-d={seq + 380 + i * 70}><path data-b={b.id} d={b.d} transform={b.tf || undefined} /></g>
+      ))}
+    </g>
+  )}
+
+  {variant === 'lab' && (
+    <g class="foot-dim" data-r="dim" data-rise data-d={seq + 1300}>
+      <line class="dim-halo" data-d-line x1={D.x} x2={D.x} y1={D.y} y2={FLOOR} />
+      <line class="dim-l" data-d-line x1={D.x} x2={D.x} y1={D.y} y2={FLOOR} />
+      <line class="dim-t" data-d-top x1={D.x - 14} x2={D.x + 14} y1={D.y} y2={D.y} />
+      <text class="dim-x" x={D.x} y="458" text-anchor="middle">arch height</text>
+    </g>
+  )}
+
+  {COS.length > 0 && (
+    <g class="foot-labels" aria-hidden="true">
+      {COS.map((c: any, i: number) => (
+        <g class="co" data-co={c.id} data-rise={variant === 'lab' ? '' : undefined} data-d={seq + 1000 + i * 90}>
+          <line class="co-l" data-r="lead" x1={c.sx} y1={c.sy} x2={c.ex} y2={c.ey} />
+          <circle class="co-dot" data-r="dot" cx={c.ex} cy={c.ey} r="4.5" />
+          <text class="co-t" x={c.lx} y={c.ly} text-anchor={c.anchor}>{c.label}</text>
+        </g>
+      ))}
+    </g>
+  )}
+</svg>

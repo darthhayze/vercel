@@ -1,0 +1,28 @@
+---
+interface Props {
+  id: string; name: string; title: string; formula: string;
+  headers?: string[]; rows?: string[][]; next?: string; grouped?: boolean;
+}
+const { id, name, title, formula, headers, rows, next, grouped } = Astro.props;
+const tabs = [['raw_export', 'ms-sheet'], ['reshaped', 'ms-reshaped'], ['stats', 'ms-stats'], ['volcano', 'ms-volcano'], ['lab_notes', 'ms-used']];
+---
+<section class:list={['ms-sheet', { 'ms-grouped': grouped }]} id={id} aria-labelledby={`${id}-h`} data-ms-sheet>
+  <div class="ms-filebar"><span>mass_spec.xlsm</span><span>Excel / VBA</span></div>
+  <div class="ms-toolbar"><h2 id={`${id}-h`}>{title}</h2>{next && <button class="ms-run" type="button" data-ms-next={next} hidden>Run macro <span aria-hidden="true">↳</span></button>}</div>
+  <div class="ms-formula"><span class="ms-address" aria-hidden="true">{name === 'stats' ? 'E2' : 'B2'}</span><span class="ms-fx" aria-hidden="true">ƒx</span><p>{formula}</p></div>
+  <div class="ms-sheet-body">
+  {headers && rows && <div class="ms-grid-scroll" role="region" aria-label={`${name} table; scroll horizontally to see all sample columns`} tabindex="0">
+    <table class="ms-grid">
+      <caption class="sr-only">{title}. Illustrative values.</caption>
+      <thead>
+        <tr class="ms-letters" aria-hidden="true"><th></th>{headers.map((_, i) => <th>{String.fromCharCode(65 + i)}</th>)}</tr>
+        <tr><th class="ms-rownum" scope="row">1</th>{headers.map(h => <th scope="col">{h}</th>)}</tr>
+      </thead>
+      <tbody>{rows.map((row, r) => <tr><th class="ms-rownum" scope="row">{r + 2}</th>{row.map((v, i) => <td class:list={{'ms-selected': r === 0 && i === (name === 'stats' ? 4 : 1), 'ms-flag': v === 'Missing' || v === 'Check A2'}} data-ms-cell data-illustrative>{v}</td>)}</tr>)}</tbody>
+    </table>
+  </div>}
+  {headers && <p class="ms-scroll-hint">Scroll sideways for more columns.</p>}
+  <slot />
+  </div>
+  <nav class="ms-tabs" aria-label={`${title}: workbook sheets`}>{tabs.map(([label, target]) => <a href={`#${target}`} aria-current={name === label ? 'location' : undefined}>{label}</a>)}</nav>
+</section>

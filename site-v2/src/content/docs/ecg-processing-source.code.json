@@ -1,0 +1,929 @@
+{
+ "slug": "ecg-processing-source",
+ "title": "ECG Processing monitor",
+ "language": "processing",
+ "pdf": "/docs/ecg-processing-source.pdf",
+ "lines": [
+  {
+   "n": 1,
+   "text": "// This Processing code has been written by Univeristy Of Cincinnati Student Hamza Al Halabi [Alhalaha] for use in Circuits BME2081C for Summer of 2026"
+  },
+  {
+   "n": 2,
+   "text": "// No Artificial intelligence was used for this program with the unique exception of line 32 to obtain the correct hospital monitor pitch"
+  },
+  {
+   "n": 3,
+   "text": "// This Code runs in parallel with the arduino code to provide the visual and audible outputs"
+  },
+  {
+   "n": 4,
+   "text": "// Code is fully commented to allow for easy navigation to essential chunck loops such as line trace, bpm tracking, sound initialization, et as well explain certain functionalities"
+  },
+  {
+   "n": 5,
+   "text": "// Enjoy!"
+  },
+  {
+   "n": 6,
+   "text": ""
+  },
+  {
+   "n": 7,
+   "text": "import processing.serial.*;"
+  },
+  {
+   "n": 8,
+   "text": "import processing.sound.*; // Import the Sound library"
+  },
+  {
+   "n": 9,
+   "text": ""
+  },
+  {
+   "n": 10,
+   "text": "Serial myPort;"
+  },
+  {
+   "n": 11,
+   "text": "SinOsc beepSound; // Create the sine wave oscillator"
+  },
+  {
+   "n": 12,
+   "text": ""
+  },
+  {
+   "n": 13,
+   "text": "int ecgValue = 0;"
+  },
+  {
+   "n": 14,
+   "text": ""
+  },
+  {
+   "n": 15,
+   "text": "// Variables for the scrolling line"
+  },
+  {
+   "n": 16,
+   "text": "int xPos = 0;"
+  },
+  {
+   "n": 17,
+   "text": "float previousX = 0;"
+  },
+  {
+   "n": 18,
+   "text": "float previousY = 0;"
+  },
+  {
+   "n": 19,
+   "text": ""
+  },
+  {
+   "n": 20,
+   "text": "// Threshold and Visual settings"
+  },
+  {
+   "n": 21,
+   "text": "int threshold = 450;"
+  },
+  {
+   "n": 22,
+   "text": "int flashTimer = 0;"
+  },
+  {
+   "n": 23,
+   "text": ""
+  },
+  {
+   "n": 24,
+   "text": "// BPM Calculation Variables"
+  },
+  {
+   "n": 25,
+   "text": "boolean isPeak = false;"
+  },
+  {
+   "n": 26,
+   "text": "long lastBeatTime = 0;"
+  },
+  {
+   "n": 27,
+   "text": "float currentBPM = 0;"
+  },
+  {
+   "n": 28,
+   "text": ""
+  },
+  {
+   "n": 29,
+   "text": "void setup() {"
+  },
+  {
+   "n": 30,
+   "text": "  size(1000, 500);"
+  },
+  {
+   "n": 31,
+   "text": "  background(5, 10, 5);"
+  },
+  {
+   "n": 32,
+   "text": ""
+  },
+  {
+   "n": 33,
+   "text": "  // Initialize the beep sound"
+  },
+  {
+   "n": 34,
+   "text": "  beepSound = new SinOsc(this);"
+  },
+  {
+   "n": 35,
+   "text": "  beepSound.freq(700); // 700 Hz is a standard clinical monitor pitch"
+  },
+  {
+   "n": 36,
+   "text": "  beepSound.play();"
+  },
+  {
+   "n": 37,
+   "text": "  beepSound.amp(0.0);  // Start it muted"
+  },
+  {
+   "n": 38,
+   "text": ""
+  },
+  {
+   "n": 39,
+   "text": "  printArray(Serial.list());"
+  },
+  {
+   "n": 40,
+   "text": ""
+  },
+  {
+   "n": 41,
+   "text": "  try {"
+  },
+  {
+   "n": 42,
+   "text": "    String portName = Serial.list()[12];"
+  },
+  {
+   "n": 43,
+   "text": "    myPort = new Serial(this, portName, 9600);"
+  },
+  {
+   "n": 44,
+   "text": "    myPort.bufferUntil('\\n');"
+  },
+  {
+   "n": 45,
+   "text": "    println(\"SUCCESS: Connected to \" + portName);"
+  },
+  {
+   "n": 46,
+   "text": "  } catch (Exception e) {"
+  },
+  {
+   "n": 47,
+   "text": "    println(\"CRITICAL ERROR: Could not connect to the COM port!\");"
+  },
+  {
+   "n": 48,
+   "text": "    println(\"Close the Arduino Serial Monitor and try again.\");"
+  },
+  {
+   "n": 49,
+   "text": "  }"
+  },
+  {
+   "n": 50,
+   "text": "}"
+  },
+  {
+   "n": 51,
+   "text": ""
+  },
+  {
+   "n": 52,
+   "text": "void draw() {"
+  },
+  {
+   "n": 53,
+   "text": "  // =========================================="
+  },
+  {
+   "n": 54,
+   "text": "  // 1. DRAW TRACE AREA (WITH ERASE BAR & GRID)"
+  },
+  {
+   "n": 55,
+   "text": "  // =========================================="
+  },
+  {
+   "n": 56,
+   "text": "  float traceWidth = width - 280;"
+  },
+  {
+   "n": 57,
+   "text": ""
+  },
+  {
+   "n": 58,
+   "text": "  // Erase the path ahead of the drawing line"
+  },
+  {
+   "n": 59,
+   "text": "  noStroke();"
+  },
+  {
+   "n": 60,
+   "text": "  fill(5, 10, 5);"
+  },
+  {
+   "n": 61,
+   "text": "  rect(xPos, 0, 40, height);"
+  },
+  {
+   "n": 62,
+   "text": ""
+  },
+  {
+   "n": 63,
+   "text": "  // Draw faint clinical grid lines"
+  },
+  {
+   "n": 64,
+   "text": "  stroke(15, 30, 15);"
+  },
+  {
+   "n": 65,
+   "text": "  strokeWeight(1);"
+  },
+  {
+   "n": 66,
+   "text": "  for (int i = 0; i < height; i += 50) {"
+  },
+  {
+   "n": 67,
+   "text": "    line(xPos, i, xPos + 40, i);"
+  },
+  {
+   "n": 68,
+   "text": "  }"
+  },
+  {
+   "n": 69,
+   "text": "  for (int i = 0; i < traceWidth; i += 50) {"
+  },
+  {
+   "n": 70,
+   "text": "    if (i >= xPos && i < xPos + 40) {"
+  },
+  {
+   "n": 71,
+   "text": "      line(i, 0, i, height);"
+  },
+  {
+   "n": 72,
+   "text": "    }"
+  },
+  {
+   "n": 73,
+   "text": "  }"
+  },
+  {
+   "n": 74,
+   "text": ""
+  },
+  {
+   "n": 75,
+   "text": "  // =========================================="
+  },
+  {
+   "n": 76,
+   "text": "  // 2. THRESHOLD, BPM, AND AUDIO LOGIC"
+  },
+  {
+   "n": 77,
+   "text": "  // =========================================="
+  },
+  {
+   "n": 78,
+   "text": "  if (ecgValue >= threshold && !isPeak) {"
+  },
+  {
+   "n": 79,
+   "text": "    flashTimer = 10;"
+  },
+  {
+   "n": 80,
+   "text": "    isPeak = true;"
+  },
+  {
+   "n": 81,
+   "text": "    beepSound.amp(0.4); // Turn the beep volume up when threshold is crossed"
+  },
+  {
+   "n": 82,
+   "text": ""
+  },
+  {
+   "n": 83,
+   "text": "    long currentTime = millis();"
+  },
+  {
+   "n": 84,
+   "text": "    long timeInterval = currentTime - lastBeatTime;"
+  },
+  {
+   "n": 85,
+   "text": ""
+  },
+  {
+   "n": 86,
+   "text": "    // Filter noise: Calculate only if interval is between 300ms (200 BPM) and 2000ms (30 BPM)"
+  },
+  {
+   "n": 87,
+   "text": "    if (timeInterval > 300 && timeInterval < 2000) {"
+  },
+  {
+   "n": 88,
+   "text": "      currentBPM = 60000.0 / timeInterval;"
+  },
+  {
+   "n": 89,
+   "text": "    }"
+  },
+  {
+   "n": 90,
+   "text": "    lastBeatTime = currentTime;"
+  },
+  {
+   "n": 91,
+   "text": "  }"
+  },
+  {
+   "n": 92,
+   "text": ""
+  },
+  {
+   "n": 93,
+   "text": "  if (ecgValue < threshold - 20) {"
+  },
+  {
+   "n": 94,
+   "text": "    isPeak = false; // Reset lock"
+  },
+  {
+   "n": 95,
+   "text": "  }"
+  },
+  {
+   "n": 96,
+   "text": ""
+  },
+  {
+   "n": 97,
+   "text": "  // =========================================="
+  },
+  {
+   "n": 98,
+   "text": "  // 3. DRAW RIGHT-SIDE VITALS PANEL"
+  },
+  {
+   "n": 99,
+   "text": "  // =========================================="
+  },
+  {
+   "n": 100,
+   "text": "  noStroke();"
+  },
+  {
+   "n": 101,
+   "text": "  fill(15, 20, 15);"
+  },
+  {
+   "n": 102,
+   "text": "  rect(traceWidth, 0, 280, height);"
+  },
+  {
+   "n": 103,
+   "text": ""
+  },
+  {
+   "n": 104,
+   "text": "  // Panel Border Line"
+  },
+  {
+   "n": 105,
+   "text": "  stroke(30, 60, 30);"
+  },
+  {
+   "n": 106,
+   "text": "  strokeWeight(3);"
+  },
+  {
+   "n": 107,
+   "text": "  line(traceWidth, 0, traceWidth, height);"
+  },
+  {
+   "n": 108,
+   "text": ""
+  },
+  {
+   "n": 109,
+   "text": "  // Beating Heart Icon & Audio Mute Logic"
+  },
+  {
+   "n": 110,
+   "text": "  if (flashTimer > 0) {"
+  },
+  {
+   "n": 111,
+   "text": "    fill(255, 40, 40); // Bright Red Flash"
+  },
+  {
+   "n": 112,
+   "text": "    flashTimer--;"
+  },
+  {
+   "n": 113,
+   "text": ""
+  },
+  {
+   "n": 114,
+   "text": "    // Mute the beep the moment the flash finishes"
+  },
+  {
+   "n": 115,
+   "text": "    if (flashTimer == 0) {"
+  },
+  {
+   "n": 116,
+   "text": "      beepSound.amp(0.0);"
+  },
+  {
+   "n": 117,
+   "text": "    }"
+  },
+  {
+   "n": 118,
+   "text": "  } else {"
+  },
+  {
+   "n": 119,
+   "text": "    fill(60, 15, 15);  // Dim Red Rest"
+  },
+  {
+   "n": 120,
+   "text": "  }"
+  },
+  {
+   "n": 121,
+   "text": "  ellipse(traceWidth + 50, 60, 25, 25);"
+  },
+  {
+   "n": 122,
+   "text": ""
+  },
+  {
+   "n": 123,
+   "text": "  // Label"
+  },
+  {
+   "n": 124,
+   "text": "  fill(200);"
+  },
+  {
+   "n": 125,
+   "text": "  textSize(20);"
+  },
+  {
+   "n": 126,
+   "text": "  text(\"ECG / EKG\", traceWidth + 80, 67);"
+  },
+  {
+   "n": 127,
+   "text": ""
+  },
+  {
+   "n": 128,
+   "text": "  // MASSIVE BPM DISPLAY"
+  },
+  {
+   "n": 129,
+   "text": "  fill(0, 255, 100); // Neon Green text"
+  },
+  {
+   "n": 130,
+   "text": "  textSize(24);"
+  },
+  {
+   "n": 131,
+   "text": "  text(\"HR\", traceWidth + 30, 160);"
+  },
+  {
+   "n": 132,
+   "text": ""
+  },
+  {
+   "n": 133,
+   "text": "  textSize(80); // Giant clinical font"
+  },
+  {
+   "n": 134,
+   "text": "  if (currentBPM > 0) {"
+  },
+  {
+   "n": 135,
+   "text": "    text(int(currentBPM), traceWidth + 80, 180);"
+  },
+  {
+   "n": 136,
+   "text": "  } else {"
+  },
+  {
+   "n": 137,
+   "text": "    text(\"--\", traceWidth + 80, 180);"
+  },
+  {
+   "n": 138,
+   "text": "  }"
+  },
+  {
+   "n": 139,
+   "text": ""
+  },
+  {
+   "n": 140,
+   "text": "  textSize(20);"
+  },
+  {
+   "n": 141,
+   "text": "  text(\"bpm\", traceWidth + 210, 180);"
+  },
+  {
+   "n": 142,
+   "text": ""
+  },
+  {
+   "n": 143,
+   "text": "  // DYNAMIC LEVEL INDICATOR"
+  },
+  {
+   "n": 144,
+   "text": "  String levelText = \"ANALYZING...\";"
+  },
+  {
+   "n": 145,
+   "text": "  color levelColor = color(100);"
+  },
+  {
+   "n": 146,
+   "text": ""
+  },
+  {
+   "n": 147,
+   "text": "  if (currentBPM > 0) {"
+  },
+  {
+   "n": 148,
+   "text": "    if (currentBPM < 60) {"
+  },
+  {
+   "n": 149,
+   "text": "      levelText = \"LOW (BRADYCARDIA)\";"
+  },
+  {
+   "n": 150,
+   "text": "      levelColor = color(255, 255, 100); // Yellow"
+  },
+  {
+   "n": 151,
+   "text": "    } else if (currentBPM <= 99) {"
+  },
+  {
+   "n": 152,
+   "text": "      levelText = \"NORMAL RESTING\";"
+  },
+  {
+   "n": 153,
+   "text": "      levelColor = color(100, 200, 255); // Cyan"
+  },
+  {
+   "n": 154,
+   "text": "    } else if (currentBPM <= 139) {"
+  },
+  {
+   "n": 155,
+   "text": "      levelText = \"ACTIVE\";"
+  },
+  {
+   "n": 156,
+   "text": "      levelColor = color(255, 150, 0);   // Orange"
+  },
+  {
+   "n": 157,
+   "text": "    } else {"
+  },
+  {
+   "n": 158,
+   "text": "      levelText = \"ELEVATED\";"
+  },
+  {
+   "n": 159,
+   "text": "      levelColor = color(255, 50, 50);   // Red"
+  },
+  {
+   "n": 160,
+   "text": "    }"
+  },
+  {
+   "n": 161,
+   "text": "  }"
+  },
+  {
+   "n": 162,
+   "text": ""
+  },
+  {
+   "n": 163,
+   "text": "  fill(levelColor);"
+  },
+  {
+   "n": 164,
+   "text": "  textSize(22);"
+  },
+  {
+   "n": 165,
+   "text": "  text(levelText, traceWidth + 30, 240);"
+  },
+  {
+   "n": 166,
+   "text": ""
+  },
+  {
+   "n": 167,
+   "text": "  // Debug/Raw Data at the bottom of the panel"
+  },
+  {
+   "n": 168,
+   "text": "  fill(0, 150, 50);"
+  },
+  {
+   "n": 169,
+   "text": "  textSize(14);"
+  },
+  {
+   "n": 170,
+   "text": "  text(\"RAW SIGNAL: \" + ecgValue, traceWidth + 30, height - 50);"
+  },
+  {
+   "n": 171,
+   "text": "  text(\"THRESHOLD: \" + threshold, traceWidth + 30, height - 30);"
+  },
+  {
+   "n": 172,
+   "text": ""
+  },
+  {
+   "n": 173,
+   "text": "  // =========================================="
+  },
+  {
+   "n": 174,
+   "text": "  // 4. DRAW THE ECG TRACE"
+  },
+  {
+   "n": 175,
+   "text": "  // =========================================="
+  },
+  {
+   "n": 176,
+   "text": "  float mappedY = map(ecgValue, 300, 600, height - 40, 40);"
+  },
+  {
+   "n": 177,
+   "text": ""
+  },
+  {
+   "n": 178,
+   "text": "  stroke(0, 255, 50); // Bright Hospital Green"
+  },
+  {
+   "n": 179,
+   "text": "  strokeWeight(3);"
+  },
+  {
+   "n": 180,
+   "text": ""
+  },
+  {
+   "n": 181,
+   "text": "  if (xPos > 0 && xPos < traceWidth) {"
+  },
+  {
+   "n": 182,
+   "text": "    line(previousX, previousY, xPos, mappedY);"
+  },
+  {
+   "n": 183,
+   "text": "  }"
+  },
+  {
+   "n": 184,
+   "text": ""
+  },
+  {
+   "n": 185,
+   "text": "  previousX = xPos;"
+  },
+  {
+   "n": 186,
+   "text": "  previousY = mappedY;"
+  },
+  {
+   "n": 187,
+   "text": "  xPos += 3; // Speed of the scan line"
+  },
+  {
+   "n": 188,
+   "text": ""
+  },
+  {
+   "n": 189,
+   "text": "  // Wrap around when it hits the panel"
+  },
+  {
+   "n": 190,
+   "text": "  if (xPos >= traceWidth) {"
+  },
+  {
+   "n": 191,
+   "text": "    xPos = 0;"
+  },
+  {
+   "n": 192,
+   "text": "    previousX = 0;"
+  },
+  {
+   "n": 193,
+   "text": "  }"
+  },
+  {
+   "n": 194,
+   "text": "}"
+  },
+  {
+   "n": 195,
+   "text": ""
+  },
+  {
+   "n": 196,
+   "text": "// Automatically triggers whenever Arduino sends data"
+  },
+  {
+   "n": 197,
+   "text": "void serialEvent(Serial myPort) {"
+  },
+  {
+   "n": 198,
+   "text": "  String inString = myPort.readStringUntil('\\n');"
+  },
+  {
+   "n": 199,
+   "text": "  if (inString != null) {"
+  },
+  {
+   "n": 200,
+   "text": "    inString = trim(inString);"
+  },
+  {
+   "n": 201,
+   "text": "    try {"
+  },
+  {
+   "n": 202,
+   "text": "      ecgValue = int(inString);"
+  },
+  {
+   "n": 203,
+   "text": "    } catch (NumberFormatException e) {}"
+  },
+  {
+   "n": 204,
+   "text": "  }"
+  },
+  {
+   "n": 205,
+   "text": "}"
+  }
+ ],
+ "segments": [
+  {
+   "id": "header",
+   "name": "Header: who wrote what",
+   "from": 1,
+   "to": 5,
+   "plain": "Comments only. They say I wrote this monitor for BME2081C, that it runs alongside the Arduino sketch, and that no AI was used except for one line: the pitch of the beep. The header gives that line as 32.",
+   "why": "I wrote the monitor and used AI to choose the beep pitch. The beep pitch line, beepSound.freq(700), sets the pitch.",
+   "tweak": "The header comment does not affect how the program runs."
+  },
+  {
+   "id": "globals",
+   "name": "Libraries, state, threshold",
+   "from": 7,
+   "to": 27,
+   "plain": "Loads the serial and sound libraries and declares the program's memory: the latest reading (ecgValue), the scan position (xPos), a flash countdown, a peak lock (isPeak), the time of the last beat and the current heart-rate estimate. threshold is set to 450 right here.",
+   "why": "Everything the draw loop needs between frames lives in these globals. The threshold is a fixed number written in the source. It is a raw count on the 0 to 1023 scale, so it only suits a signal that rises above 450 on every beat.",
+   "tweak": "For this classroom demo, set the threshold between the baseline and peak raw counts: read the RAW SIGNAL number on screen at rest and at the peak. Changes in baseline or signal size can cause missed or repeated flags."
+  },
+  {
+   "id": "sound",
+   "name": "setup: a muted 700 Hz tone",
+   "from": 29,
+   "to": 37,
+   "plain": "Sets the window to 1000 by 500 pixels with a near-black green background. Then it creates a sine-wave oscillator at 700 Hz, starts it playing and turns its volume to zero.",
+   "why": "The oscillator keeps running while the program changes its volume. I chose 700 Hz for the demo. The source comment calls it a standard clinical monitor pitch; this project did not check that.",
+   "tweak": "Change freq(700) for a different pitch. Lower the 0.4 volume used on a beat if it is loud. Mute it entirely by never raising the amp."
+  },
+  {
+   "id": "serial-open",
+   "name": "setup: open the serial port",
+   "from": 39,
+   "to": 50,
+   "plain": "Prints the list of serial ports, then tries to open one at 9600 baud. It uses the port at position 12 in that list, and bufferUntil('\\n') makes Processing wait for a full line before it calls serialEvent. If anything fails, it prints an error telling you to close the Arduino Serial Monitor.",
+   "why": "Only one program can hold a serial port at a time, which is why the error message names the Serial Monitor. The 9600 matches Serial.begin(9600) in the Arduino sketch. Port index 12 is specific to my setup.",
+   "tweak": "Check the printed port list before changing the index; an invalid index and a busy port produce the same error message."
+  },
+  {
+   "id": "trace-area",
+   "name": "draw: erase bar and grid",
+   "from": 53,
+   "to": 73,
+   "plain": "Each frame it paints a 40-pixel dark block just ahead of the scan position, to wipe the old trace. Then it redraws faint grid lines inside that block only. The trace area is the window width minus 280 pixels, which leaves room for the side panel.",
+   "why": "The screen is never cleared. The block ahead of the line is erased as the line moves, which gives the sweeping look of a bedside monitor and keeps the drawing cheap.",
+   "tweak": "Widen the 40 for a bigger gap ahead of the line. Change the 50-pixel grid spacing. This block does not touch the data."
+  },
+  {
+   "id": "beat",
+   "name": "Beat detection and heart rate",
+   "from": 75,
+   "to": 95,
+   "plain": "The monitor flags a threshold crossing when the latest reading reaches 450 ADC counts and no peak is already being tracked. It starts a 10-frame flash, locks isPeak, raises the beep volume and takes the time since the last flag. The peak lock re-arms when the reading falls below 430. The heart-rate estimate is 60000 divided by the gap, updated only for gaps greater than 300 ms and less than 2000 ms.",
+   "why": "The peak lock stops one tall peak from being flagged many times while the value stays high. The 20-count drop gives it a little room against jitter. The gap window is a plain rule on timing; it does not tell noise from a heartbeat.",
+   "tweak": "This is a fixed-threshold detector, so it depends on signal size and baseline: a smaller or drifting signal can miss beats or never re-arm. It runs once per drawn frame, not once per sample. Options: an adaptive threshold, a smoothed rate over several beats, or checking the frame rate."
+  },
+  {
+   "id": "flash",
+   "name": "Flash, beep off, heart icon",
+   "from": 97,
+   "to": 121,
+   "plain": "Draws the dark side panel and its border. Then the heart dot: while flashTimer is above zero it is bright red and counts down; when it reaches zero the beep volume goes back to 0. Otherwise the dot is dim red.",
+   "why": "The flash and the beep share one countdown, so the light and the sound start together and stop together. Both last ten drawn frames.",
+   "tweak": "Raise flashTimer in the beat block for a longer flash and beep. Because the timer counts frames, it also changes with the frame rate, and this program never sets one."
+  },
+  {
+   "id": "readout",
+   "name": "Heart-rate readout and level label",
+   "from": 123,
+   "to": 165,
+   "plain": "Writes the 'ECG / EKG' label and a big rate estimate, or '--' until one exists. Below it a label and colour set by fixed cut-offs: under 60, up to 99, up to 139, above that, and ANALYZING while there is no estimate yet.",
+   "why": "These labels belong to a classroom demo program I wrote. They are fixed cut-offs on a number from a fixed-threshold detector. They are not a diagnosis, and nothing here was checked against a clinical device. The source text keeps its original wording.",
+   "tweak": "For a revised display, remove the condition labels and show only the estimated rate and raw trace."
+  },
+  {
+   "id": "debug",
+   "name": "Raw value and threshold on screen",
+   "from": 167,
+   "to": 171,
+   "plain": "Prints the current raw reading and the threshold in small green text at the bottom of the panel.",
+   "why": "This is the tuning aid. To set the threshold you need to see the raw numbers your own signal produces.",
+   "tweak": "Add the current frame rate or the last beat gap to the debug text."
+  },
+  {
+   "id": "trace",
+   "name": "draw: the trace line",
+   "from": 173,
+   "to": 194,
+   "plain": "Maps the raw reading from the range 300 to 600 onto the screen height, draws a line from the last point to the new one, then moves right by 3 pixels. At the end of the trace area it wraps back to the left edge.",
+   "why": "One point is drawn per frame, using whatever value serialEvent stored last. So the trace follows the frames of the window, not the 10 ms samples one by one. The 300 to 600 range is why 450 sits mid-screen. A value outside that range is drawn off the plot, because map() does not clamp.",
+   "tweak": "Change 300 and 600 to fit your signal. Draw every incoming sample, not one per frame, to see the full sample stream. Change xPos += 3 for a faster or slower sweep."
+  },
+  {
+   "id": "serial-event",
+   "name": "serialEvent: read one line",
+   "from": 196,
+   "to": 205,
+   "plain": "Processing calls this on its own each time a full line has arrived from the Arduino. It reads the line, trims the line break and turns the text into an integer stored in ecgValue.",
+   "why": "This is the only place the data comes in. It is a hand-off: serialEvent writes ecgValue, draw() reads it. That is why detection and drawing run at the frame rate and not at the sample rate.",
+   "tweak": "Keep a list of recent values, and you could draw every sample or smooth the signal. Handle a bad line deliberately: the catch block here ignores the error silently."
+  }
+ ]
+}

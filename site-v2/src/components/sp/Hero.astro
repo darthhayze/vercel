@@ -1,0 +1,20 @@
+---
+// Poster yellow with a halftone lens. Measured clear zones protect every text block.
+import copy from '../../content/copy.json';
+const links = [['Work', '#work'], ['Research', '/research/'], ['Evidence', '/evidence/'], ['About', '#about'], ['Contact', '#contact']];
+---
+<section class="hero" aria-labelledby="top" data-bounds>
+  <div class="wire" data-wire aria-hidden="true"></div>
+  <nav class="toplinks" aria-label="Main navigation"><ul>{links.map(([t, h]) => <li><a href={h} data-mask="wide">{t}</a></li>)}</ul></nav>
+
+  <div class="lead">
+    <h1 id="top" class="hl">
+      <span class="sr">Hamza Al Halabi. </span><span class="stmt" data-mask>I build biomedical prototypes and software for lab data.</span>
+    </h1>
+    <p class="sub" data-mask="wide">{copy.home.sub}</p>
+  </div>
+
+  <p class="paint-hint" data-paint-hint data-mask="wide">Move your cursor</p>
+  <p class="wordmark" aria-hidden="true" data-mask="box">Hamza Al Halabi</p>
+</section>
+<script>import '../../scripts/specimen.ts';</script>

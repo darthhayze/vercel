@@ -1,0 +1,61 @@
+---
+import WorldShell from '../../components/kit/WorldShell.astro';
+import DocTabs from '../../components/docs/DocTabs.astro';
+import { loadDoc } from '../../components/docs/load';
+import '@fontsource-variable/source-serif-4/opsz.css';
+import { chapters, docs } from './data';
+import Opening from './Opening.astro';
+import './research.css';
+const pageSrc = (doc: string, page: number) => `/docs-pages/${doc}/p-${String(page).padStart(2,'0')}.webp`;
+---
+<WorldShell slug="research" title="Research" description="Biomedical sample work, a proteomics paper and a preprint, with annotated documents and a TENS course review.">
+  <header class="rr-head rr-wrap">
+    <h1>Research</h1>
+    <p class="rr-lede">Sample collection and processing</p>
+    <p>I contributed sample collection and processing to a peer-reviewed proteomics paper and a metabolomics and transcriptomics preprint at Hamad Medical Corporation, Qatar.</p>
+    <a class="rr-link" href="#demo">Read the papers with me <span aria-hidden="true">↓</span></a>
+  </header>
+  <div class="rr-room rr-wrap" id="demo">
+    <nav class="rr-chapters" aria-label="Reading room chapters">
+      {chapters.map(ch => <a href={`#chapter-${ch.id}`}>{ch.label}</a>)}
+    </nav>
+    <p class="rr-hint">Scroll through the notes to follow the yellow highlights. Select a note to revisit its page.</p>
+    {chapters.map(ch => {
+      const d = loadDoc(ch.doc);
+      return <section class="rr-chapter" id={`chapter-${ch.id}`} data-chapter aria-labelledby={`title-${ch.id}`}>
+        <header class="rr-chapter-head">
+          <div><h2 id={`title-${ch.id}`}>{ch.title}</h2><p>{ch.subtitle}</p><a class="rr-link" href={`#doc-${ch.doc}`}>Open the full reader <span aria-hidden="true">↗</span></a></div>
+          <Opening kind={ch.art}/>
+        </header>
+        <div class="rr-spread">
+          <div class="rr-paper-well">
+            <div class="rr-paper-stack">
+              {ch.notes.map((n,i) => <figure class="rr-paper" data-paper={i}>
+                <div class="rr-page">
+                  <img src={pageSrc(ch.doc,n.page)} width={d.size[0]} height={d.size[1]} loading="lazy" decoding="async" alt={`${d.title}, page ${n.page}. Highlight: ${n.region}.`} />
+                  <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x={'x' in n ? n.x : 25} y={n.y} width={'w' in n ? n.w : 69} height={n.h}/></svg>
+                </div>
+                <figcaption>Page {n.page} · {n.region} <a href={d.pdf}>PDF</a></figcaption>
+              </figure>)}
+            </div>
+          </div>
+          <div class="rr-marginalia">
+            {ch.notes.map((n,i) => <article class="rr-note" data-note={i} id={`note-${ch.id}-${i}`}>
+              <p class="rr-page-ref">{ch.label} · page {n.page}</p>
+              <h3><button type="button" data-select={i}>{n.title}<span aria-hidden="true"> ↖</span></button></h3>
+              <p>{n.text}</p>
+            </article>)}
+          </div>
+        </div>
+        <p class="rr-reader-entry" id={`reader-${ch.id}`}><a class="rr-link" href={`#doc-${ch.doc}`}>Continue in the {ch.label.toLowerCase()} reader ↓</a></p>
+      </section>;
+    })}
+    <p class="rr-boundary">The study authors handled analysis and writing. The TENS documents come from a separate course project. Opening diagrams are teaching illustrations; the highlighted pages are the source documents.</p>
+  </div>
+  <section class="rr-readers rr-wrap" id="documents" aria-labelledby="readers-h">
+    <h2 id="readers-h">Full readers</h2>
+    <p>Choose a document, then select a page or annotation.</p>
+    <DocTabs docs={docs} label="Research documents" />
+  </section>
+</WorldShell>
+<script>import './research-client';</script>

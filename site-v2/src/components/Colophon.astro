@@ -1,0 +1,45 @@
+---
+// Colophon: summary on the home page, full on /colophon.
+import { site } from '../lib/data';
+interface Props { full?: boolean }
+const { full = false } = Astro.props;
+const build = new Date().toISOString().slice(0, 10);
+const fmt = (d: string) => new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+---
+{!full ? (
+  <div class="colo-sum">
+    <p>Built {fmt(build)} with Astro as static pages. Fonts are Bricolage Grotesque, Instrument Sans and Caveat, served from this domain. Google Analytics loads only after you accept. No ads; you can withdraw consent through Analytics settings in the footer. Project figures are listed in the <a href="/evidence/">evidence ledger</a>. Figures were last checked against the résumé and linked documents on {fmt(site.lastVerified)}.</p>
+    <p><a href="/colophon/">Full colophon</a></p>
+  </div>
+) : (
+  <div class="colo">
+    <section aria-labelledby="c-build"><h2 id="c-build">Build</h2>
+      <dl class="kv">
+        <div><dt>Built</dt><dd><time datetime={build}>{fmt(build)}</time></dd></div>
+        <div><dt>Stack</dt><dd>Astro, static output, plain CSS with custom properties, a few small scripts bundled with the site. No server functions. Hosted on Vercel. Google Analytics loads only after you accept; Analytics settings in the footer lets you withdraw consent. No ads.</dd></div>
+      </dl>
+    </section>
+    <section aria-labelledby="c-fonts"><h2 id="c-fonts">Fonts and licences</h2>
+      <div>
+      <ul class="plain">
+        <li>Bricolage Grotesque (variable), SIL Open Font License 1.1. Headlines and numbers.</li>
+        <li>Instrument Sans (variable), SIL Open Font License 1.1. Body text.</li>
+        <li>Caveat (variable), SIL Open Font License 1.1. Short hints next to interactive objects.</li>
+        <li>Project pages also use self-hosted open-licence fonts.</li>
+      </ul>
+      <p>The main fonts come from Fontsource packages. JobHub uses a self-hosted Space Grotesk file. All fonts load from this domain. <a href="/worlds-assets/jobhub/Space-Grotesk-OFL.txt">Space Grotesk licence</a>.</p>
+      </div>
+    </section>
+    <section aria-labelledby="c-credits"><h2 id="c-credits">Asset credits</h2>
+      <ul class="plain">
+        <li>Document images come from the linked course guide, team reports and research PDFs; their original credits remain in those documents.</li>
+        <li>The Ninetales board belongs to the University of Cincinnati BME course; its guide is linked as the course published it. The Arduino sketch is adapted from the course example EXAMPLE02_Sample.ino.</li>
+        <li>The TENS poster and literature review are team documents.</li>
+        <li>Motion (MIT) drives springs and dragging. The magnetic-button interaction adapts Motion Primitives (MIT).</li>
+      </ul>
+    </section>
+    <section aria-labelledby="c-status"><h2 id="c-status">Figures</h2>
+      <p>The <a href="/evidence/">evidence ledger</a> lists each figure with its status, source and check date.</p>
+    </section>
+  </div>
+)}

@@ -1,0 +1,196 @@
+---
+// WORLD: JobHub as a system map. One dark canvas holds every part of the product as an engineering box with ports and
+// labelled wires. Scrolling moves a camera between regions; selecting any box (click, focus, arrow keys) fills the inspector.
+// No JS or a stacked layout: the boxes and inspector panes read as a plain list, top to bottom.
+import WorldShell from '../../components/kit/WorldShell.astro';
+import jh from '../../content/jobhub.json';
+import { NODES, WIRES } from './map';
+import './jobhub.css';
+interface Props { slug: string; c: any }
+const { slug, c } = Astro.props;
+
+const PREFIX = '/home/hamza/.superset/worktrees/JobHub/feat/landing-feature-demos/';
+const fact = (id: string) => (jh.facts as any[]).find((f) => f.id === id);
+const paths = (id: string) => {
+  const f = fact(id);
+  if (!f) return [];
+  return String(f.source_path).replaceAll(PREFIX, '').split(/;\s*/).filter((p) => !/tests?\//.test(p));
+};
+const byId = Object.fromEntries(NODES.map((n) => [n.id, n]));
+const links = (id: string) => {
+  const out: { dir: string; other: string; label: string }[] = [];
+  for (const w of WIRES) {
+    const [a] = w.from.split('.'), [b] = w.to.split('.');
+    const label = (w.label ?? '').replace('\n', ' ');
+    if (a === id && byId[b]) out.push({ dir: 'to', other: byId[b].title, label });
+    if (b === id && byId[a]) out.push({ dir: 'from', other: byId[a].title, label });
+  }
+  return out;
+};
+const skip = new Set(['tests-passing', 'test-files', 'gate-tests', 'test-harness']);
+const notes = (jh.facts as any[]).filter((f) => !skip.has(f.id));
+const clean = (s: string) => s.split(/(?<=\.)\s+/).filter((x) => !/\btests?\b|\.test\.mjs/i.test(x)).join(' ');
+const cyl = (w: number, h: number) => {
+  const ry = 24, rx = w / 2 - 1;
+  return `M1 ${ry} a${rx} ${ry} 0 0 1 ${w - 2} 0 v${h - ry * 2} a${rx} ${ry} 0 0 1 ${-(w - 2)} 0 z`;
+};
+const providers = ['greenhouse', 'lever', 'ashby', 'smartrecruiters', 'recruitee', 'workable', 'adzuna', 'usajobs'];
+const meters = [['External requests', 20], ['D1 statements', 25], ['Work items', 20], ['Pages', 10]];
+const rungs = [['4', 'Strong coverage'], ['3', 'Partial coverage'], ['cap', 'Unknown relevance stops here'], ['2', 'Anything else'], ['1', 'Eligibility conflict'], ['0', 'Unrelated role']];
+const shots: Record<string, [string, number, number, string]> = {
+  'ui-roles': ['ui-roles.webp', 325, 208, 'Three sample roles for an example company, with the second one selected.'],
+  'ui-prep': ['ui-prep.webp', 400, 260, 'A requirement marked In plan, a concrete next step, and the evidence to keep.'],
+  'ui-plan': ['ui-calendar.webp', 330, 192, 'A calendar session saved to Google, and My plan showing Tuesday 6:00 to 7:30 PM.'],
+};
+---
+<WorldShell slug={slug} title={c.title} description={c.summary}>
+  <header class="jh-head">
+    <p class="jh-status">Cloudflare Workers · D1 · invite-only sign-in</p>
+    <h1>JobHub</h1>
+    <p class="jh-lead">A private job-search tool with account-scoped data, a two-database design, budgeted job collectors and a bounded language-model layer.</p>
+    <p class="jh-own">Product direction and code review are mine. An AI coding assistant wrote much of the code.</p>
+  </header>
+
+  <section class="jm" id="demo" aria-labelledby="jm-h" data-jm>
+    <h2 id="jm-h" class="jm-h">The system map</h2>
+    <div class="jm-track" data-track>
+      <span id="tour" class="jm-anchor" data-tour></span>
+      <div class="jm-stage" data-stage-pin data-stage>
+        <div class="jm-main">
+          <div class="jm-view" data-view role="group" aria-label="JobHub architecture map. Scroll to move the camera, or move between boxes with Up and Down.">
+            <div class="jm-world" data-world>
+              <svg class="jm-under" data-under aria-hidden="true" focusable="false"></svg>
+              {NODES.map((n) => {
+                const Tag = n.shape === 'board' ? 'div' : 'button';
+                const attrs = Tag === 'button' ? { type: 'button', 'aria-pressed': 'false' } as const : {};
+                return (
+                  <Tag class={`nd nd-${n.tone} ${n.shape ? 'nd-' + n.shape : ''}`} data-node={n.id} {...attrs}>
+                    {n.shape === 'db' && <svg class="nd-cyl" viewBox={`0 0 ${n.rect.w} ${n.rect.h}`} aria-hidden="true" focusable="false"><path class="cyl-body" d={cyl(n.rect.w, n.rect.h)} /><ellipse class="cyl-top" cx={n.rect.w / 2} cy="24" rx={n.rect.w / 2 - 1} ry="23" /></svg>}
+                    {n.shape === 'wall' && <span class="wall-h" aria-hidden="true"></span>}
+                    {n.shape === 'board' ? (
+                      <button type="button" class="nd-head" data-head aria-pressed="false">
+                        <span class="nd-k">{n.kind}</span><span class="nd-t">{n.title}</span><span class="nd-s">{n.sub}</span>
+                      </button>
+                    ) : (
+                      <Fragment>
+                        <span class="nd-k">{n.kind}</span>
+                        <span class="nd-t">{n.title}</span>
+                        <span class="nd-s">{n.sub}</span>
+                      </Fragment>
+                    )}
+
+                    {n.id === 'providers' && <span class="chips">{providers.map((p) => <span class="chip">{p}</span>)}</span>}
+                    {n.id === 'collector' && (
+                      <span class="meters">
+                        {meters.map(([l, v]) => <span class="mt" data-v={v}><span class="mt-l">{l}</span><span class="mt-n">{v}</span><span class="mt-bar"><i></i></span></span>)}
+                        <span class="mt-note">Ceilings per run</span>
+                      </span>
+                    )}
+                    {n.id === 'jobdb' && <span class="chips"><span class="chip">postings</span><span class="chip">posting_observations</span><span class="chip">source_schedule</span></span>}
+                    {n.id === 'accdb' && <span class="chips"><span class="chip">jobs</span><span class="chip">seen</span><span class="chip">meta</span><span class="chip">job_extras</span><span class="chip">plan_tasks</span></span>}
+                    {n.id === 'wall' && <span class="wall-t">No shared rows</span>}
+                    {n.id === 'finder' && <span class="chips"><span class="chip chip-shared">reads JOBDATA</span><span class="chip chip-private">writes DB</span></span>}
+                    {n.id === 'shortlist' && <span class="chips"><span class="chip">FTS5 keywords, 1000 rows</span><span class="chip">Vectorize, 100 rows</span></span>}
+                    {n.id === 'evidence' && <span class="chips"><span class="chip">8 requirements</span><span class="chip">4 excerpts</span></span>}
+                    {n.id === 'fence' && <span class="fence-box"><span class="sk sk-1"></span><span class="sk sk-2"></span><span class="sk sk-3"></span><span class="fence-tag">untrusted: data, not instructions</span></span>}
+                    {n.id === 'injection' && <span class="chips"><span class="chip chip-code">looksLikeInstructions()</span><span class="chip">8 fixed phrase patterns</span></span>}
+                    {n.id === 'jev' && <span class="chips"><span class="chip">yes or no</span><span class="chip">pick one</span><span class="chip">0 to 4</span></span>}
+                    {n.id === 'answers' && (
+                      <span class="tiles">
+                        <span class="tile"><b>boolean</b><span>yes counts at 0.6 to 0.8</span></span>
+                        <span class="tile"><b>choice</b><span>fixed list, safe default</span></span>
+                        <span class="tile"><b>score</b><span>clamped to 0 to 4</span></span>
+                      </span>
+                    )}
+                    {n.id === 'recompute' && <span class="lines"><span class="ln">Positive answer, no cited source: unknown</span><span class="ln">Coverage recomputed from classifications</span><span class="ln">Gap needs negation in the excerpt</span></span>}
+                    {n.id === 'ladder' && (
+                      <span class="lad">{rungs.map(([v, l]) => <span class={`rg rg-${v}`}><b>{v === 'cap' ? '' : v}</b><span>{l}</span></span>)}</span>
+                    )}
+                    {n.id === 'session' && <span class="chips"><span class="chip chip-private">401 Sign in first.</span><span class="chip">403 Origin mismatch</span></span>}
+                    {n.id === 'scope' && <span class="chips"><span class="chip chip-code">WHERE user_id = ?</span><span class="chip">composite keys</span></span>}
+                    {n.id === 'rows' && <span class="chips"><span class="chip">jobs</span><span class="chip">notes</span><span class="chip">meta</span><span class="chip">extras</span><span class="chip">résumés</span></span>}
+                    {n.id === 'foreign' && <span class="chips"><span class="chip chip-private">404</span></span>}
+                    {n.shape === 'shot' && <img class="nd-img" src={`/worlds-assets/jobhub/${shots[n.id][0]}`} width={shots[n.id][1]} height={shots[n.id][2]} alt={shots[n.id][3]} loading="lazy" decoding="async" />}
+                    {n.id === 'rules' && (
+                      <div class="board" data-board>
+                        <button type="button" class="sw" role="switch" aria-checked="true" data-sw="classify" data-on="Fixed choice. A positive answer needs a cited source." data-off="Off. This call is not made.">
+                          <span class="sw-box" aria-hidden="true"></span><span class="sw-t">Classify requirements<small data-msg>Fixed choice. A positive answer needs a cited source.</small></span>
+                        </button>
+                        <button type="button" class="sw" role="switch" aria-checked="true" data-sw="score" data-on="Code clamps it to 0 to 4." data-off="Off. No score comes back.">
+                          <span class="sw-box" aria-hidden="true"></span><span class="sw-t">Return a score<small data-msg>Code clamps it to 0 to 4.</small></span>
+                        </button>
+                        <button type="button" class="sw sw-lock" role="switch" aria-checked="false" data-locked="Collectors use official public APIs only. Locked off.">
+                          <span class="sw-box" aria-hidden="true"></span><span class="sw-t">Discover or choose jobs<small data-msg>Locked off. Collectors use official public APIs only.</small></span>
+                        </button>
+                        <button type="button" class="sw sw-lock" role="switch" aria-checked="false" data-locked="The interface supplies the text. Locked off.">
+                          <span class="sw-box" aria-hidden="true"></span><span class="sw-t">Write interface text<small data-msg>Locked off. The interface supplies the text.</small></span>
+                        </button>
+                      </div>
+                    )}
+                  </Tag>
+                );
+              })}
+              <p class="jm-note" data-note="note-sample">Screens are scripted previews with sample data.</p>
+              <p class="jm-note jm-note-key" data-note="note-boundary">JobHub does not submit applications for you.</p>
+              <svg class="jm-over" data-over aria-hidden="true" focusable="false"></svg>
+            </div>
+            <div class="jm-hud">
+              <p class="jm-where" data-where aria-hidden="true">Collect</p>
+              <div class="jm-nav">
+                <button type="button" class="jm-btn" data-jm-prev aria-label="Previous region">Back</button>
+                <button type="button" class="jm-btn" data-jm-next aria-label="Next region">Next</button>
+              </div>
+              <p class="jm-hint"><span>Scrolling moves the camera.</span> <span class="jm-hint-d">Select a box to inspect it. Up and Down step between boxes.</span><span class="jm-hint-m">Tap a box to inspect it.</span></p>
+              <div class="jm-bar" aria-hidden="true"><i data-bar></i></div>
+            </div>
+          </div>
+        </div>
+        <aside class="jm-insp" data-insp aria-labelledby="ip-h">
+          <div class="ip-top">
+            <h3 id="ip-h" class="ip-h">Inspector</h3>
+            <p class="ip-path" data-path>jobhub / Collect / Eight providers</p>
+          </div>
+          <div class="ip-body" data-ipbody>
+            {NODES.map((n) => {
+              const io = links(n.id);
+              const src = n.facts.map((id) => ({ label: fact(id)?.label as string, ps: paths(id) })).filter((x) => x.ps.length);
+              return (
+                <section class="ip" data-pane={n.id} aria-label={n.title}>
+                  <p class="ip-kind"><span class={`dot dot-${n.tone}`} aria-hidden="true"></span>{n.kind}</p>
+                  <h4 class="ip-t">{n.title}</h4>
+                  <p class="ip-what">{n.what}</p>
+                  <h5>Details</h5>
+                  <ul class="ip-pts">{n.points.map((p) => <li>{p}</li>)}</ul>
+                  {io.length > 0 && <Fragment><h5>Connections</h5>
+                  <ul class="ip-io">{io.map((l) => <li><span class="ip-dir">{l.dir === 'to' ? 'to' : 'from'}</span> {l.other}{l.label && <span class="ip-lab">{l.label}</span>}</li>)}</ul></Fragment>}
+                  {src.length > 0 && <Fragment><h5>Source</h5>
+                  <ul class="ip-src">{src.map((s) => <li><span>{s.label}</span>{s.ps.map((p) => <code>{p}</code>)}</li>)}</ul></Fragment>}
+                </section>
+              );
+            })}
+          </div>
+          <ul class="ip-key" aria-label="Colour key">
+            <li><span class="dot dot-shared" aria-hidden="true"></span>Shared postings</li>
+            <li><span class="dot dot-private" aria-hidden="true"></span>Account data</li>
+            <li><span class="dot dot-ai" aria-hidden="true"></span>Language model</li>
+            <li><span class="dot dot-code" aria-hidden="true"></span>Code</li>
+          </ul>
+        </aside>
+        <p class="vh" role="status" data-status></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="jh-notes" aria-label="Source notes">
+    <details>
+      <summary>Source notes</summary>
+      <p>Reviewed source snapshot: {fact('source-branch')?.value}. Where a fact lists what was not audited, the line says so.</p>
+      <dl>
+        {notes.filter((f) => f.id !== 'source-branch').map((f) => (
+          <div><dt>{f.label}</dt><dd>{clean(f.how_counted)}<code>{String(f.source_path).replaceAll(PREFIX, '').split(/;\s*/).filter((p) => !/tests?\//.test(p)).join('; ')}</code></dd></div>
+        ))}
+      </dl>
+    </details>
+  </section>
+</WorldShell>
+<script>import './client.ts';</script>

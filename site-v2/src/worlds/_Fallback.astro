@@ -1,0 +1,84 @@
+---
+// Clean fallback world, built only from cases.json + the ledger. Used when src/worlds/<slug>/World.astro is missing,
+// and re-exported by the placeholder worlds. Takes the world's palette from the registry.
+import WorldShell from '../components/kit/WorldShell.astro';
+import PageHead from '../components/kit/PageHead.astro';
+import Specimen from '../components/kit/Specimen.astro';
+import StatusChip from '../components/StatusChip.astro';
+import { row, media, CASE_LABEL } from '../lib/data';
+interface Props { slug: string; c: any }
+const { slug, c } = Astro.props;
+const order = [['need', 'Need'], ['constraints', 'Constraints'], ['contribution', 'My contribution'], ['build', 'Build'], ['evidence', 'Evidence'], ['limits', 'Limits']] as const;
+const srcHref = (h: string) => (h === '#ledger' ? '/evidence/' : h);
+const rots = [-3, 2, -2, 4];
+---
+<WorldShell slug={slug} title={c.title} description={c.summary}>
+  <PageHead title={c.title} lede={c.subtitle} field="ground" crumb={{ href: '/#work', text: 'Work' }} wide>
+    <dl class="case-meta">
+      <div><dt>Role</dt><dd>{c.role}</dd></div>
+      <div><dt>Period</dt><dd>{c.period}</dd></div>
+      {c.course && <div><dt>Course</dt><dd>{c.course}</dd></div>}
+      <div><dt>Status</dt><dd>{c.status}</dd></div>
+    </dl>
+  </PageHead>
+
+  <section class="sec f-acc" aria-labelledby="headline-h">
+    <h2 id="headline-h" class="sr">Headline</h2>
+    <p class="headline-v">{c.headline.value}</p>
+    <p class="headline-c"><StatusChip status={c.headline.chip.type} /> <span>{c.headline.chip.label}</span></p>
+    {c.headline.ledger?.length > 0 && <p class="headline-l">Ledger: {c.headline.ledger.map((id: string, i: number) => <>{i > 0 && ', '}<a href={`/evidence/#ledger-${id}`}>{row(id).value}</a></>)}</p>}
+  </section>
+
+  <section class="sec f-ground" aria-labelledby="sum-h">
+    <div class="sec-grid">
+      <h2 id="sum-h">In short</h2>
+      <div class="case-art">
+        <p class="lede">{c.summary}</p>
+        {c.artifacts?.length && (
+          <div class="specs">
+            {c.artifacts.map((a: any, i: number) => {
+              const m = media(a.src);
+              return <Specimen rot={rots[i % 4]} caption={a.caption} href={a.doc ?? m.doc}><img src={a.src} alt={m.alt} width={m.w} height={m.h} loading="lazy" decoding="async" draggable="false" /></Specimen>;
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  {order.map(([key, title], i) => {
+    const s = c.sections[key];
+    return (
+      <section class:list={['sec', i % 2 === 0 ? 'f-panel' : 'f-ground']} id={key} aria-labelledby={`${key}-h`}>
+        <div class="sec-grid">
+          <h2 id={`${key}-h`}>{title}</h2>
+          <div class="prose">
+            {s.body.map((p: string) => <p>{p}</p>)}
+            {s.ledger?.length > 0 && (
+              <ul class="excerpts" aria-label={`Ledger rows for ${title}`}>
+                {s.ledger.map((id: string) => { const r = row(id); return (
+                  <li><StatusChip status={r.type} /><span class="ex-v mono">{r.value}</span><span class="ex-c">{r.claim}</span><a class="ex-l" href={`/evidence/#ledger-${id}`}>Ledger row<span class="sr-only"> {id}</span></a></li>
+                ); })}
+              </ul>
+            )}
+          </div>
+        </div>
+      </section>
+    );
+  })}
+
+  <section class="sec f-panel" id="sources" aria-labelledby="sources-h">
+    <div class="sec-grid">
+      <h2 id="sources-h">Sources</h2>
+      <div class="prose">
+        <ul class="sources">{c.sections.sources.map((s: any) => <li><a href={srcHref(s.href)}>{s.label}{s.kind === 'pdf' || s.kind === 'résumé' ? ' (PDF)' : ''}</a></li>)}</ul>
+        <p>Every figure here is a row in the <a href="/evidence/">evidence ledger</a> with its type, source and check date.</p>
+      </div>
+    </div>
+  </section>
+
+  <nav class="sec f-acc case-next" aria-label="More cases">
+    <p>Other work</p>
+    <ul>{['lungscope', 'arch-support', 'mass-spec', 'ecg', 'jobhub'].filter((x) => x !== slug).map((x) => <li><a href={`/work/${x}/`}>{CASE_LABEL[x]}</a></li>)}</ul>
+  </nav>
+</WorldShell>

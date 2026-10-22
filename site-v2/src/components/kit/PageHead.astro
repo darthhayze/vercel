@@ -1,0 +1,17 @@
+---
+// Inner-page header field: giant title and lede. Pick a field.
+import BigType from './BigType.astro';
+interface Props { title: string; lede?: string; field?: 'yellow' | 'cobalt' | 'ink' | 'paper' | 'ground' | 'acc'; crumb?: { href: string; text: string }; wide?: boolean; id?: string }
+const { title, lede, field = 'yellow', crumb, wide = false, id = 'page-title' } = Astro.props;
+---
+<header class:list={['phead', `f-${field}`]} aria-labelledby={id}>
+  {crumb && <a class="crumb" href={crumb.href}>← {crumb.text}</a>}
+  <div class:list={['phead-grid', Astro.slots.has('aside') && 'two']}>
+    <div>
+      <BigType as="h1" size="xl" id={id} class={wide ? 'wide' : ''}>{title}</BigType>
+      {lede && <p class="lede">{lede}</p>}
+      <slot />
+    </div>
+    {Astro.slots.has('aside') && <div><slot name="aside" /></div>}
+  </div>
+</header>

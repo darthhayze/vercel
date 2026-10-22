@@ -1,0 +1,108 @@
+---
+// WORLD: LUNGSCOPE = SOUND. A dark audio workstation. A sticky timeline canvas, tracks as lanes, a ruler, a moving playhead and a
+// transport bar. Scrolling advances the playhead and rearranges the clips: pile, canonical set, eligible clips, subject lanes,
+// three bins, the leak test (drag or assign a lane to a second bin: refused), the overlap audit, what the counts show.
+// Without script, with reduced motion, or on a short screen, the same drawings stack as finished frames (the flat list).
+import WorldShell from '../../components/kit/WorldShell.astro';
+import { row } from '../../lib/data';
+import { scenes, flatFrame, sprite, heroArt, inspectorArt, SCENE_DESC, N, type Counts } from './daw';
+import './lungscope.css';
+interface Props { slug: string; c: any }
+const { slug, c } = Astro.props;
+const v = (id: string) => row(id).value;
+const counts: Counts = { recordings: v('ls-recordings'), canonical: v('ls-canonical'), eligible: v('ls-eligible'), subjects: v('ls-subjects'), train: v('ls-split-train'), val: v('ls-split-val'), test: v('ls-split-test'), overlap: v('ls-overlap') };
+const sc = scenes(counts);
+const icon = {
+  prev: '<path d="M6 5h2v14H6zM20 5v14L9.5 12z"/>',
+  next: '<path d="M16 5h2v14h-2zM4 5l10.5 7L4 19z"/>',
+  play: '<path d="M7 4.5v15l12-7.5z"/>',
+  stop: '<rect x="6" y="6" width="12" height="12" rx="2"/>',
+  tone: '<path d="M3 9h4l5-4v14l-5-4H3z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+};
+const svgi = (k: keyof typeof icon) => `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">${icon[k]}</svg>`;
+const assign = (flat: boolean) => `
+  <div class="ls-assign"${flat ? '' : ' id="demo"'} data-ls-assign hidden>
+    <p class="ls-assign-q" id="ls-q${flat ? '-f' : ''}">Move <span data-ls-sel>Subject A (Train)</span> to:</p>
+    <div class="ls-assign-btns" role="group" aria-labelledby="ls-q${flat ? '-f' : ''}">
+      <button type="button" class="ls-assign-btn" data-bin="0" aria-label="Move the selected subject to Train">Train</button>
+      <button type="button" class="ls-assign-btn" data-bin="1" aria-label="Move the selected subject to Validation">Validation</button>
+      <button type="button" class="ls-assign-btn" data-bin="2" aria-label="Move the selected subject to Test">Test</button>
+    </div>
+    <p class="ls-assign-out" role="status" aria-live="polite" data-ls-out></p>
+  </div>`;
+---
+<WorldShell slug={slug} title={c.title} description={c.summary}>
+  <Fragment slot="head"><script is:inline src="/worlds-assets/lungscope/boot.js"></script></Fragment>
+  <Fragment set:html={sprite()} />
+
+  <header class="ls-hero">
+    <div class="ls-hero-in">
+      <div>
+        <h1>LungScope</h1>
+        <p class="ls-hero-lede">I split public lung-sound recordings by subject, then check that no person lands in two splits.</p>
+        <p class="ls-hero-role">AI wrote much of the code. I wrote the requirements, data contracts and release checklist, then reviewed and tested it.</p>
+        <p class="ls-hero-meta">Data engineering · {c.period}</p>
+        <a class="ls-btn" href="#ls-daw" data-ls-start>Start the timeline <span aria-hidden="true">↓</span></a>
+      </div>
+      <Fragment set:html={heroArt()} />
+    </div>
+  </header>
+
+  <section class="ls-daw" id="ls-daw" aria-label="LungScope timeline" data-ls-root data-counts={JSON.stringify(counts)}>
+    <div class="ls-track" data-ls-track>
+      {Array.from({ length: N }, (_, k) => <span class={`ls-anch ls-a${k}`} id={k === 5 ? 'ls-leak' : `ls-s${k}`} data-k={k} tabindex="-1"></span>)}
+      <div class="ls-stage" data-ls-stage data-stage-pin role="group" aria-label="Audio workstation. Scroll to move the playhead.">
+        <div class="ls-band">
+          <div>
+            <h2 class="ls-scene-title" data-ls-title>{sc[0].title}</h2>
+            <p class="ls-scene-text" data-ls-text>{sc[0].text}</p>
+          </div>
+          <div class="ls-insp" data-decor>
+            <Fragment set:html={inspectorArt()} />
+            <p>Clip inspector, synthetic signal</p>
+          </div>
+        </div>
+        <div class="ls-canvas" data-ls-canvas></div>
+        <div class="ls-dock">
+          <div class="ls-read" data-ls-read><span class="ls-big" data-ls-big>{sc[0].big}</span><span class="ls-big-l" data-ls-biglabel>{sc[0].label}</span></div>
+          <p class="ls-hint" data-ls-hint>{sc[0].hint}</p>
+          <Fragment set:html={assign(false)} />
+        </div>
+        <div class="ls-transport" role="group" aria-label="Transport">
+          <button type="button" class="ls-tb" data-ls-prev aria-label="Previous scene"><Fragment set:html={svgi('prev')} /></button>
+          <button type="button" class="ls-tb ls-play" data-ls-play aria-pressed="false"><span data-ls-playi><Fragment set:html={svgi('play')} /></span><span data-ls-playt>Play</span></button>
+          <button type="button" class="ls-tb" data-ls-next aria-label="Next scene"><Fragment set:html={svgi('next')} /></button>
+          <output class="ls-time" data-ls-time></output>
+          <div class="ls-tone">
+            <label class="ls-vol"><span>Volume, capped</span><input type="range" min="0" max="100" value="40" data-ls-vol aria-label="Synthetic tone volume, capped at low" /></label>
+            <button type="button" class="ls-tb ls-tonebtn" data-ls-tone aria-pressed="false"><Fragment set:html={svgi('tone')} /><span class="ls-two"><span data-ls-tonet>Tone</span><small>synthetic</small></span></button>
+          </div>
+        </div>
+        <p class="ls-live-sr" role="status" aria-live="polite" data-ls-status></p>
+      </div>
+    </div>
+
+    <ol class="ls-flat" data-ls-flat>
+      {sc.map((s, k) => (
+        <li class="ls-fs" data-k={k} id={k === 5 ? 'ls-leak-flat' : undefined}>
+          <h2>{s.title}</h2>
+          <p>{s.text}</p>
+          <div class="ls-fs-fig">
+            <div class="ls-fw" data-ls-fw set:html={flatFrame(k, true, counts, SCENE_DESC[k])}></div>
+            <div class="ls-fn" data-ls-fn set:html={flatFrame(k, false, counts, SCENE_DESC[k])}></div>
+          </div>
+          {s.big && <p class="ls-fs-big"><b>{s.big}</b><span>{s.label}</span></p>}
+          {k === 5 && <div data-ls-flat-slot></div>}
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <p class="ls-note">The lanes and clips are drawn examples. The counts come from the v0.11.3 snapshot report, and the tone is synthetic.</p>
+
+  <section class="ls-sources" aria-labelledby="ls-sources-h">
+    <h2 id="ls-sources-h">Sources</h2>
+    <ul>{c.sections.sources.map((s: { href: string; label: string }) => <li><a href={s.href === '#ledger' ? '/evidence/#ledger-ls-recordings' : s.href}>{s.label}</a></li>)}</ul>
+  </section>
+</WorldShell>
+<script>import './client';</script>

@@ -1,0 +1,613 @@
+[
+  {
+    "id": "lungscope",
+    "order": 1,
+    "title": "LungScope",
+    "subtitle": "Splitting public lung-sound recordings by subject",
+    "role": "I wrote the requirements, data contracts and release checklist, then reviewed and tested AI-generated code.",
+    "status": "prototype",
+    "period": "2026; versions through v0.11.3",
+    "course": null,
+    "headline": {
+      "value": "5,881 recordings, 854 subjects",
+      "chip": {
+        "type": "measured",
+        "label": "snapshot counts"
+      },
+      "ledger": [
+        "ls-eligible",
+        "ls-subjects"
+      ]
+    },
+    "summary": "A local prototype that sorts public lung-sound recordings by subject. The documented split keeps each known subject in one group: training, validation or test.",
+    "sections": {
+      "need": {
+        "body": [
+          "If one patient's recordings land in both the training and test sets, the model has already heard the answer and any accuracy number is inflated. I needed a layer that records who each recording belongs to, what was annotated and which split it sits in, before any model trains."
+        ],
+        "ledger": []
+      },
+      "constraints": {
+        "body": [
+          "The public data is messy: some recordings have no known subject, one has a conflicting duplicate, and some are poor quality or auxiliary only.",
+          "Where identity is unknown, I leave it unknown. I never invent a subject ID.",
+          "The release could not touch the existing runtime, model weights, training code, source audio or earlier corpora."
+        ],
+        "ledger": []
+      },
+      "contribution": {
+        "body": [
+          "I decided what the pipeline had to guarantee: traceable identity, no subject in two splits, conflicting source evidence kept, immutable releases, checksums, reproducible splits, installer safeguards and runbooks.",
+          "The AI assistant wrote much of the code. I wrote the requirements and release claims, reviewed the data contracts, tried edge cases and pushed back on unsafe assumptions."
+        ],
+        "ledger": []
+      },
+      "build": {
+        "body": [
+          "A versioned pipeline over public respiratory-audio sources: staging, canonical recordings, annotations, quality checks, split generation, saved-view checks and release gates.",
+          "On the documented SPRSound snapshot it checked 6,567 source recordings and 24,578 event annotations. One conflicting duplicate left 6,566 canonical recordings. Recordings with unknown identity stayed out of the supervised splits, which are by subject: train, validation, test."
+        ],
+        "ledger": [
+          "ls-recordings",
+          "ls-annotations",
+          "ls-canonical"
+        ]
+      },
+      "evidence": {
+        "body": [
+          "The audited snapshot has 5,881 supervision-eligible recordings from 854 known subjects, split 598, 128 and 128 by subject. The report records no subject and no identical PCM audio in two splits. The report also records source-audio integrity checks, repeat count checks, installer rollback and mock-model regression checks."
+        ],
+        "ledger": [
+          "ls-eligible",
+          "ls-subjects",
+          "ls-split-train",
+          "ls-split-val",
+          "ls-split-test",
+          "ls-overlap"
+        ]
+      },
+      "limits": {
+        "body": [
+          "The v0.11.3 report covers one dataset snapshot and software checks. It does not report model accuracy or clinical validation."
+        ],
+        "ledger": []
+      },
+      "sources": [
+        {
+          "label": "Résumé, LungScope section",
+          "href": "/resume/Hamza_Al_Halabi_Resume_Extended_3page.pdf",
+          "kind": "résumé"
+        },
+        {
+          "label": "Snapshot counts in the evidence ledger",
+          "href": "#ledger",
+          "kind": "ledger"
+        }
+      ]
+    },
+    "artifacts": [],
+    "funnel": [
+      {
+        "label": "Source recordings",
+        "value": 6567,
+        "ledger": "ls-recordings"
+      },
+      {
+        "label": "Canonical recordings",
+        "value": 6566,
+        "ledger": "ls-canonical"
+      },
+      {
+        "label": "Supervision-eligible recordings",
+        "value": 5881,
+        "ledger": "ls-eligible"
+      },
+      {
+        "label": "Known subjects",
+        "value": 854,
+        "ledger": "ls-subjects"
+      },
+      {
+        "label": "Train / validation / test subjects",
+        "value": "598 / 128 / 128",
+        "ledger": [
+          "ls-split-train",
+          "ls-split-val",
+          "ls-split-test"
+        ]
+      }
+    ],
+    "funnelNote": "Counts only; no model accuracy is reported. The first three steps count recordings and the last two count subjects.",
+    "_unverified": [
+      "No source repository, screenshots or release package are on the build machine; no artifact links provided.",
+      "Whether the 6,567 -> 5,881 reduction reasons (unknown identity, poor quality, auxiliary-only) can be quantified per category is not in the master."
+    ]
+  },
+  {
+    "id": "arch-support",
+    "order": 2,
+    "title": "Pediatric arch support",
+    "subtitle": "An adjustable arch sleeve for children aged 5 to 7",
+    "role": "Team member, BME 3050 Medical Device Design, Group 11, and clinical-contact coordinator. I researched existing treatments, drew the system diagram, helped with the engineering analysis, ideation and down-selection, and drafted the verification-and-validation matrix.",
+    "status": "concept; V2 beta built; V3 not built",
+    "period": "Summer 2026",
+    "course": "BME 3050 Medical Device Design, University of Cincinnati",
+    "headline": {
+      "value": "Adjustable sewn sleeve with a gel insert",
+      "chip": {
+        "type": "cited",
+        "label": "V2 prototype, beta"
+      },
+      "ledger": [
+        "arch-v2"
+      ]
+    },
+    "summary": "Our team's adjustable, non-invasive arch support for children with symptomatic flatfoot. We built V2 as a sewn prototype and bench-tested it.",
+    "sections": {
+      "need": {
+        "body": [
+          "We designed for children aged 5 to 7 with symptomatic pes planus. The aim was a support that adjusts as the foot grows and pulls on like a sock."
+        ],
+        "ledger": [
+          "arch-age"
+        ]
+      },
+      "constraints": {
+        "body": [
+          "Three design inputs: room for up to 10% volumetric foot growth, a 150 N ground-reaction-force target, and midfoot thickness under 8 mm to fit standard pediatric shoes. All three are targets.",
+          "We listed who the device touches (children, caregivers, providers, payers) and what could go wrong: pad slippage, torn textile, constriction, sweat and hygiene, and the insert rupturing."
+        ],
+        "ledger": [
+          "arch-growth",
+          "arch-grf",
+          "arch-thickness"
+        ]
+      },
+      "contribution": {
+        "body": [
+          "I was clinical-contact coordinator. I researched existing treatments, drew the system diagram, helped run the engineering analysis, took part in ideation and down-selection, and drafted the verification-and-validation matrix. I contributed to the bench-test strategy. The prototype was a team build."
+        ],
+        "ledger": []
+      },
+      "build": {
+        "body": [
+          "We compared rigid orthotics, store-bought insoles and the sleeve on fit, comfort, adaptability and cost. The sleeve is breathable muslin with a pocket for the gel insert, a gel-adhesive insert and an elastic strap.",
+          "V1 was cardboard and foam: it gave the lift but was not stable. V2 put gel pads inside compression sleeves and is the version we built. V3, custom-molded hybrid inserts with a reinforced pouch, was never built."
+        ],
+        "ledger": [
+          "arch-v2",
+          "arch-v3"
+        ]
+      },
+      "evidence": {
+        "body": [
+          "A 30 lb load held on the insert for 1 minute (static) and a 30 lb dumbbell dropped from 1 ft (impact). All three static tests left the insert unaffected, as did the first two drops. The third drop slightly damaged the insert and let a little gel leak."
+        ],
+        "ledger": [
+          "arch-static",
+          "arch-impact-pass",
+          "arch-impact-fail"
+        ]
+      },
+      "limits": {
+        "body": [
+          "10%, 150 N and under 8 mm are targets. The report names tensile-strain testing, compression mapping and caliper measurement as planned methods, and none has a result.",
+          "Six bench trials on one prototype give no statistical result.",
+          "We ran no pediatric clinical study and claim no treatment effect. Gel containment is what the next team has to fix.",
+          "The final report calls V2 a functional alpha; the résumé calls it a beta."
+        ],
+        "ledger": [
+          "arch-growth",
+          "arch-grf",
+          "arch-thickness",
+          "arch-v2"
+        ]
+      },
+      "sources": [
+        {
+          "label": "Final project documentation (design history, requirements, verification)",
+          "href": "/docs/arch-final-report.pdf",
+          "kind": "pdf"
+        },
+        {
+          "label": "Background review",
+          "href": "/docs/arch-background-review.pdf",
+          "kind": "pdf"
+        },
+        {
+          "label": "Design review",
+          "href": "/docs/arch-design-review.pdf",
+          "kind": "pdf"
+        }
+      ]
+    },
+    "artifacts": [
+      {
+        "kind": "image",
+        "src": "/media/a3be078a90333848.jpg",
+        "alt": "Background review, first page",
+        "caption": "Background review",
+        "doc": "/docs/arch-background-review.pdf"
+      },
+      {
+        "kind": "image",
+        "src": "/media/ae06231c03a26b1f.jpg",
+        "alt": "Design requirements page from the design review",
+        "caption": "Design requirements",
+        "doc": "/docs/arch-design-review.pdf"
+      },
+      {
+        "kind": "image",
+        "src": "/media/3e63921cab906671.jpg",
+        "alt": "Prototype history page from the final report",
+        "caption": "Prototype history, V1 to V2",
+        "doc": "/docs/arch-final-report.pdf"
+      },
+      {
+        "kind": "image",
+        "src": "/media/9ca6c36a2a186955.jpg",
+        "alt": "Verification results page from the final report",
+        "caption": "Verification results",
+        "doc": "/docs/arch-final-report.pdf"
+      }
+    ],
+    "_unverified": [
+      "Exact page numbers within the PDFs for each preview image not checked.",
+      "The 30 lb drop energy is not a calibrated stand-in for pediatric impact; the report's own '3600 lbs' impact requirement was not found tested. Not mentioned on site."
+    ]
+  },
+  {
+    "id": "mass-spec",
+    "order": 3,
+    "title": "Mass-spectrometry workflow",
+    "subtitle": "An Excel/VBA macro at Cincinnati Children's",
+    "role": "Research Student II. I wrote the macro, prepared samples and operated the mass spectrometer.",
+    "status": "completed (role ended May 2026)",
+    "period": "Aug 2025 to May 2026",
+    "course": null,
+    "headline": {
+      "value": "Automated analysis tables",
+      "chip": {
+        "type": "cited",
+        "label": "documented in résumé"
+      },
+      "ledger": [
+        "ms-reduction"
+      ]
+    },
+    "summary": "I wrote an Excel/VBA macro to turn raw high-resolution mass-spec exports into analysis-ready tables, t-tests and volcano plots. I used it mainly for human samples; it also supported the mouse study.",
+    "sections": {
+      "need": {
+        "body": [
+          "A raw mass-spec export is a long list of numbers. Before anyone can review it, someone has to reshape it, run the tests and plot the result. Done by hand for every run, that was slow and error-prone."
+        ],
+        "ledger": []
+      },
+      "constraints": {
+        "body": [
+          "A preclinical research lab at Cincinnati Children's Research Foundation. I had Excel and VBA, with Linux/HPC, R and GraphPad Prism for the analysis downstream.",
+          "Partner study data is not published."
+        ],
+        "ledger": []
+      },
+      "contribution": {
+        "body": [
+          "I wrote the Excel/VBA macro. Around it I did sample prep and runs, adapted FLEX v2 single-cell preparation workflows, and operated, maintained and calibrated a Thermo Fisher Velos Pro mass spectrometer. I also wrote recurring technical reports and gave data presentations."
+        ],
+        "ledger": []
+      },
+      "build": {
+        "body": [
+          "The macro puts each feature on one row with a column per sample, runs the t-tests and draws the volcano plots, so a run is quicker to review and easier to track."
+        ],
+        "ledger": []
+      },
+      "evidence": {
+        "body": [
+          "I used the macro mainly for human samples; it also supported samples from the same mouse study as the Flex v2 work."
+        ],
+        "ledger": [
+          "ms-reduction",
+          "ms-samples"
+        ]
+      },
+      "limits": {
+        "body": [
+          "The evidence ledger retains the historical résumé figure; no baseline timing or measurement method is on file.",
+          "No code, screenshots or data are published, because the work belongs to a research lab and involves study data. Study results are not part of this case."
+        ],
+        "ledger": []
+      },
+      "sources": [
+        {
+          "label": "Résumé, Research Student II and Mass-Spectrometry Data Automation",
+          "href": "/resume/Hamza_Al_Halabi_Resume_Extended_3page.pdf",
+          "kind": "résumé"
+        }
+      ]
+    },
+    "artifacts": [],
+    "_unverified": [
+      "No public artifact exists. A sanitized screenshot or a synthetic-data demo of the macro output would strengthen the case, subject to lab approval.",
+      "Whether the macro is still in use at the lab is not stated in the master."
+    ]
+  },
+  {
+    "id": "ecg",
+    "order": 4,
+    "title": "ECG board",
+    "subtitle": "A soldered board to a trace on screen",
+    "role": "Solo build for BME 2081C Electric Circuits. I soldered and tested the board, adapted the acquisition code and wrote the Processing monitor.",
+    "status": "educational prototype",
+    "period": "Summer 2026",
+    "course": "BME 2081C, University of Cincinnati",
+    "headline": {
+      "value": "about 100 Hz nominal sampling",
+      "chip": {
+        "type": "target",
+        "label": "nominal, set by the 10 ms loop delay"
+      },
+      "ledger": [
+        "ecg-rate"
+      ]
+    },
+    "summary": "Electrodes into a Ninetales board, an Arduino sending samples over serial, and a Processing monitor with a scrolling trace and threshold beat detection. A classroom demo; it is non-diagnostic.",
+    "sections": {
+      "need": {
+        "body": [
+          "Every student in the course soldered a Ninetales board and built a lab project on it. I wanted the whole path running on my desk: electrodes, sampled values, serial bytes, a trace on screen and a threshold flag."
+        ],
+        "ledger": []
+      },
+      "constraints": {
+        "body": [
+          "A course-supplied board and a soldering assignment.",
+          "An Arduino sketch adapted from the course example EXAMPLE02_Sample.ino, a 9600 baud serial link and a 10 ms loop delay.",
+          "One analog input (A1) and one fixed threshold, so the detector depends on signal amplitude."
+        ],
+        "ledger": [
+          "ecg-baud",
+          "ecg-input"
+        ]
+      },
+      "contribution": {
+        "body": [
+          "I soldered and tested the board, connected the ECG probes, chose input A1 and checked the serial stream between Arduino and Processing.",
+          "The Arduino code is adapted from the course example. I wrote the Processing program. Its header says AI was used for one thing only: the pitch of the monitor tone."
+        ],
+        "ledger": []
+      },
+      "build": {
+        "body": [
+          "The Arduino reads A1 and sends each reading over serial; a 10 ms delay sets a nominal rate of about 100 Hz. The Processing monitor draws a scrolling trace and flags a threshold crossing at a fixed value. It estimates heart rate from the time between flags, with a status display, a flash on each flag and a matching beep."
+        ],
+        "ledger": [
+          "ecg-rate",
+          "ecg-baud",
+          "ecg-threshold"
+        ]
+      },
+      "evidence": {
+        "body": [
+          "I tested the chain from board to serial stream to screen. The source files and the soldering guide are linked below."
+        ],
+        "ledger": []
+      },
+      "limits": {
+        "body": [
+          "The 100 Hz is nominal; I did not measure the real rate. The threshold is a fixed constant, and the heart-rate figure is an estimate from the gap between detected peaks.",
+          "No schematic or parts list is published, because none is cleared for release."
+        ],
+        "ledger": [
+          "ecg-rate",
+          "ecg-threshold"
+        ]
+      },
+      "sources": [
+        {
+          "label": "Ninetales soldering and testing guide (BME 2081C assignment)",
+          "href": "/docs/ninetales-assignment.pdf",
+          "kind": "pdf"
+        },
+        {
+          "label": "Arduino source",
+          "href": "/docs/ecg-arduino-source.pdf",
+          "kind": "pdf"
+        },
+        {
+          "label": "Processing monitor source",
+          "href": "/docs/ecg-processing-source.pdf",
+          "kind": "pdf"
+        }
+      ]
+    },
+    "artifacts": [
+      {
+        "kind": "image",
+        "src": "/media/83cddd0f4c8afcda.jpg",
+        "alt": "Cover of the Ninetales soldering and testing guide",
+        "caption": "Assignment guide",
+        "doc": "/docs/ninetales-assignment.pdf"
+      },
+      {
+        "kind": "image",
+        "src": "/media/009aae8cc255aa57.jpg",
+        "alt": "First page of the Arduino source",
+        "caption": "Arduino source",
+        "doc": "/docs/ecg-arduino-source.pdf"
+      },
+      {
+        "kind": "image",
+        "src": "/media/0192e3570851e473.jpg",
+        "alt": "First page of the Processing monitor source",
+        "caption": "Processing source",
+        "doc": "/docs/ecg-processing-source.pdf"
+      }
+    ],
+    "_unverified": [
+      "The hero's recorded ECG capture (WP3) needs a named, cleared capture file; its rate, units and processing are not documented in any file I was given.",
+      "No parts list, schematic or ADC specification published, deliberately."
+    ]
+  },
+  {
+    "id": "jobhub",
+    "order": 5,
+    "title": "JobHub",
+    "subtitle": "A private job-search workspace",
+    "role": "Product lead, building with an AI coding assistant. I defined the workflows, data boundaries and acceptance checks and reviewed the output. The assistant wrote much of the code.",
+    "status": "private product in development",
+    "period": "2026 to present",
+    "course": null,
+    "headline": {
+      "value": "Two databases with account-scoped data",
+      "chip": {
+        "type": "measured",
+        "label": "counted from the source, offline"
+      },
+      "ledger": [
+        "jh-tables"
+      ]
+    },
+    "summary": "A private, account-based job-search tool. It finds jobs, matches roles, prepares résumés from evidence and plans your calendar.",
+    "sections": {
+      "need": {
+        "body": [
+          "Job searching is scattered across listings, résumé versions and calendars. I wanted one private workspace where matching and preparation stay tied to what the user has done."
+        ],
+        "ledger": []
+      },
+      "constraints": {
+        "body": [
+          "Every account's data is separate from every other account's, and application routes need a login.",
+          "The AI only sees the user's saved résumé and project evidence, plus structured questions. Application text, scheduling and workflow logic are plain code.",
+          "It does not submit applications on your behalf."
+        ],
+        "ledger": []
+      },
+      "contribution": {
+        "body": [
+          "I defined the product: job discovery, résumé evidence and role matching, application prep, calendar planning, and the rules for account-scoped data and protected routes. I directed an AI coding assistant to build it and reviewed what it produced."
+        ],
+        "ledger": []
+      },
+      "build": {
+        "body": [
+          "It runs on Cloudflare Pages and Functions, Workers, D1, R2 and Vectorize with Workers AI, with per-account data access, protected application routes, scheduled job ingestion and per-account planning."
+        ],
+        "ledger": []
+      },
+      "evidence": {
+        "body": [
+          "The login gate, the per-account data scoping and the no-submission rule are written down in the project's code and notes."
+        ],
+        "ledger": []
+      },
+      "limits": {
+        "body": [
+          "Private, in development. Previews use sample data.",
+          "The offline tests do not establish production reliability or user outcomes.",
+          "The project is documented in the October 2026 résumés."
+        ],
+        "ledger": []
+      },
+      "sources": [
+        {
+          "label": "Project entry in the extended résumé",
+          "href": "/resume/Hamza_Al_Halabi_Resume_Extended_3page.pdf",
+          "kind": "résumé"
+        }
+      ]
+    },
+    "artifacts": [],
+    "_unverified": [
+      "JobHub source repo is not on the build machine; claims come from the résumés and the audit file. Production health UNVERIFIED.",
+      "The audit referenced commit 99d170b; the local worktree was 24 commits behind. Not re-checked.",
+      "No screenshot published; a synthetic-data screenshot may be added only with owner approval."
+    ]
+  },
+  {
+    "id": "flex-v2",
+    "order": 6,
+    "title": "Flex v2 single-cell sequencing",
+    "subtitle": "Probe-based single-cell profiling at Cincinnati Children's",
+    "role": "Research Student II. I prepared the protocol, the samples and the custom probes, and I ran the data analysis.",
+    "status": "completed (role ended May 2026)",
+    "period": "Aug 2025 to May 2026",
+    "course": null,
+    "headline": {
+      "value": "88 samples through the full Flex v2 protocol",
+      "chip": {
+        "type": "cited",
+        "label": "owner statement"
+      },
+      "ledger": [
+        "flex-samples"
+      ]
+    },
+    "summary": "I prepared the protocol, samples and custom probes for a mouse study at Cincinnati Children's Research Foundation, ran 88 samples through the full Flex v2 protocol, and analyzed the Illumina sequencing data with Cell Ranger.",
+    "sections": {
+      "need": {
+        "body": [
+          "Single-cell sequencing counts which genes are active in individual cells. Flex v2 does it on fixed cells, using pairs of short probes in place of reverse transcription of every RNA."
+        ],
+        "ledger": []
+      },
+      "constraints": {
+        "body": [
+          "A preclinical research lab. Study details and data are not published here, so the probe lab on the page uses an invented sequence."
+        ],
+        "ledger": []
+      },
+      "contribution": {
+        "body": [
+          "I prepared the protocol, samples and custom probes, ran 88 samples through the full Flex v2 protocol, and performed the Cell Ranger analysis. Flex v2 took about half my placement."
+        ],
+        "ledger": [
+          "flex-half",
+          "flex-role",
+          "flex-samples",
+          "flex-cell-ranger"
+        ]
+      },
+      "build": {
+        "body": [
+          "The demo steps an invented target through probe hybridisation, ligation, barcoding in a droplet and a toy count."
+        ],
+        "ledger": []
+      },
+      "evidence": {
+        "body": [
+          "The owner statement confirms 88 samples through the full Flex v2 protocol for a mouse study, sequencing on Illumina machines, and my analysis with Cell Ranger."
+        ],
+        "ledger": [
+          "flex-samples",
+          "flex-cell-ranger",
+          "flex-illumina",
+          "flex-mouse-study"
+        ]
+      },
+      "limits": {
+        "body": [
+          "Tissue details and study results are not published. The probe lab uses invented sequences and toy counts."
+        ],
+        "ledger": []
+      },
+      "sources": [
+        {
+          "label": "GEM-X Flex v2 Gene Expression user guide (10x Genomics, CG000834)",
+          "href": "https://cdn.10xgenomics.com/image/upload/v1761674234/support-documents/CG000834_GEM-X_Flex_v2_Gene_Expression_UserGuide_Rev_A.pdf",
+          "kind": "reference"
+        },
+        {
+          "label": "Custom Probe Design for GEM-X Flex v2 (10x Genomics, CG000839)",
+          "href": "https://cdn.10xgenomics.com/image/upload/v1779380719/support-documents/CG000839_GEM-X_Flex_v2_CustomProbeDesign_TechNote_Rev_B.pdf",
+          "kind": "reference"
+        }
+      ]
+    },
+    "artifacts": [],
+    "_unverified": [
+      "Tissue details and study results are not cleared for publication."
+    ]
+  }
+]

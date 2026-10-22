@@ -1,0 +1,15 @@
+---
+import { site } from '../../lib/data';
+import copy from '../../content/copy.json';
+---
+<section class="contact" id="contact" aria-labelledby="contact-h">
+  <h2 id="contact-h" class="sr">Contact</h2>
+  <a class="mail" href={site.links.email}>{site.email}</a>
+  <ul class="clinks">
+    <li><a class="btn" href={site.links.email} data-magnetic>{copy.contact.button}</a></li>
+    <li><a href={site.links.linkedin}>LinkedIn ↗</a></li>
+    <li><a href={site.links.resume1}>Résumé, 1 page</a></li>
+    <li><a href={site.links.resume3}>Résumé, 3 pages</a></li>
+  </ul>
+  <footer class="foot"><span>{site.name}, biomedical engineering</span><a href="/evidence/">Evidence</a><a href="/colophon/">Colophon</a></footer>
+</section>

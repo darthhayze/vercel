@@ -1,0 +1,83 @@
+---
+// STAGE EXPLAINER. A staged, scroll-driven explainer: each stage is a sticky flat-vector SVG scene with a numbered progress rail,
+// one caption (22 words or fewer), a legend and Play / Pause / Replay controls. Full API and style guide: ./README.md.
+// Authoring rule: a scene is drawn in its FINAL frame; data-a hooks (see glyphs/core.ts A()) describe how it gets there.
+// No JS and prefers-reduced-motion both show every stage as a stacked final frame. No inline styles (CSP).
+import './stage.css';
+import type { StageDef } from './types';
+interface Props {
+  stages: StageDef[];
+  /** small line above the first stage title, e.g. the project name */
+  eyebrow?: string;
+  /** id of the first stage (the story "demo" anchor), default "demo" */
+  demoId?: string;
+  /** accessible name of the rail */
+  railLabel?: string;
+  /** ONE quiet line under the whole stage list (not per stage). Default "Illustrative workflow; not study data."; pass '' to drop it. */
+  footnote?: string;
+}
+const { stages, eyebrow, demoId = 'demo', railLabel = 'Walkthrough stages', footnote = 'Illustrative workflow; not study data.' } = Astro.props;
+const N = stages.length;
+const sid = (i: number) => (i === 0 ? demoId : stages[i].id);
+const bg = (h: number) => `<rect class="bgp" width="800" height="${h}" rx="22"/>`;
+---
+<div class="stg stg-root" data-stage-root>
+  <slot name="intro" />
+  <svg class="stg-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs><clipPath id="stg-clip"><rect width="800" height="560" rx="22"/></clipPath></defs></svg>
+  <nav class="stg-rail" aria-label={railLabel}>
+    <ol class="stg-ol">
+      {stages.map((s, i) => <li><a href={`#${sid(i)}`} data-rail={i} aria-label={`Stage ${i + 1}: ${s.title}`}><span aria-hidden="true">{i + 1}</span></a></li>)}
+    </ol>
+    <div class="stg-m">
+      <a class="stg-mb" href={`#${sid(0)}`} data-prev aria-label="Previous stage"><span aria-hidden="true">↑</span><span class="stg-mbt">Prev</span></a>
+      <p class="stg-mt"><span data-mn>Stage 1 of {N}</span> <b data-mtitle>{stages[0].title}</b></p>
+      <a class="stg-mb" href={`#${sid(Math.min(1, N - 1))}`} data-next aria-label="Next stage"><span class="stg-mbt">Next</span><span aria-hidden="true">↓</span></a>
+    </div>
+  </nav>
+  <div class="stg-tracks">
+    {stages.map((s, i) => {
+      const ctx = { index: i, total: N, id: sid(i) };
+      const h = s.viewHeight ?? 560;
+      return (
+        <section class="stg-track" id={sid(i)} data-stage-track data-dur={s.duration} data-len={s.length ?? 'm'} aria-labelledby={`${sid(i)}-h`}>
+          <div class="stg-stage" data-stage-pin>
+            <div class="stg-head">
+              <p class="stg-step">{i === 0 && eyebrow ? `${eyebrow} · ` : ''}Stage {i + 1} of {N}</p>
+              <h2 id={`${sid(i)}-h`}>{s.title}</h2>
+            </div>
+            <figure class="stg-fig">
+              {i === 0 && <span id="pl" class="stg-anchor" aria-hidden="true"></span>}
+              <svg viewBox={`0 0 800 ${h}`} role="img" aria-labelledby={`${sid(i)}-t ${sid(i)}-d`} focusable="false">
+                <title id={`${sid(i)}-t`}>{s.title}</title>
+                <desc id={`${sid(i)}-d`}>{s.desc ?? s.caption}</desc>
+                {s.reducedFinalFrame ? (
+                  <Fragment>
+                    <g clip-path="url(#stg-clip)" class="stg-anim" set:html={bg(h) + s.scene(ctx)} />
+                    <g clip-path="url(#stg-clip)" class="stg-final" set:html={bg(h) + s.reducedFinalFrame(ctx)} />
+                  </Fragment>
+                ) : (
+                  <g clip-path="url(#stg-clip)" set:html={bg(h) + s.scene(ctx)} />
+                )}
+              </svg>
+            </figure>
+            <div class="stg-body">
+              <p class="stg-cap">{s.caption}</p>
+              {s.legend && <ul class="stg-key">{s.legend.map((k) => <li><i class={`sw sw-${k.swatch}`} aria-hidden="true"></i>{k.label}</li>)}</ul>}
+              {s.files && <ul class="stg-files">{s.files.map((f) => <li>{f}</li>)}</ul>}
+              {s.note && <p class="stg-note">{s.note}</p>}
+              <div class="stg-ctl" role="group" aria-label={`Stage ${i + 1} playback`} hidden>
+                <button type="button" class="stg-btn" data-play>Play stage</button>
+                <button type="button" class="stg-btn alt" data-replay>Replay stage</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    })}
+    {footnote && <p class="stg-ill stg-once">{footnote}</p>}
+  </div>
+</div>
+
+<script>
+  import './stage-player.ts';
+</script>

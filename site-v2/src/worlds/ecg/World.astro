@@ -1,0 +1,147 @@
+---
+// WORLD: ECG board, "the oscilloscope". One large scope with a probe that travels the signal chain (electrodes, board, pin A1,
+// the 10 ms loop, serial, the Processing monitor, the beat detector). The screen shows the signal as it is at the probe point,
+// the drawer beside it shows the matching code block, and the beat-detector point has the threshold knob (id="demo").
+// Without JS the chain is a plain list of seven static screens and both code explorers; with reduced motion the probe snaps and
+// the screens show their final frame. Educational and non-diagnostic; the trace is synthetic.
+import WorldShell from '../../components/kit/WorldShell.astro';
+import CodeExplorer from '../../components/docs/CodeExplorer.astro';
+import { row } from '../../lib/data';
+import { NODES } from './nodes';
+import { ICONS } from './icons';
+import { GRATICULE, screen } from './screens';
+import './ecg.css';
+interface Props { slug: string; c: any }
+const { slug, c } = Astro.props;
+const specs = ['ecg-rate', 'ecg-input', 'ecg-baud', 'ecg-threshold'].map((id) => row(id));
+const still = (i: number) => screen(i, 0, { thr: 450, still: true });
+const first = NODES[0];
+const short: Record<string, string> = { 'ninetales-assignment': 'Soldering guide PDF', 'ecg-arduino-source': 'Arduino source PDF', 'ecg-processing-source': 'Processing source PDF' };
+const docs: { href: string; label: string }[] = c.sections.sources.map((s: any) => ({ href: s.href, label: short[String(s.href).split('/').pop()?.replace('.pdf', '') ?? ''] ?? s.label }));
+---
+<WorldShell slug={slug} title={c.title} description={c.summary}>
+  <header class="ecgh">
+    <div class="ecgh-in">
+      <div class="ecgh-main">
+        <p class="ecgh-where">{c.course} · {c.period}</p>
+        <h1>ECG board</h1>
+        <p class="ecgh-lede">A soldered board, an Arduino and a Processing monitor, followed from the skin to a beat flag on screen.</p>
+        <p class="ecgh-go"><a class="ecgh-btn" href="#trace">Move the probe <span aria-hidden="true">↓</span></a><a class="ecgh-src" href="/evidence/#ledger-ecg-rate">Where the numbers come from</a></p>
+      </div>
+      <dl class="ecgh-facts">
+        <div><dt>I soldered</dt><dd>and tested the Ninetales board and connected the ECG probes</dd></div>
+        <div><dt>I adapted</dt><dd>the Arduino sketch from the course example</dd></div>
+        <div><dt>I wrote</dt><dd>the Processing monitor: trace, beat flag and rate estimate</dd></div>
+      </dl>
+    </div>
+    <p class="ecgh-note">Educational prototype. It is not a diagnostic or clinically validated monitor, and the trace on the scope is synthetic.</p>
+  </header>
+
+  <section class="sc" id="trace" aria-labelledby="sc-h" data-sc>
+    <h2 id="sc-h" class="sr-only">The signal chain, probe point by probe point</h2>
+    <div class="sc-track" data-track>
+      <span class="sc-anchor" id="demo" aria-hidden="true"></span>
+      <div class="sc-pin" data-pin data-stage-pin>
+        <div class="sc-views" role="group" aria-label="View" data-js-only hidden>
+          <button type="button" aria-pressed="true" data-view-btn="scope">Scope</button>
+          <button type="button" aria-pressed="false" data-view-btn="code">Code at this point</button>
+        </div>
+        <div class="sc-grid">
+          <div class="sc-inst" data-inst>
+            <div class="bz-top">
+              <p class="bz-name">Signal scope <span>synthetic trace</span></p>
+              <p class="bz-hint" data-js-only hidden>Scroll or press <kbd>↑</kbd> <kbd>↓</kbd> to move the probe</p>
+              <button type="button" class="bz-run" data-run data-js-only hidden aria-pressed="false"><i aria-hidden="true"></i><span>Run</span></button>
+            </div>
+            <div class="bz-screen">
+              <svg class="scr" viewBox="0 0 800 480" role="img" aria-labelledby="scr-d" focusable="false" data-scr>
+                <desc id="scr-d" data-scr-desc>{first.desc}</desc>
+                <rect class="scr-bg" width="800" height="480" rx="14"/>
+                <g aria-hidden="true">{/* graticule */}<Fragment set:html={GRATICULE} /></g>
+                <g data-layer="a" aria-hidden="true"><Fragment set:html={still(0)} /></g>
+                <g data-layer="b" aria-hidden="true" opacity="0"></g>
+              </svg>
+            </div>
+            <p class="inst-cap" aria-hidden="true"><span class="cap-t" data-cap2-t>{first.title}</span> <span data-cap2>{first.caption}</span></p>
+            <div class="bz-row">
+              <div class="bz-ch" aria-hidden="true">
+                <span>CH1</span>
+                <svg viewBox="0 0 44 44" width="44" height="44" data-bnc><circle class="bnc-o" cx="22" cy="22" r="19"/><circle class="bnc-i" cx="22" cy="22" r="10"/><circle class="bnc-c" cx="22" cy="22" r="3.5"/></svg>
+              </div>
+              <dl class="bz-read">
+                <div><dt>Probe at</dt><dd data-r-at>{first.at}</dd></div>
+                <div><dt>Screen</dt><dd data-r-shows>{first.shows}</dd></div>
+                <div><dt data-r-key>{first.live}</dt><dd class="bz-live" data-r-live>weak</dd></div>
+              </dl>
+              <div class="bz-thr" data-thr>
+                <svg class="knob" viewBox="0 0 48 48" width="44" height="44" aria-hidden="true" focusable="false"><circle class="kn-o" cx="24" cy="24" r="21"/><circle class="kn-i" cx="24" cy="24" r="15"/><line class="kn-p" x1="24" y1="24" x2="24" y2="11" data-knob/></svg>
+                <div class="thr-c">
+                  <label for="ecg-thr-in">Threshold <output id="ecg-thr-out" for="ecg-thr-in">450</output></label>
+                  <input type="range" id="ecg-thr-in" min="300" max="600" step="5" value="450" aria-describedby="ecg-thr-say" />
+                </div>
+                <p class="sr-only" id="ecg-thr-say" aria-live="polite" data-thr-say>Threshold 450. Moving it sends the probe to the beat detector.</p>
+              </div>
+            </div>
+            <div class="lane" aria-hidden="true" data-lane></div>
+            <nav class="chain-nav" aria-label="Probe points">
+              <ol class="pchain" data-chain>
+                {NODES.map((n, i) => (
+                  <li><button type="button" class={`ch-n${i === 0 ? ' is-on' : ''}`} data-i={i} aria-current={i === 0 ? 'step' : undefined} aria-label={`${n.title}: ${n.shows}`}><span class="tp" aria-hidden="true"></span><Fragment set:html={ICONS[i]} /><span class="ch-l">{n.name}</span></button></li>
+                ))}
+              </ol>
+            </nav>
+            <svg class="pov" aria-hidden="true" data-decor focusable="false" data-probe-svg></svg>
+          </div>
+
+          <aside class="sc-drawer" aria-label="Code at this probe point" data-drawer>
+            <header class="dr-head">
+              <p class="dr-k">Probe at <span class="dr-t" data-dr-name>{first.title}</span></p>
+              <p class="dr-cap" data-dr-cap>{first.caption}</p>
+              <p class="dr-no" data-dr-no hidden>{first.nocode}</p>
+            </header>
+            <div class="dr-bar" data-js-only hidden>
+              <div class="dr-tabs" role="tablist" aria-label="Source file">
+                <button type="button" role="tab" id="tab-arduino" aria-controls="code-arduino" aria-selected="true" data-tab="arduino">Arduino<span class="lg"> sketch</span></button>
+                <button type="button" role="tab" id="tab-processing" aria-controls="code-processing" aria-selected="false" tabindex="-1" data-tab="processing">Processing<span class="lg"> monitor</span></button>
+              </div>
+              <ul class="dr-chips" aria-label="Other code at this point" data-chips></ul>
+            </div>
+            <div class="dr-panels">
+              <div id="code-arduino" role="tabpanel" aria-labelledby="tab-arduino" data-panel="arduino"><CodeExplorer doc="ecg-arduino-source" /></div>
+              <div id="code-processing" role="tabpanel" aria-labelledby="tab-processing" data-panel="processing"><CodeExplorer doc="ecg-processing-source" /></div>
+            </div>
+            <ul class="dr-docs" aria-label="Documents">
+              {docs.map((s) => <li><a href={s.href}>{s.label}</a></li>)}
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+    <ol class="sc-flat" aria-label="The signal chain, step by step">
+      {NODES.map((n, i) => (
+        <li>
+          <h3>{n.title}</h3>
+          <p>{n.caption}</p>
+          <svg class="scr" viewBox="0 0 800 480" role="img" aria-label={n.desc} focusable="false"><rect class="scr-bg" width="800" height="480" rx="14"/><g aria-hidden="true"><Fragment set:html={GRATICULE} /></g><g aria-hidden="true"><Fragment set:html={still(i)} /></g></svg>
+          {n.code.length ? <p class="flat-code">Code for this point: {n.code.map((r) => r.label).join(', ')}. The explorer below has it.</p> : <p class="flat-code">{n.nocode}</p>}
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="ecgs" id="limits" aria-labelledby="lim-h">
+    <h2 id="lim-h">Source values</h2>
+    <dl class="ecgs-specs">
+      {specs.map((r) => <div><dt>{r.claim}</dt><dd>{r.value}<small>{r.caveat} <a href={r.id === 'ecg-threshold' ? '/docs/ecg-processing-source.pdf' : '/docs/ecg-arduino-source.pdf'}>Source sketch</a></small></dd></div>)}
+    </dl>
+    <div class="ecgs-lim">
+      {c.sections.limits.body.map((p: string) => <p>{p}</p>)}
+    </div>
+    <nav class="ecgs-more" aria-label="More work">
+      <a href="/evidence/#ledger-ecg-rate">Evidence ledger</a><a href="/work/arch-support/">Pediatric arch support</a><a href="/work/lungscope/">LungScope</a>
+    </nav>
+  </section>
+</WorldShell>
+
+<script>import './client';</script>

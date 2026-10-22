@@ -1,0 +1,86 @@
+{
+  "_note": "Maps hash-named files in public/media to cases. Alt text describes what is visible, checked by eye on 2026-10-20.",
+  "items": [
+    {
+      "src": "/media/83cddd0f4c8afcda.jpg",
+      "case": "ecg",
+      "role": "source",
+      "alt": "First page of the BME 2081C Ninetales soldering and testing guide, showing the green Ninetales circuit board with a white fox drawing in its silkscreen.",
+      "doc": "/docs/ninetales-assignment.pdf",
+      "w": 1148,
+      "h": 1485
+    },
+    {
+      "src": "/media/009aae8cc255aa57.jpg",
+      "case": "ecg",
+      "role": "source",
+      "alt": "First page of the Arduino source: about twenty lines that read pin A1, begin serial at 9600 baud and delay 10 milliseconds.",
+      "doc": "/docs/ecg-arduino-source.pdf",
+      "w": 910,
+      "h": 1287
+    },
+    {
+      "src": "/media/0192e3570851e473.jpg",
+      "case": "ecg",
+      "role": "source",
+      "alt": "A page of the Processing monitor source showing the threshold, beat interval and flash logic.",
+      "doc": "/docs/ecg-processing-source.pdf",
+      "w": 910,
+      "h": 1287
+    },
+    {
+      "src": "/media/a3be078a90333848.jpg",
+      "case": "arch-support",
+      "role": "source",
+      "alt": "Background review page titled Brainstorming Artifacts with three hand-drawn, coloured-pencil concept sketches: an oversized insole in a flexible sock, a fluid shoe, and an insole with fluid-filled arch bladders.",
+      "doc": "/docs/arch-background-review.pdf",
+      "w": 1148,
+      "h": 1485
+    },
+    {
+      "src": "/media/ae06231c03a26b1f.jpg",
+      "case": "arch-support",
+      "role": "source",
+      "alt": "Design review page with a table of six user needs, their design inputs and verification methods, including the 8 mm thickness, 10 percent growth and 150 N inputs.",
+      "doc": "/docs/arch-design-review.pdf",
+      "w": 1148,
+      "h": 1485
+    },
+    {
+      "src": "/media/3e63921cab906671.jpg",
+      "case": "arch-support",
+      "role": "source",
+      "alt": "Final report page describing the assembly and the prototype history from the V1 cardboard and foam proof of concept to V2 gel pads in compression sleeves.",
+      "doc": "/docs/arch-final-report.pdf",
+      "w": 1148,
+      "h": 1485
+    },
+    {
+      "src": "/media/9ca6c36a2a186955.jpg",
+      "case": "arch-support",
+      "role": "source",
+      "alt": "Final report results table: three static tests and two impact tests marked insert unaffected, and impact number three marked insert slightly damaged but contained with slight leakage.",
+      "doc": "/docs/arch-final-report.pdf",
+      "w": 1148,
+      "h": 1485
+    },
+    {
+      "src": "/media/e38fa86fb6102a5a.jpg",
+      "case": "tens",
+      "role": "source",
+      "alt": "Page of the TENS literature review showing a systems diagram with human, mechanical, electrical, chemical and biological boxes connected by labelled arrows.",
+      "doc": "/docs/tens-literature-review.pdf",
+      "w": 1148,
+      "h": 1485
+    },
+    {
+      "src": "/media/d57d405538445140.jpg",
+      "case": "tens",
+      "role": "source",
+      "alt": "Red and white poster titled Systemic Analysis of TENS Devices to Guide Future Design Improvements, with a problem statement, a systems diagram, a handheld TENS unit, and wearable garment examples.",
+      "doc": "/docs/tens-poster.pdf",
+      "w": 1500,
+      "h": 1125
+    }
+  ]
+}

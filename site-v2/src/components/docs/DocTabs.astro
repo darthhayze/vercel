@@ -1,0 +1,30 @@
+---
+// DocTabs: accessible tabbed wrapper around GuidedReader.
+// <DocTabs docs={[{doc:'arch-final-report', label:'Final report'}, ...]} />
+// With JS: ARIA tabs (arrows, Home/End), only the active reader loads images, deep link #doc-<slug>.
+// Without JS: every reader stacked, tablist not shown.
+import '../../styles/docs.css';
+import GuidedReader from './GuidedReader.astro';
+import { loadDoc } from './load';
+export interface Props { docs: { doc: string; label: string }[]; label?: string }
+const { docs, label = 'Documents' } = Astro.props as Props;
+const items = docs.map((d, i) => ({ ...d, slug: loadDoc(d.doc)?.slug ?? d.doc, i }));
+const uid = 'dt-' + items.map((x) => x.slug).join('_');
+---
+<div class="docr dt" data-dt data-first={items[0]?.slug}>
+  {items.length > 1 && (
+    <div class="dt-list" role="tablist" aria-label={label} data-js-only hidden>
+      {items.map((x) => (
+        <button type="button" role="tab" class="dt-tab" id={`${uid}-tab-${x.slug}`} aria-controls={`doc-${x.slug}`} aria-selected={x.i === 0 ? 'true' : 'false'} tabindex={x.i === 0 ? 0 : -1} data-slug={x.slug}>
+          {x.label}
+        </button>
+      ))}
+    </div>
+  )}
+  {items.map((x) => (
+    <div class="dt-panel" id={`doc-${x.slug}`} data-slug={x.slug} role={items.length > 1 ? 'tabpanel' : undefined} aria-labelledby={items.length > 1 ? `${uid}-tab-${x.slug}` : undefined} tabindex={items.length > 1 ? 0 : undefined}>
+      <GuidedReader doc={x.doc} eager={x.i === 0} />
+    </div>
+  ))}
+</div>
+<script>import '../../scripts/docs/doc-tabs.ts';</script>

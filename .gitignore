@@ -1,0 +1,10 @@
+# Local planning and alternative sites; production source lives in site-v2.
+/creative-direction/
+/dev-only/
+/qa/
+/site/
+/site-a/
+/site-b/
+/site-c/
+.env*
+.vercel/

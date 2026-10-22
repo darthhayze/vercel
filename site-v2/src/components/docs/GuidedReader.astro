@@ -1,0 +1,116 @@
+---
+// GuidedReader: page-image viewer with numbered hotspot pins and a margin note panel.
+// <GuidedReader doc="arch-final-report" />  reads src/content/docs/<doc>.json
+// {slug,title,pdf,pages,startHere:number[] (note IDs),hotspots:[{page,x,y,n,title,note,kind:'what'|'why'|'limit'}],intro}
+// Without JS: every page, followed by its notes, as a plain list. With JS: one page at a time, pins, guided path.
+import '../../styles/docs.css';
+import { loadDoc } from './load';
+// optional hotspot fields: margin:true draws the pin in the page margin with a leader line; side:'left'|'right' picks the margin.
+export interface Props { doc: string; data?: any; eager?: boolean }
+const { doc, data, eager = true } = Astro.props as Props;
+const d = data ?? loadDoc(doc);
+if (!d) throw new Error(`GuidedReader: no src/content/docs/${doc}.json`);
+const pages: number = d.pages;
+const slug: string = d.slug ?? doc;
+const hotspots: any[] = [...(d.hotspots ?? [])].sort((a, b) => a.n - b.n);
+const startHere: number[] = d.startHere ?? [];
+const pad = (n: number) => String(n).padStart(2, '0');
+const src = (p: number) => `/docs-pages/${slug}/p-${pad(p)}.webp`;
+const thumb = (p: number) => `/docs-pages/${slug}/t-${pad(p)}.webp`; // 200 px wide, so the thumbnail strip never pulls full pages
+// page size: 1100x1424 for most; keep the ratio stable to avoid layout shift
+const W = d.size?.[0] ?? 1100, H = d.size?.[1] ?? 1424;
+const kindLabel: Record<string, string> = { what: 'Overview', why: 'Context', limit: 'Limits' };
+// x,y are 0-1 per contract; tolerate 0-100 percentages from authors
+const frac = (v: number) => Math.max(0, Math.min(1, v > 1 ? v / 100 : v));
+const uid = `gr-${slug}`;
+const byPage = (p: number) => hotspots.filter((h) => h.page === p);
+// Guided path uses note IDs; ordinary navigation includes every note.
+const hasMargin = hotspots.some((h) => h.margin);
+const sideOf = (h: any) => (h.side === 'left' || h.side === 'right' ? h.side : frac(h.x) > 0.5 ? 'right' : 'left');
+let path = startHere.map((n) => hotspots.find((h) => h.n === n)).filter(Boolean);
+if (!path.length) path = hotspots;
+---
+<section class="docr gr" data-gr data-slug={slug} data-pages={pages} data-start={startHere.join(',')} data-path={path.map((h) => h.n).join(',')} aria-labelledby={`${uid}-t`}>
+  <header class="gr-head">
+    <div>
+            <h3 class="docr-title" id={`${uid}-t`}>{d.title}</h3>
+      {d.intro && <p class="docr-intro">{d.intro}</p>}
+    </div>
+    <p class="gr-links"><a class="docr-btn" href={d.pdf} target="_blank" rel="noopener">Original PDF <span class="sr-only">(opens in a new tab)</span></a></p>
+  </header>
+
+  <div class="gr-bar" data-js-only hidden>
+    <div class="gr-group" role="group" aria-label="Guided path">
+      <button type="button" class="docr-btn is-solid" data-act="start">Go to the first note</button>
+      <button type="button" class="docr-btn" data-act="note-prev" >Previous note</button>
+      <button type="button" class="docr-btn" data-act="note-next" >Next note</button>
+      <button type="button" class="docr-btn" data-act="tour" aria-pressed="false" title="Walk the guided path automatically; any click stops it">Start the guided tour</button>
+    </div>
+    <div class="gr-group" role="group" aria-label="Pages">
+      <button type="button" class="docr-btn" data-act="page-prev" >Previous page</button>
+      <span class="gr-count" aria-live="polite"><span data-cur>1</span> / {pages}</span>
+      <button type="button" class="docr-btn" data-act="page-next" >Next page</button>
+    </div>
+    <div class="gr-group" role="group" aria-label="Zoom">
+      <button type="button" class="docr-btn" data-act="zoom-out" >Zoom out</button>
+      <span class="gr-zoom" data-zoomlabel>100%</span>
+      <button type="button" class="docr-btn" data-act="zoom-in" >Zoom in</button>
+    </div>
+  </div>
+  <div class="gr-progress" data-js-only hidden>
+    <div class="gr-track" role="progressbar" aria-label="Guided path progress" aria-valuemin="0" aria-valuemax={path.length} aria-valuenow="0"><span class="gr-fill" data-fill></span></div>
+    <p class="gr-prog-text" data-progtext>{path.length} notes on the guided path.</p>
+  </div>
+
+  <p class="gr-help" data-js-only hidden>Zoom in to read the page. Scroll within the page to move around.</p>
+  <div class="gr-stage">
+    <div class="gr-view">
+      <div class={`gr-scroll${hasMargin ? ' has-margin' : ''}`} data-scroll tabindex="0" role="region" aria-label="Document pages. Keys: [ and ] change page, n and p change note, plus and minus zoom.">
+        <ol class="gr-pages">
+          {Array.from({ length: pages }, (_, i) => i + 1).map((p) => (
+            <li class="gr-page" data-page={p} id={`${uid}-p${p}`}>
+              <div class="gr-frame">
+                <img src={src(p)} width={W} height={H} loading={p === 1 && eager ? 'eager' : 'lazy'} decoding="async" alt={`${d.title}, page ${p} of ${pages}`} />
+                {byPage(p).map((h) => (
+                  <button type="button" class="gr-pin" data-n={h.n} data-x={frac(h.x)} data-y={frac(h.y)} data-kind={h.kind} data-margin={h.margin ? sideOf(h) : undefined} aria-label={`Note ${h.n}: ${h.title}`} aria-controls={`${uid}-n${h.n}`}>{h.n}</button>
+                ))}
+              </div>
+              <p class="gr-pageno">Page {p}</p>
+              {byPage(p).length > 0 && (
+                <ul class="gr-nojs-notes">
+                  {byPage(p).map((h) => <li><a href={`#${uid}-n${h.n}`}>Note {h.n}: {h.title}</a></li>)}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ol>
+      </div>
+      <nav class="gr-thumbs" aria-label="Page thumbnails" data-js-only hidden>
+        <ol>
+          {Array.from({ length: pages }, (_, i) => i + 1).map((p) => (
+            <li>
+              <button type="button" class="gr-thumb" data-goto={p} aria-label={`Page ${p}`} data-has={byPage(p).length ? '1' : '0'}>
+                <img src={thumb(p)} width={200} height={Math.round(200 * H / W)} loading="lazy" decoding="async" alt="" />
+                <span class="gr-thumb-n">{p}</span>
+              </button>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </div>
+
+    <aside class="gr-side" aria-label="Notes" data-side>
+      <p class="gr-empty" data-empty>Select a numbered pin on the page, or start the guided tour.</p>
+      <ol class="gr-notes" data-notes>
+        {hotspots.map((h) => (
+          <li class="gr-note" id={`${uid}-n${h.n}`} data-n={h.n} data-page={h.page} data-kind={h.kind}>
+            <p class="gr-kind"><span class="gr-kind-n">{h.n}</span><span class="gr-badge">{kindLabel[h.kind] ?? h.kind}</span><span class="gr-pg">page {h.page}</span></p>
+            <h4 class="gr-note-t">{h.title}</h4>
+            <p class="gr-note-b">{h.note}</p>
+          </li>
+        ))}
+      </ol>
+    </aside>
+  </div>
+</section>
+<script>import '../../scripts/docs/guided-reader.ts';</script>

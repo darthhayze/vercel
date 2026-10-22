@@ -1,0 +1,141 @@
+{
+ "slug": "ijms-26-02262",
+ "title": "Metabolically Healthy Obesity Is Characterized by a Distinct Proteome Signature",
+ "pdf": "/docs/ijms-26-02262.pdf",
+ "pages": 14,
+ "size": [
+  1100,
+  1556
+ ],
+ "coords": "x and y are percent of the page image, measured from the top left",
+ "startHere": [
+  1,
+  2,
+  4,
+  9,
+  12
+ ],
+ "intro": "International Journal of Molecular Sciences, March 2025.",
+ "hotspots": [
+  {
+   "page": 1,
+   "x": 32,
+   "y": 63,
+   "n": 1,
+   "title": "Question and result",
+   "kind": "what",
+   "note": "The authors compared 27 participants classified as having obesity only with 15 lean controls. Of 184 proteins measured, 24 differed between groups: 11 higher and 13 lower. The study did not track later disease.",
+   "margin": true
+  },
+  {
+   "page": 3,
+   "x": 48,
+   "y": 49,
+   "n": 2,
+   "title": "Figure 1: the study design",
+   "kind": "what",
+   "note": "Figure 1 shows the two groups and protein measurements. It labels the lean group BMI below 25 and the obesity group above 35.",
+   "margin": true
+  },
+  {
+   "page": 3,
+   "x": 50,
+   "y": 83,
+   "n": 3,
+   "title": "Table 1: who the groups were",
+   "kind": "limit",
+   "note": "Table 1 begins here and continues on page 4. Mean ages were 36.4 and 38.8 years. The obesity group had higher weight, BMI, glucose, insulin and C-reactive protein, and a greater proportion of women: 17 of 27 versus 7 of 15.",
+   "margin": true
+  },
+  {
+   "page": 4,
+   "x": 46,
+   "y": 57,
+   "n": 4,
+   "title": "Figure 2A and 2B: the heatmap and volcano plot",
+   "kind": "what",
+   "note": "Each heatmap column is a person. On the volcano plot, each dot is a protein; right means higher in the obesity group, and up means a smaller p-value. IL-6 is near the top right.",
+   "margin": true
+  },
+  {
+   "page": 4,
+   "x": 82,
+   "y": 57,
+   "n": 5,
+   "title": "Figure 2C: the 24 proteins",
+   "kind": "why",
+   "note": "IL-6 has the largest increase (log2 fold change 1.17), followed by CXCL10 and CCL19. SIRT2 and AXIN1 have the largest decreases. The authors used a 1.25-fold change threshold and a false discovery rate below 0.05, adjusting for age, sex and race.",
+   "margin": true
+  },
+  {
+   "page": 5,
+   "x": 22,
+   "y": 62,
+   "n": 6,
+   "title": "Figure 3A: how the proteins relate",
+   "kind": "what",
+   "note": "The STRING network shows associations among the proteins. IL-6 and CXCL10 have the most links; the authors describe an inflammation cluster.",
+   "margin": true
+  },
+  {
+   "page": 5,
+   "x": 76,
+   "y": 62,
+   "n": 7,
+   "title": "Figure 3B and 3C: pathways",
+   "kind": "why",
+   "note": "In Figure 3B, green marks downregulated pathways such as regulation of T-cell differentiation; red marks upregulated pathways such as leukocyte chemotaxis. Figure 3C lists enriched molecular functions, including chemokine, cytokine and growth-factor activity.",
+   "margin": true
+  },
+  {
+   "page": 6,
+   "x": 50,
+   "y": 28,
+   "n": 8,
+   "title": "How the authors interpret it",
+   "kind": "why",
+   "note": "The authors discuss earlier links between these proteins, inflammation and insulin resistance. Their cross-sectional study cannot establish whether participants will develop disease.",
+   "margin": true
+  },
+  {
+   "page": 8,
+   "x": 32,
+   "y": 79,
+   "n": 9,
+   "title": "The authors' own limits",
+   "kind": "limit",
+   "note": "The authors note the small cohort, single time point and unequal sex distribution. The discussion continues on page 9 with a call for a larger, multiethnic study followed over time.",
+   "margin": true
+  },
+  {
+   "page": 9,
+   "x": 55,
+   "y": 52,
+   "n": 10,
+   "title": "Figure 4: the authors' hypothesis",
+   "kind": "limit",
+   "note": "The authors combine the protein results with earlier disease associations to propose possible links. This schematic does not show disease outcomes observed during follow-up.",
+   "margin": true
+  },
+  {
+   "page": 10,
+   "x": 32,
+   "y": 52,
+   "n": 11,
+   "title": "How the proteins were measured",
+   "kind": "what",
+   "note": "Olink uses pairs of DNA-tagged antibodies to measure relative protein abundance. The authors used two 92-protein panels and tested group differences with limma.",
+   "margin": true
+  },
+  {
+   "page": 11,
+   "x": 55,
+   "y": 31,
+   "n": 12,
+   "title": "Who did what",
+   "kind": "what",
+   "note": "The paper credits me and six co-authors with leading cohort sample collection, processing and ethical approvals. Other authors handled study design, analysis and writing.",
+   "margin": true
+  }
+ ]
+}

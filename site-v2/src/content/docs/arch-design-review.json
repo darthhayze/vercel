@@ -1,0 +1,164 @@
+{
+ "slug": "arch-design-review",
+ "title": "Pediatric arch support: final design review",
+ "pdf": "/docs/arch-design-review.pdf",
+ "pages": 15,
+ "coords": "x and y are percent of the page image, measured from the top left",
+ "startHere": [4, 6, 7, 8, 9],
+ "intro": "Our 8 August 2026 design review. Start with the requirements on page 5 and the V2 sleeve on pages 7 and 8.",
+ "hotspots": [
+  {
+   "page": 2,
+   "x": 30,
+   "y": 42,
+   "n": 1,
+   "title": "Objective and need",
+   "kind": "what",
+   "note": "We aimed to reduce arch discomfort with an adjustable, low-cost sleeve. These were design goals."
+  },
+  {
+   "page": 3,
+   "x": 30,
+   "y": 70,
+   "n": 2,
+   "title": "The Valmassy formula",
+   "kind": "limit",
+   "note": "The slide cites RCSP = 7 minus age as a background rule of thumb. We did not measure heel angle."
+  },
+  {
+   "page": 4,
+   "x": 50,
+   "y": 50,
+   "n": 3,
+   "title": "Benchmark table",
+   "kind": "limit",
+   "note": "Rigid orthotics, store insoles and our sleeve rated on four rows. The sleeve column is design intent; none of it was tested."
+  },
+  {
+   "page": 5,
+   "x": 50,
+   "y": 55,
+   "n": 4,
+   "title": "Needs turned into inputs",
+   "kind": "why",
+   "note": "The table sets targets of 10% growth, 150 N load and thickness under 8 mm, with planned verification methods. The reports provide no results for those checks."
+  },
+  {
+   "page": 6,
+   "x": 50,
+   "y": 52,
+   "n": 5,
+   "title": "Why muslin and gel",
+   "kind": "what",
+   "note": "We chose muslin for the sewn sleeve and gel pads for the arch insert. Comfort and ease of use remained design goals."
+  },
+  {
+   "page": 7,
+   "x": 20,
+   "y": 55,
+   "n": 6,
+   "title": "V1: cardboard and foam",
+   "kind": "what",
+   "note": "Cardboard and foam in standard socks. In the slide's words: verified the lift, failed on stability."
+  },
+  {
+   "page": 7,
+   "x": 50,
+   "y": 55,
+   "n": 7,
+   "title": "V2: gel pads in sleeves",
+   "kind": "what",
+   "note": "V2 used gel pads in compression sleeves. It was steadier than V1; the next version needed a dedicated pad pocket."
+  },
+  {
+   "page": 7,
+   "x": 80,
+   "y": 55,
+   "n": 8,
+   "title": "V3 proposal",
+   "kind": "limit",
+   "note": "The proposed V3 used custom-molded hybrid inserts and a reinforced pouch. It was not built."
+  },
+  {
+   "page": 8,
+   "x": 70,
+   "y": 50,
+   "n": 9,
+   "title": "The cut pattern",
+   "kind": "what",
+   "note": "Paper patterns for the bottom pad, top pad, pocket and back strap, with sewing steps: print on 8.5 by 11, cut the fabric, iron, sew the pocket, hand-sew it shut. This is how the prototype was made."
+  },
+  {
+   "page": 9,
+   "x": 25,
+   "y": 56,
+   "n": 10,
+   "title": "Windlass model",
+   "kind": "limit",
+   "note": "The arch modelled as a windlass: plantar fascia tension from ground reaction force, foot length and arch height. I helped with this analysis. The slide shows the formula, with no foot data run through it."
+  },
+  {
+   "page": 9,
+   "x": 75,
+   "y": 66,
+   "n": 11,
+   "title": "Sleeve stress estimate",
+   "kind": "limit",
+   "note": "Stress equals modulus times strain, with a modulus of 10 to 100 MPa 'based on stitch vs cross stretch'. It is a calculated range; we ran no tensile test on our fabric."
+  },
+  {
+   "page": 10,
+   "x": 50,
+   "y": 60,
+   "n": 12,
+   "title": "Risk analysis",
+   "kind": "why",
+   "note": "The table lists five failure modes and proposed mitigations, including a reinforced gel casing."
+  },
+  {
+   "page": 11,
+   "x": 24,
+   "y": 40,
+   "n": 13,
+   "title": "How we tested",
+   "kind": "what",
+   "note": "A 30 lb dumbbell sat on the insert for 1 minute, then was dropped on it from 1 foot. The test ran three static holds and three drops."
+  },
+  {
+   "page": 11,
+   "x": 60,
+   "y": 38,
+   "n": 14,
+   "title": "What counts as a pass",
+   "kind": "why",
+   "note": "The insert has to stay fully intact: no gel outside the pouch, no stitching undone, no fabric torn."
+  },
+  {
+   "page": 12,
+   "x": 50,
+   "y": 50,
+   "n": 15,
+   "title": "A frame from the bench test in our report",
+   "kind": "limit",
+   "note": "A low-resolution still of the test, with the dumbbell on the ground. It shows the setup. No force was recorded."
+  },
+  {
+   "page": 13,
+   "x": 28,
+   "y": 50,
+   "n": 16,
+   "title": "Gel containment",
+   "kind": "why",
+   "note": "The next sleeve needed better gel containment and a check on fabric tension against the foot."
+  },
+  {
+   "page": 13,
+   "x": 72,
+   "y": 50,
+   "n": 17,
+   "title": "Future improvements",
+   "kind": "limit",
+   "note": "TPU printed encasement and scan-to-print are listed as ideas. None was printed or built."
+  }
+ ]
+}

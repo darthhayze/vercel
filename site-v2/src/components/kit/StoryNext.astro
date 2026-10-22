@@ -1,0 +1,13 @@
+---
+import story from '../../content/story.json';
+interface Props { slug: string }
+const { slug } = Astro.props;
+const href = (slug: string) => slug === 'research' ? '/research/' : `/work/${slug}/`;
+---
+<nav class="story-end" aria-labelledby="project-directory-h">
+  <div class="story-directory">
+    <h2 id="project-directory-h">All projects</h2>
+    <ul>{story.order.map((id) => <li><a href={href(id)} aria-current={id === slug ? 'page' : undefined} data-story-link>{story.projects[id as keyof typeof story.projects].title}<span aria-hidden="true">{id === slug ? '●' : '→'}</span></a></li>)}</ul>
+    <p class="story-keys">Left / Right: previous / next project</p>
+  </div>
+</nav>

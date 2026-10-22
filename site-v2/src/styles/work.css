@@ -1,0 +1,195 @@
+/* HOME / WORK. A poster collage of seven windows. Each window is its own object with its own shape, border, texture and depth.
+   Shared across the set: Bricolage titles, the yellow Quick-read button, one line, one number, hard offset shadows, a 12-column grid.
+   No inline styles (CSP): per-item variation lives in classes. */
+.work { padding: clamp(4rem, 8vw, 7rem) var(--pad) clamp(4rem, 8vw, 7rem); background: var(--paper); overflow-x: clip; }
+.work-head { display: flex; align-items: flex-end; justify-content: space-between; gap: .8rem 3rem; flex-wrap: wrap; margin-bottom: clamp(1.6rem, 3.5vw, 3rem); }
+
+.wins { display: grid; grid-template-columns: repeat(12, 1fr); gap: clamp(1.4rem, 2.6vw, 2.4rem) clamp(1rem, 2vw, 2rem); align-items: start; padding-bottom: 1rem; }
+.win { position: relative; color: var(--ink); scroll-margin-top: 1.5rem; transition: translate .25s cubic-bezier(.2,.8,.2,1), rotate .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s; }
+.win:hover, .win:focus-within { translate: 0 -5px; }
+.win:target { outline: 4px solid var(--ink); outline-offset: 6px; }
+.win svg { display: block; width: 100%; height: 100%; }
+.win .wart { position: relative; overflow: hidden; }
+
+/* grid placement (story order is also reading order) */
+.w-flex-v2 { grid-column: 1 / 6; grid-row: 1; }
+.w-mass-spec { grid-column: 6 / 13; grid-row: 1; margin-top: clamp(0rem, 3vw, 3.2rem); }
+.w-lungscope { grid-column: 1 / 8; grid-row: 2 / 4; align-self: stretch; }
+.w-ecg { grid-column: 8 / 13; grid-row: 2; }
+.w-arch-support { grid-column: 8 / 13; grid-row: 3; }
+.w-jobhub { grid-column: 1 / 9; grid-row: 4; margin-top: .6rem; }
+.w-research { grid-column: 9 / 13; grid-row: 4; margin-top: -2.6rem; }
+
+/* view-transition names (match the story header) */
+.w-flex-v2 { view-transition-name: win-flex-v2; } .w-mass-spec { view-transition-name: win-mass-spec; } .w-lungscope { view-transition-name: win-lungscope; }
+.w-ecg { view-transition-name: win-ecg; } .w-arch-support { view-transition-name: win-arch-support; } .w-jobhub { view-transition-name: win-jobhub; } .w-research { view-transition-name: win-research; }
+
+/* ---- shared text block ---- */
+.wtxt { display: flex; flex-direction: column; gap: .7rem; min-width: 0; }
+.whead { display: block; }
+.wtxt h3 { font: 800 clamp(1.5rem, 2vw, 1.875rem)/1.05 var(--display); font-stretch: 85%; letter-spacing: -.015em; text-wrap: balance; }
+.wtxt h3 a { text-decoration: none; }
+.wtxt h3 a:hover { text-decoration: underline; text-underline-offset: .2em; text-decoration-thickness: .08em; }
+.wline { font-size: 1.0625rem; line-height: 1.5; font-weight: 500; max-width: 46ch; text-wrap: pretty; }
+.wskills { max-width: 46ch; }
+.wskills small { display: block; font: 600 .875rem/1.45 var(--display); letter-spacing: .01em; opacity: .78; }
+.wbtns { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .25rem; }
+.wb { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 1.15rem; font: 800 1rem/1 var(--display); text-decoration: none; border-radius: 99px; border: 2.5px solid var(--bd, var(--ink)); flex: 1 1 auto; text-align: center; transition: translate .2s, background .2s, color .2s; }
+.wb.q { background: var(--q-bg, var(--yellow)); color: var(--q-fg, var(--ink)); }
+.wb.e { background: var(--e-bg, transparent); color: var(--e-fg, var(--ink)); }
+.wb:hover { background: var(--h-bg, var(--ink)); color: var(--h-fg, var(--yellow)); translate: 0 -2px; }
+.win :focus-visible { outline: 3px solid var(--fc, var(--cobalt)); outline-offset: 3px; }
+
+/* ================= LUNGSCOPE: night panel, speaker-grille face ================= */
+.w-lungscope { background: #0A1822; color: #EAF7F5; border: 3px solid var(--ink); border-radius: 3.2rem; padding: clamp(.9rem, 1.6vw, 1.4rem); box-shadow: 10px 10px 0 var(--cobalt); display: flex; flex-direction: column; gap: clamp(1rem, 2vw, 1.6rem); --bd: #EAF7F5; --q-bg: #5CF0D6; --q-fg: #06161D; --e-fg: #EAF7F5; --h-bg: #EAF7F5; --h-fg: #0A1822; --fc: #5CF0D6; }
+.w-lungscope .wart { flex: 1 1 auto; min-height: 22rem; border-radius: 2.3rem; background-color: #12283A; background-image: radial-gradient(circle at center, #060E15 0 2.4px, transparent 3px); background-size: 15px 15px; border: 2px solid #2D1F66; }
+.w-lungscope .wart svg { position: absolute; inset: 0; }
+.w-lungscope .wtxt { padding: 0 clamp(.6rem, 1.4vw, 1.4rem) clamp(.6rem, 1.2vw, 1rem); }
+.w-lungscope .wline { color: #D5ECE8; max-width: 52ch; }
+.win .wave .b { fill: #5CF0D6; transform-box: fill-box; transform-origin: center; }
+.win .wave .b.v { fill: #B8A4FF; }
+.win .ld { fill: #5CF0D6; } .win .ld1 { fill: #FFD60A; } .win .ld2 { fill: #FF9FB0; }
+.win .ls-t { font: 700 12px var(--display); fill: #EAF7F5; letter-spacing: .04em; }
+
+/* ================= FLEX V2: navy droplet with a barcode edge ================= */
+.w-flex-v2 { background: #080C22; color: #EDF1FF; border: 3px solid var(--ink); border-radius: 0 clamp(5rem, 11vw, 9rem) clamp(2rem, 4vw, 3rem) clamp(2rem, 4vw, 3rem); box-shadow: 8px 8px 0 var(--ink); overflow: hidden; display: flex; flex-direction: column; --bd: #EDF1FF; --q-bg: var(--yellow); --q-fg: var(--ink); --e-fg: #EDF1FF; --h-bg: #3BE3FF; --h-fg: #080C22; --fc: #3BE3FF; }
+.w-flex-v2 .wart { flex: none; aspect-ratio: 470 / 236; }
+.w-flex-v2 .wtxt { padding: .4rem clamp(1.2rem, 2.2vw, 2rem) 1.4rem; }
+.win .barcode { display: flex; align-items: stretch; gap: 3px; height: 1.2rem; padding: 0 clamp(1.2rem, 2.2vw, 2rem); margin-bottom: 1.1rem; }
+.win .barcode i { flex: none; background: #EDF1FF; height: 100%; }
+.win .barcode .bc1 { width: 2px; } .win .barcode .bc2 { width: 4px; } .win .barcode .bc3 { width: 6px; } .win .barcode .bc4 { width: 9px; }
+
+/* ================= MASS-SPEC: a spreadsheet ================= */
+.w-mass-spec { background: #fff; border: 3px solid var(--ink); border-radius: 6px; box-shadow: 8px 8px 0 var(--ink); --fc: var(--cobalt); --bd: var(--ink); --q-bg: var(--yellow); --e-bg: #fff; --h-bg: var(--ink); --h-fg: var(--yellow); display: grid; grid-template-columns: 2.4rem 1fr; }
+.win .sh-title { grid-column: 1 / -1; display: flex; align-items: center; gap: 1rem; background: var(--yellow); border-bottom: 3px solid var(--ink); padding: .45rem .9rem; min-height: 2.6rem; font: 700 .9375rem/1 var(--mono); }
+.win .sh-fx { flex: 1; background: #fff; border: 2px solid var(--ink); padding: .3rem .6rem; }
+.win .sh-cols { grid-column: 1 / -1; display: grid; grid-template-columns: 2.4rem repeat(6, 1fr); background: #E3E3DD; border-bottom: 2px solid var(--ink); font: 700 .8125rem/1 var(--display); color: #333; }
+.win .sh-cols i, .win .sh-rows i { font-style: normal; text-align: center; padding: .4rem 0; border-right: 1.5px solid #9A9A92; }
+.win .sh-body { grid-column: 1 / -1; display: grid; grid-template-columns: 2.4rem minmax(0, 1.4fr) minmax(0, 1fr); }
+.win .sh-rows { display: grid; grid-auto-rows: 1fr; background: #E3E3DD; color: #333; font: 700 .8125rem/1 var(--display); border-right: 2px solid var(--ink); }
+.win .sh-rows i { border-right: 0; border-bottom: 1.5px solid #9A9A92; display: grid; place-items: center; }
+.win .sh-main { padding: 1rem; background-image: linear-gradient(#C9C9C2 1.5px, transparent 1.5px), linear-gradient(90deg, #C9C9C2 1.5px, transparent 1.5px); background-size: 100% 2.8rem, 6.2rem 100%; }
+.w-mass-spec .wtxt { background: #fff; outline: 3px solid var(--cobalt); padding: 1.1rem 1.2rem 1.2rem; position: relative; }
+.w-mass-spec .wtxt::after { content: ''; position: absolute; right: -7px; bottom: -7px; width: 9px; height: 9px; background: var(--cobalt); border: 2px solid #fff; }
+.w-mass-spec .wart { background: #fff; border-left: 2px solid var(--ink); background-image: linear-gradient(#DADAD3 1.5px, transparent 1.5px); background-size: 100% 2.8rem; min-height: 14rem; }
+.w-mass-spec .wart svg { position: absolute; inset: 0; }
+.win .ms-cell { fill: #B3B3AA; } .win .ms-cell.hot { fill: #3E9E66; } .win .ms-ax { stroke: #333; stroke-width: 1.2; }
+.win .msel { fill: rgb(31 53 245 / .1); stroke: var(--cobalt); stroke-width: 2.5; }
+.win .vd { fill: #77776F; } .win .vd.hot { fill: #C2410C; }
+
+/* ================= ECG: oscilloscope bezel ================= */
+.w-ecg { background: #2B2D2C; color: #F3F2EA; border: 3px solid var(--ink); border-radius: 1.3rem; padding: .9rem .9rem 1.2rem; box-shadow: 8px 8px 0 var(--ink); display: grid; gap: .7rem; --bd: #F3F2EA; --q-bg: var(--yellow); --e-fg: #F3F2EA; --h-bg: #F3F2EA; --h-fg: #2B2D2C; --fc: var(--yellow); }
+.w-ecg .screen { aspect-ratio: 400 / 230; background: #202923; border-radius: 12px; overflow: hidden; }
+.w-ecg .screen svg { display: block; width: 100%; height: auto; }
+.w-ecg .scope-bezel { fill: #485149; stroke: #a5afa5; stroke-width: 2; }
+.w-ecg .scope-glass { fill: #06100a; }
+.w-ecg .grid { stroke: #9cff9c; stroke-opacity: .22; stroke-width: 1; fill: none; }
+.w-ecg .trace { stroke: #a2ffbb; stroke-width: 2.6; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.w-ecg .scope-knob { fill: #c9c9c0; stroke: #111; stroke-width: 3; }
+.w-ecg .probe-lead { fill: none; stroke: #e5ce71; stroke-width: 3; }
+.w-ecg .pcb-base { fill: #285d43; stroke: #8fbd9b; stroke-width: 2; }
+.w-ecg .pcb-track { fill: none; stroke: #8fbd9b; stroke-width: 1.5; }
+.w-ecg .pcb-chip { fill: #17241b; stroke: #c9c9c0; }
+.w-ecg .pcb-pin { stroke: #c9c9c0; stroke-width: 3; }
+.w-ecg .pcb-pad { fill: #e5ce71; }
+.w-ecg .wtxt { padding: 0 .4rem; }
+.w-ecg .wnum b { color: var(--yellow); }
+.w-ecg .wtag { display: none; }
+
+/* ================= ARCH SUPPORT: blueprint-grey sheet, orange toolpath, corner registration marks ================= */
+.w-arch-support { background-color: #D3D8DB; background-image: linear-gradient(rgb(17 17 17 / .1) 1px, transparent 1px), linear-gradient(90deg, rgb(17 17 17 / .1) 1px, transparent 1px); background-size: 1.6rem 1.6rem; padding: 1.9rem 1.4rem 1.4rem; box-shadow: var(--shadow); display: grid; gap: 1rem; --bd: var(--ink); --q-bg: #F08A3C; --q-fg: var(--ink); --e-bg: #D3D8DB; --h-bg: var(--ink); --h-fg: #F4A36A; --fc: var(--ink); }
+.w-arch-support .tape { top: -.8rem; } .w-arch-support .tape.t-left { left: 8%; rotate: -8deg; }
+.w-arch-support .tape.tp-r { left: auto; right: 8%; margin-left: 0; rotate: 7deg; }
+.w-arch-support .wart { aspect-ratio: 880 / 470; background: #C3CBD0; padding: .5rem; rotate: 1.2deg; transition: rotate .25s cubic-bezier(.2,.8,.2,1); }
+.win .ar-reg path { fill: none; stroke: var(--ink); stroke-width: 4; stroke-linecap: square; }
+.win .ar-floor { fill: none; stroke: rgb(26 26 26 / .45); stroke-width: 3; stroke-dasharray: 3 10; stroke-linecap: round; }
+.win .ar-fill { fill: rgb(247 242 232 / .55); }
+.win .ar-out { fill: none; stroke: var(--ink); stroke-width: 5; stroke-linejoin: round; stroke-linecap: round; }
+.win .ar-fasc { fill: none; stroke: rgb(26 26 26 / .45); stroke-width: 3; stroke-linecap: round; }
+.win .ar-arch { fill: none; stroke: #E8742A; stroke-width: 8; stroke-linecap: round; stroke-dasharray: 1; }
+.win .ar-tp { stroke: #D9611A; stroke-width: 4; stroke-dasharray: 1; }
+.w-arch-support .wtxt { background: #D3D8DB; padding: .2rem .2rem 0; }
+
+/* ================= JOBHUB: laptop ================= */
+.w-jobhub { background: var(--cobalt); color: #fff; border: 3px solid var(--ink); border-radius: 1.6rem; box-shadow: 8px 8px 0 var(--ink); padding: clamp(1.2rem, 2.4vw, 2.2rem) clamp(1.2rem, 2.4vw, 2.2rem) clamp(1.4rem, 2.6vw, 2.4rem); display: grid; gap: 1.6rem clamp(1.4rem, 3vw, 3rem); align-items: center; --bd: #fff; --q-bg: var(--yellow); --q-fg: var(--ink); --e-bg: #fff; --e-fg: var(--ink); --h-bg: var(--ink); --h-fg: var(--yellow); --fc: var(--yellow); }
+.wins .w-jobhub { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); }
+.win .laptop { position: relative; padding-bottom: .5rem; }
+.win .lid { background: #151515; border: 2px solid var(--ink); border-radius: 1.1rem 1.1rem .3rem .3rem; padding: .9rem .8rem .7rem; position: relative; }
+.win .lid::before { content: ''; position: absolute; top: .38rem; left: 50%; width: .4rem; height: .4rem; margin-left: -.2rem; border-radius: 50%; background: #3a3a3a; }
+.win .lscreen { aspect-ratio: 16 / 9.5; overflow: hidden; border-radius: 3px; background: #000; }
+.win .lscreen img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: object-position 4s ease-in-out; }
+.win .lbase { position: relative; height: 1.15rem; margin: 0 -4%; background: #C9CBD1; border: 2px solid var(--ink); border-radius: .2rem .2rem 1.2rem 1.2rem; }
+.win .lbase::after { content: ''; position: absolute; left: 50%; top: -2px; width: 18%; height: .4rem; margin-left: -9%; background: #9FA2AA; border-radius: 0 0 .5rem .5rem; }
+
+/* ================= RESEARCH: paper on tape ================= */
+.w-research { background: #FBFAF4; color: var(--ink); padding: 2.2rem 1.4rem 1.5rem; box-shadow: var(--shadow); display: grid; gap: 1.1rem; --bd: var(--ink); --q-bg: var(--yellow); --e-bg: #fff; --h-bg: var(--ink); --h-fg: var(--yellow); --fc: var(--cobalt); clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1.8rem), calc(100% - 1.8rem) 100%, 0 100%); }
+.w-research .tape { top: .5rem; z-index: 2; }
+.win .page { rotate: -1.3deg; transition: rotate .25s cubic-bezier(.2,.8,.2,1); height: clamp(14rem, 19vw, 18rem); overflow: hidden; background: #fff; border: 1px solid #CFCDC2; box-shadow: 0 2px 6px rgb(0 0 0 / .15); }
+.win .page img { width: 100%; height: auto; display: block; transition: translate 3s ease-in-out; }
+
+/* ================= micro-motion (hover, keyboard focus). Reduced motion keeps every miniature still. ================= */
+@media (prefers-reduced-motion: no-preference) {
+  .win:hover .wave .b, .win:focus-within .wave .b { animation: breathe 1.9s ease-in-out infinite; animation-delay: calc(var(--i, 0) * 1s); }
+  .win .wave .b1 { animation-delay: .12s !important; } .win .wave .b2 { animation-delay: .24s !important; } .win .wave .b3 { animation-delay: .36s !important; } .win .wave .b4 { animation-delay: .48s !important; } .win .wave .b5 { animation-delay: .6s !important; } .win .wave .b6 { animation-delay: .72s !important; } .win .wave .b7 { animation-delay: .84s !important; }
+  .win:hover .ld0, .win:focus-within .ld0 { animation: blink 1.6s ease-in-out infinite; }
+  .win:hover .ar-tp, .win:focus-within .ar-tp, .win:hover .ar-arch, .win:focus-within .ar-arch { animation: tpdraw .7s cubic-bezier(.16, 1, .3, 1) backwards; }
+  .w-arch-support .ar-tps .ar-tp:nth-child(1) { animation-delay: 0ms; }
+  .w-arch-support .ar-tps .ar-tp:nth-child(2) { animation-delay: 45ms; }
+  .w-arch-support .ar-tps .ar-tp:nth-child(3) { animation-delay: 90ms; }
+  .w-arch-support .ar-tps .ar-tp:nth-child(4) { animation-delay: 135ms; }
+  .w-arch-support .ar-tps .ar-tp:nth-child(5) { animation-delay: 180ms; }
+  .w-arch-support .ar-tps .ar-tp:nth-child(6) { animation-delay: 225ms; }
+  .w-arch-support .ar-tps .ar-tp:nth-child(7) { animation-delay: 270ms; }
+  .w-arch-support .ar-tps .ar-tp:nth-child(8) { animation-delay: 315ms; }
+  .w-arch-support .ar-tps .ar-tp:nth-child(9) { animation-delay: 360ms; }
+  .w-arch-support .ar-tps .ar-tp:nth-child(10) { animation-delay: 405ms; }
+  .w-arch-support .ar-tps .ar-tp:nth-child(11) { animation-delay: 450ms; }
+  .w-arch-support .ar-tps .ar-tp:nth-child(12) { animation-delay: 495ms; }
+  .w-arch-support .ar-tps .ar-tp:nth-child(13) { animation-delay: 540ms; }
+  .w-arch-support .ar-tps .ar-tp:nth-child(14) { animation-delay: 585ms; }
+  .w-arch-support .ar-tps .ar-tp:nth-child(15) { animation-delay: 630ms; }
+  .w-arch-support .ar-tps .ar-tp:nth-child(16) { animation-delay: 675ms; }
+  .w-ecg:hover .screen .trace, .w-ecg:focus-within .screen .trace { stroke-dasharray: 100 100; animation: draw 2.4s linear infinite; }
+  .win:hover .msel, .win:focus-within .msel { animation: cellhop 3.6s steps(1, end) infinite; }
+  .win:hover .vd.hot, .win:focus-within .vd.hot { animation: pulse 1.2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .win:hover .dr, .win:focus-within .dr { animation: drift 4.5s ease-in-out infinite; }
+  .win:hover .bead, .win:focus-within .bead { animation: bob 2.2s ease-in-out infinite; }
+  .win:hover .strand .k, .win:focus-within .strand .k { animation: key 1.6s ease-in-out infinite; }
+  .w-flex-v2 .k:nth-of-type(odd) { animation-delay: .2s !important; }
+  .win:hover .lscreen img, .win:focus-within .lscreen img { object-position: bottom; }
+  .w-research:hover .page, .w-research:focus-within .page { rotate: 0deg; }
+  .win:hover .page img, .win:focus-within .page img { translate: 0 -38%; }
+  .w-arch-support:hover .wart, .w-arch-support:focus-within .wart { rotate: .6deg; }
+}
+@keyframes breathe { 50% { transform: scaleY(.4); } }
+@keyframes blink { 50% { opacity: .25; } }
+@keyframes tpdraw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes draw { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+@keyframes cellhop { 0% { translate: 0 0; } 25% { translate: 44px 40px; } 50% { translate: 88px 80px; } 75% { translate: 44px 120px; } }
+@keyframes pulse { 50% { scale: 1.5; } }
+@keyframes drift { 50% { translate: -10px 8px; rotate: -1.5deg; } }
+@keyframes bob { 50% { translate: 0 10px; } }
+@keyframes key { 50% { translate: 0 -5px; } }
+@media (prefers-reduced-motion: reduce) { .win, .wb, .lscreen img, .page img { transition: none; } }
+
+/* ================= tablet / phone ================= */
+@media (max-width: 1100px) {
+  .wins { grid-template-columns: 1fr 1fr; align-items: stretch; }
+  .win { grid-column: auto !important; grid-row: auto !important; margin: 0 !important; }
+  .w-lungscope, .w-jobhub { grid-column: 1 / -1 !important; }
+  .w-research { margin-top: 0 !important; grid-column: 1 / -1 !important; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); align-items: center; gap: 1.4rem 2rem; }
+  .w-research .tape { grid-column: 1 / -1; }
+  .wins .w-jobhub { grid-template-columns: 1fr; }
+  .w-mass-spec .sh-body { grid-template-columns: 2.4rem 1fr; }
+  .w-mass-spec .wart { display: none; }
+}
+@media (max-width: 700px) {
+  .wins { grid-template-columns: 1fr; gap: 1.6rem; }
+  .w-lungscope, .w-jobhub, .w-research { grid-column: auto !important; }
+  .w-research { grid-template-columns: 1fr; }
+  .w-lungscope { border-radius: 2.2rem; box-shadow: 6px 6px 0 var(--cobalt); }
+  .w-lungscope .wart { border-radius: 1.5rem; }
+  .w-flex-v2, .w-mass-spec, .w-ecg, .w-jobhub { box-shadow: 5px 5px 0 var(--ink); }
+  .w-arch-support .wart { rotate: 1deg; } .w-research .page { rotate: -.8deg; }
+  .win .sh-cols { grid-template-columns: 2.4rem repeat(4, 1fr); } .win .sh-cols i:nth-child(n+6) { display: none; }
+}

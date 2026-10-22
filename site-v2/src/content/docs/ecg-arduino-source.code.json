@@ -1,0 +1,172 @@
+{
+ "slug": "ecg-arduino-source",
+ "title": "ECG Arduino sketch",
+ "language": "arduino",
+ "pdf": "/docs/ecg-arduino-source.pdf",
+ "lines": [
+  {
+   "n": 1,
+   "text": "// This Arduino code has been written by Univeristy Of Cincinnati Student Hamza Al Halabi [Alhalaha] for use in Circuits BME2081C for Summer of 2026"
+  },
+  {
+   "n": 2,
+   "text": "// This code runs in parallel with Processing to create visual outputs including audio, light, and graphic representation"
+  },
+  {
+   "n": 3,
+   "text": "// Enjoy!"
+  },
+  {
+   "n": 4,
+   "text": ""
+  },
+  {
+   "n": 5,
+   "text": "// FILENAME: Alhalaha_ECG_Monitor.ino"
+  },
+  {
+   "n": 6,
+   "text": "// Based on EXAMPLE02_Sample.ino (Orlando S. Hoilett, Ph.D.)"
+  },
+  {
+   "n": 7,
+   "text": "// Reads ECG analog input from Ninetales board and transmits values over Serial to Processing for real-time visualization & beat detection."
+  },
+  {
+   "n": 8,
+   "text": ""
+  },
+  {
+   "n": 9,
+   "text": ""
+  },
+  {
+   "n": 10,
+   "text": "// ECG Channel Pin (A2 is default for EXG/ECG on Ninetales, A1 can also be used)"
+  },
+  {
+   "n": 11,
+   "text": "const int ECG_PIN = A1;"
+  },
+  {
+   "n": 12,
+   "text": ""
+  },
+  {
+   "n": 13,
+   "text": "void setup() {"
+  },
+  {
+   "n": 14,
+   "text": "  // Initialize serial communication at 9600 baud for smooth plotting"
+  },
+  {
+   "n": 15,
+   "text": "  Serial.begin(9600);"
+  },
+  {
+   "n": 16,
+   "text": "}"
+  },
+  {
+   "n": 17,
+   "text": ""
+  },
+  {
+   "n": 18,
+   "text": "void loop() {"
+  },
+  {
+   "n": 19,
+   "text": "  // Read the analog signal from Ninetales (0 to 1023)"
+  },
+  {
+   "n": 20,
+   "text": "  int ecgSignal = analogRead(ECG_PIN);"
+  },
+  {
+   "n": 21,
+   "text": ""
+  },
+  {
+   "n": 22,
+   "text": "  // Send raw value over Serial"
+  },
+  {
+   "n": 23,
+   "text": "  Serial.println(ecgSignal);"
+  },
+  {
+   "n": 24,
+   "text": ""
+  },
+  {
+   "n": 25,
+   "text": "  // 10ms delay gives ~100 Hz sampling rate, ideal for ECG capture"
+  },
+  {
+   "n": 26,
+   "text": "  delay(10);"
+  },
+  {
+   "n": 27,
+   "text": "}"
+  }
+ ],
+ "segments": [
+  {
+   "id": "header",
+   "name": "Header: who wrote what",
+   "from": 1,
+   "to": 7,
+   "plain": "Comments only. They say this is my sketch for the BME2081C course, that it runs alongside a Processing program, and that it is based on the course example EXAMPLE02_Sample.ino.",
+   "why": "I adapted the Arduino sketch from EXAMPLE02_Sample.ino; the header keeps the course example's credit.",
+   "tweak": "The header credits the course example the sketch is adapted from."
+  },
+  {
+   "id": "pin",
+   "name": "Which pin is the ECG",
+   "from": 10,
+   "to": 11,
+   "plain": "Names the analog input the sketch reads: A1. The comment says A2 is the default ECG input on the Ninetales board and that A1 can also be used.",
+   "why": "ECG_PIN selects the analog input and must match the board channel.",
+   "tweak": "Point ECG_PIN at another channel (the comment names A2) if you plug the cable in elsewhere. If the trace is flat, the wrong channel is the first thing to check."
+  },
+  {
+   "id": "setup",
+   "name": "setup: open the serial port",
+   "from": 13,
+   "to": 16,
+   "plain": "Runs once at power-up. Serial.begin(9600) opens the USB serial link at 9600 baud, which is bits per second.",
+   "why": "Both programs configure the serial link at 9600 baud, and the two numbers have to match.",
+   "tweak": "A faster rate such as 115200 is possible, but you must change it in both programs. At 9600 the link has room for one short number every 10 ms, so it is not what limits this build."
+  },
+  {
+   "id": "read",
+   "name": "Read the analog input",
+   "from": 18,
+   "to": 20,
+   "plain": "Start of loop(), which repeats forever. analogRead(ECG_PIN) turns the voltage on A1 into a whole number from 0 to 1023, and stores it in ecgSignal.",
+   "why": "The Ninetales board does the analog work (amplifying and filtering the tiny electrode signal). The Arduino only has to measure the board's output voltage once per pass.",
+   "tweak": "You could average a few reads to smooth noise, at the cost of a slower loop. No scaling is done here: the raw count goes out untouched, so every threshold downstream is in raw counts."
+  },
+  {
+   "id": "write",
+   "name": "Send it over serial",
+   "from": 22,
+   "to": 23,
+   "plain": "Serial.println(ecgSignal) sends the number as text, then a line break. One reading, one line.",
+   "why": "Text with a newline is easy to debug in the Arduino Serial Monitor and easy for Processing to cut apart, since it can wait for the line break.",
+   "tweak": "Sending two raw bytes per sample is shorter than text, but harder to read by eye. Another channel could go on the same line, separated by a comma."
+  },
+  {
+   "id": "delay",
+   "name": "delay(10): the loop delay",
+   "from": 25,
+   "to": 27,
+   "plain": "Waits 10 milliseconds, then loop() starts again. The comment in the source says 10 ms gives about 100 Hz.",
+   "why": "The loop waits 10 ms after reading and sending a sample. The source calls this approximately 100 Hz; the actual rate was not measured, since the read and the serial write add time on every pass. 'Ideal' in the comment is the original author's word; nothing here tested it.",
+   "tweak": "delay(5) would aim for about 200 Hz, and the link and the monitor would need checking again. For a rate you can trust, time the loop with micros() or use a hardware timer."
+  }
+ ]
+}

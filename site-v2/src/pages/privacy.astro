@@ -1,0 +1,22 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHead from '../components/kit/PageHead.astro';
+---
+<SiteLayout title="Privacy" description="How this portfolio handles consent, optional Google Analytics, cookies and contact information.">
+  <PageHead title="Privacy" lede="How this portfolio handles consent, optional Google Analytics, cookies and contact information." field="ink" />
+  <div class="band f-paper legal">
+    <section><h2>Overview</h2><p>This is a personal biomedical engineering portfolio. You can use it without an account, advertising or analytics consent.</p></section>
+    <section><h2>Optional analytics</h2><p>Google Analytics 4 (G-X4CMQSBTM1) loads only after you click Accept in the analytics control. It collects page views, the page path and URL, device and browser information, approximate location and basic visit information. Google receives network information, including your IP address, to deliver analytics. The site requests IP anonymization, disables Google signals and advertising personalization, and uses no ads. No request is sent to Google Analytics before consent or after you decline on a new page.</p></section>
+    <section><h2>Cookies and local storage</h2><p>After consent, Google Analytics may set <code>_ga</code> and <code>_ga_*</code> cookies to distinguish visits. The site stores your analytics choice in localStorage under <code>analytics-consent</code>. This preference stays in your browser until you change it or clear site data. Essential portfolio functionality does not require analytics consent.</p></section>
+    <section><h2>Withdraw consent</h2><p>Use the Analytics settings link in the footer, then choose Decline. This disables analytics, removes accessible Google Analytics cookies for this domain and reloads the page to stop the running analytics script when your browser can save the choice. If storage is unavailable, analytics stays disabled for the current page and a message explains how to clear an earlier saved choice. You can also clear cookies and local storage in your browser. Withdrawing consent does not delete data already sent to Google.</p></section>
+    <section><h2>Information you provide</h2><p>This site has no contact form or contact database. Contact links open your email app. If you contact me by email or an external professional profile, I use the information to respond to your inquiry; that service’s own handling practices also apply.</p></section>
+    <section><h2>Project documents and media</h2><p>Fonts, portfolio PDFs, images and source-code previews load from this domain. Requests for these resources may create ordinary Vercel server/CDN logs needed to deliver the site. I do not use these logs to track visitors.</p></section>
+    <section><h2>Third-party links</h2><p>This portfolio links to LinkedIn, email services and publication hosts. Their own privacy practices apply when you leave this site. Google’s <a href="https://policies.google.com/privacy">privacy policy</a> describes its handling of analytics data.</p></section>
+    <section><h2>Contact</h2><p>Questions about this privacy notice can be sent to <a href="mailto:alhalaha@mail.uc.edu">alhalaha@mail.uc.edu</a>.</p></section>
+    <p>Last updated <time datetime="2026-10-22">2026-10-22</time> · <a href="/terms/">Terms of use</a></p>
+  </div>
+</SiteLayout>
+<style>
+  .legal section { max-width: 65ch; margin-bottom: 2rem; }
+  .legal h2 { font: 700 1.5rem/1.2 var(--display); margin-bottom: .75rem; }
+</style>

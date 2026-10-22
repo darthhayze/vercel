@@ -1,0 +1,86 @@
+---
+// THE layout. Every page (home, inner pages, worlds) renders through this.
+// Head, fonts, kit.css, kit script, skip link, landmarks. `chrome="none"` lets the home page draw its own bar and contact block.
+import '@fontsource-variable/bricolage-grotesque/wdth.css';
+import '@fontsource-variable/instrument-sans/wght.css';
+import '@fontsource-variable/caveat/wght.css';
+import '../styles/kit.css';
+import Footer from '../components/Footer.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Consent from '../components/Consent.astro';
+import seoStory from '../content/story.json';
+import seoCases from '../content/cases.json';
+export interface Props {
+  title: string;
+  description?: string;
+  /** extra classes on <body> (WorldShell adds `world world-<slug>`) */
+  bodyClass?: string;
+  /** href of an extra stylesheet (WorldShell: /worlds/<slug>.css) */
+  paletteHref?: string;
+  /** `full` = shared nav + footer; `none` = the page supplies its own */
+  chrome?: 'full' | 'none';
+  themeColor?: string;
+  noindex?: boolean;
+  /** story pages: no brand link above the strip, two-line footer */
+  story?: boolean;
+}
+const { title, description = 'Hamza Al Halabi, biomedical engineering student: biomedical prototypes and data tools.', bodyClass = '', paletteHref, chrome = 'full', noindex = false, story = false } = Astro.props;
+const path = Astro.url.pathname;
+const projectSlug = path.startsWith('/work/') ? path.split('/').filter(Boolean)[1] : undefined;
+const project = projectSlug ? (seoStory.projects as Record<string, { title: string; quick: { t: string }[] }>)[projectSlug] : undefined;
+const caseMeta = seoCases.find((entry) => entry.id === projectSlug);
+const seoTitle = project?.title ?? title;
+const fullTitle = path === '/' ? seoTitle : `${seoTitle} · Hamza Al Halabi`;
+const sourceDescription = project?.quick[0]?.t ?? caseMeta?.summary ?? description;
+const seoDescription = sourceDescription.length <= 160 ? sourceDescription : sourceDescription.slice(0, 157).replace(/\s+\S*$/, '') + '…';
+const canonicalPath = noindex && ['/404', '/404/'].includes(path) ? '/404.html' : path;
+const canonical = new URL(canonicalPath.endsWith('/') || canonicalPath.endsWith('.html') ? canonicalPath : canonicalPath + '/', 'https://hamza-bme.tech').href;
+const identity = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'Person', '@id': 'https://hamza-bme.tech/#person', name: 'Hamza Al Halabi', url: 'https://hamza-bme.tech/', description: 'University of Cincinnati biomedical engineering student', affiliation: { '@type': 'CollegeOrUniversity', name: 'University of Cincinnati' }, sameAs: ['https://www.linkedin.com/in/alhalabihamza/'] },
+    { '@type': 'WebSite', '@id': 'https://hamza-bme.tech/#website', name: 'Hamza Al Halabi', url: 'https://hamza-bme.tech/', author: { '@id': 'https://hamza-bme.tech/#person' } },
+  ],
+};
+const og = 'https://hamza-bme.tech/og.png';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={seoDescription} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{fullTitle}</title>
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Hamza Al Halabi" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={seoDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={og} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={og} />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={seoDescription} />
+    <meta name="theme-color" content="#FFD60A" />
+    <meta name="color-scheme" content="light" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    {path === '/' && <script type="application/ld+json" set:html={JSON.stringify(identity).replace(/</g, '\\u003c')} />}
+    {paletteHref && <link rel="stylesheet" href={paletteHref} />}
+    <slot name="head" />
+  </head>
+  <body class:list={['sp', bodyClass]}>
+    <a class="skip" href="#main">Skip to content</a>
+    {!story && <Breadcrumbs />}
+    {chrome === 'full' ? <main id="main" tabindex="-1"><slot /></main> : <slot />}
+    {chrome === 'full' && <Footer slim={story} />}
+    <Consent />
+    <script>import '../scripts/kit.ts';</script>
+  </body>
+</html>

@@ -1,0 +1,176 @@
+/* STAGE KIT (src/components/stage). Staged scroll explainer: sticky stage, numbered rail, caption, legend, Play / Replay.
+   Colours come from the surrounding world (--ground --fg --acc --acc2 --mute --panel --focus) plus a six-colour semantic palette
+   --stg-c1..c6 that a world may override. No inline styles anywhere (CSP style-src 'self'). */
+:where(.stg) {
+  --stg-c1: var(--acc); --stg-c2: var(--acc2); --stg-c3: #7355A6; --stg-c4: #315D97; --stg-c5: #AA7820; --stg-c6: #89959D;
+  --stg-ink: var(--fg); --stg-card: #FFFFFF;
+  --stg-eq: #EEF2F3; --stg-eq2: #D6DFE3; --stg-bench: color-mix(in srgb, var(--fg) 10%, var(--ground)); --stg-screen: #17323B;
+}
+.stg-btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 44px; padding: 0 1.2rem; border-radius: 99px; border: 2px solid var(--acc); background: var(--acc); color: var(--on-acc, #fff); font: 700 1rem/1 var(--body); text-decoration: none; cursor: pointer; transition: background-color .2s, color .2s; }
+.stg-btn:hover { background: color-mix(in srgb, var(--acc) 78%, black); border-color: color-mix(in srgb, var(--acc) 78%, black); }
+.stg-btn.alt { background: transparent; color: var(--acc); }
+.stg-btn.alt:hover { background: color-mix(in srgb, var(--acc) 10%, transparent); }
+.stg-fig .stg-anchor { position: absolute; top: 0; left: 0; width: 1px; height: 1px; }
+
+/* ---------- walkthrough shell ---------- */
+.stg-root { position: relative; padding-bottom: 1rem; }
+.stg-defs { position: absolute; }
+.stg-rail { position: sticky; top: 0; z-index: 6; background: var(--ground); }
+.stg-ol { display: none; }
+.stg-m { background: var(--ground); display: none; align-items: center; gap: .5rem; padding: 0 var(--pad); min-height: 3.25rem; }
+.stg-js .stg-m { display: flex; }
+.stg-mt { flex: 1; min-width: 0; font: 600 .9375rem/1.2 var(--body); display: grid; }
+.stg-mt b { min-block-size: 3lh; font: 800 1.0625rem/1.15 var(--display); font-stretch: 88%; overflow-wrap: anywhere; }
+.stg-mb { display: inline-flex; align-items: center; justify-content: center; gap: .3rem; min-width: 44px; height: 44px; padding: 0 .7rem; border-radius: 22px; border: 2px solid var(--acc); color: var(--acc); text-decoration: none; font: 700 1.2rem/1 var(--body); flex: none; }
+.stg-mbt { font: 700 .9375rem/1 var(--body); }
+.stg-mb:hover { background: color-mix(in srgb, var(--acc) 12%, transparent); }
+.stg-tracks { min-width: 0; }
+@media (min-width: 48rem) {
+  .stg-root { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); }
+  .stg-rail { height: 100svh; align-self: start; display: grid; align-content: center; justify-items: center; background: transparent; z-index: 4; }
+  .stg-ol { display: grid; position: relative; }
+  .stg-m, .stg-js .stg-m { display: none; }
+  .stg-ol::before { content: ''; position: absolute; left: 50%; top: 22px; bottom: 22px; width: 4px; margin-left: -2px; background: color-mix(in srgb, var(--fg) 16%, var(--ground)); border-radius: 2px; }
+  .stg-ol::after { content: ''; position: absolute; left: 50%; top: 22px; width: 4px; margin-left: -2px; height: calc((100% - 44px) * var(--prog, 0)); background: var(--acc); border-radius: 2px; }
+  .stg-ol a { position: relative; z-index: 1; display: grid; place-items: center; width: 44px; height: 44px; text-decoration: none; }
+  .stg-ol a span { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--ground); border: 2px solid color-mix(in srgb, var(--fg) 38%, var(--ground)); font: 700 .9375rem/1 var(--body); color: var(--fg); transition: background-color .25s, border-color .25s, color .25s, transform .3s cubic-bezier(.34, 1.4, .64, 1); }
+  .stg-ol a.is-done span { border-color: var(--acc); color: var(--acc); }
+  .stg-ol a[aria-current="step"] span { background: var(--acc); border-color: var(--acc); color: #fff; transform: scale(1.18); }
+  .stg-ol a:hover span { border-color: var(--acc); }
+  .stg-tracks { padding-right: var(--pad); }
+}
+
+/* ---------- stage ---------- */
+.stg-track { position: relative; scroll-margin-top: 0; }
+.stg-stage { padding: 1.2rem var(--pad) 2.2rem; display: grid; gap: .9rem 2rem; align-content: start; background: var(--ground); }
+@media (min-width: 48rem) { .stg-stage { padding-inline: 0 0; } }
+.stg-head { grid-area: head; }
+.stg-fig { grid-area: fig; margin: 0; position: relative; }
+.stg-body { grid-area: body; }
+.stg-stage { grid-template-areas: 'head' 'fig' 'body'; }
+.stg-fig svg { width: 100%; height: auto; display: block; border-radius: 22px; }
+.stg-anchor { position: absolute; top: 0; left: 0; width: 1px; height: 1px; }
+.stg-step { font: 700 .9375rem/1.2 var(--body); color: var(--acc); }
+.stg-head h2 { font: 800 clamp(1.7rem, 3.2vw, 2.7rem)/1 var(--display); font-stretch: 82%; letter-spacing: -.025em; margin-top: .25rem; text-wrap: balance; }
+.stg-cap { font: 500 clamp(1.1rem, 1.45vw, 1.3rem)/1.38 var(--body); max-width: 36ch; }
+.stg-key { display: flex; flex-wrap: wrap; gap: .4rem 1rem; margin-top: .8rem; font: 600 .9375rem/1.3 var(--body); }
+.stg-key li { display: inline-flex; align-items: center; gap: .45rem; }
+.stg-files { margin-top: .6rem; display: grid; gap: .2rem; font: 500 .875rem/1.3 var(--mono); overflow-wrap: anywhere; }
+.stg-note { margin-top: .6rem; font: 400 .9375rem/1.4 var(--body); color: var(--mute); max-width: 36ch; }
+.stg-ctl { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+.stg-ctl[hidden] { display: none; }
+.stg-live .stg-ctl { display: flex; }
+.stg-ill { margin-top: .9rem; font: 600 .875rem/1.3 var(--body); color: var(--mute); }
+:where(.sw) { display: inline-block; width: 16px; height: 16px; border-radius: 4px; background: var(--fg); border: 2px solid var(--fg); flex: none; }
+/* swatch base is :where() (zero specificity): any world rule such as .sw-gbc wins whatever the stylesheet order. Worlds should still scope as .world-x :where(.stg-key) .sw-name. */
+:where(.stg-key) .sw-1 { background: var(--stg-c1); border-color: var(--stg-c1); } :where(.stg-key) .sw-2 { background: var(--stg-c2); border-color: var(--stg-c2); } :where(.stg-key) .sw-3 { background: var(--stg-c3); border-color: var(--stg-c3); transform: rotate(45deg) scale(.8); border-radius: 2px; }
+:where(.stg-key) .sw-4 { background: var(--stg-c4); border-color: var(--stg-c4); } :where(.stg-key) .sw-5 { background: var(--stg-c5); border-color: var(--stg-c5); } :where(.stg-key) .sw-6 { background: var(--stg-c6); border-color: var(--stg-c6); }
+:where(.stg-key) .sw-ring { background: #fff; border-color: var(--fg); border-radius: 50%; } :where(.stg-key) .sw-file { background: #fff; border-color: var(--fg); } :where(.stg-key) .sw-line { height: 4px; margin-block: 6px; width: 20px; border-radius: 2px; border: 0; background: var(--stg-c1); }
+
+@media (min-width: 64rem) {
+  .stg-stage { grid-template-columns: minmax(15rem, 21rem) minmax(0, 1fr); grid-template-rows: auto 1fr; grid-template-areas: 'head fig' 'body fig'; min-height: min(100svh, 54rem); align-items: start; padding-block: 1.5rem; }
+  .stg-fig { align-self: center; }
+  .stg-fig svg { max-height: calc(100svh - 3rem); }
+  .stg-body { align-self: start; }
+}
+
+/* live (scroll driven): every stage pins; the spacer is the scrub distance */
+.stg-live .stg-track { --tv: 120vh; }
+.stg-live .stg-track[data-len="s"] { --tv: 100vh; } .stg-live .stg-track[data-len="l"] { --tv: 150vh; }
+.stg-live .stg-track::after { content: ''; display: block; height: var(--tv); }
+.stg-live .stg-stage { position: sticky; top: var(--bar, 0px); min-height: calc(100svh - var(--bar, 0px)); align-content: start; }
+@media (min-width: 64rem) { .stg-live .stg-stage { height: calc(100svh - var(--bar, 0px)); min-height: 0; } }
+@media (max-width: 47.99rem) { .stg-js .stg-stage { top: var(--bar, 3.25rem); min-height: calc(100svh - var(--bar, 3.25rem)); } .stg-js:not(.stg-live) .stg-stage { min-height: 0; } }
+
+/* the SVG animation hooks: final frame is the markup; JS animates from the start state */
+.stg [data-a^="gone "], .stg [data-a^="trip "] { opacity: 0; }
+.stg [data-a] { transform-box: fill-box; transform-origin: 50% 50%; }
+
+
+/* ---------- svg vocabulary (generic) ---------- */
+.stg svg { font-family: var(--body); --lbs: 34px; }
+@media (min-width: 40rem) { .stg svg { --lbs: 22px; } }
+@media (min-width: 64rem) { .stg svg { --lbs: 20px; } }
+@media (min-width: 90rem) { .stg svg { --lbs: 18px; } }
+.stg .cap-off { display: none; }
+.stg .bgp { fill: var(--stg-card); stroke: var(--stg-ink); stroke-width: 2.4; }
+.stg .bench { fill: var(--stg-bench); } .stg .benchl { stroke: var(--stg-ink); stroke-width: 2; }
+.stg .lb, .stg .lb-m, .stg .lb-b, .stg .lb-big, .stg .lb-s, .stg .lb-w { fill: var(--stg-ink); font: 600 var(--lbs)/1 var(--body); }
+.stg .lb-m { font-weight: 700; fill: var(--mute); } .stg .lb-b { font-weight: 800; font-family: var(--display); font-size: calc(var(--lbs) * 1.04); }
+.stg .lb-s { font-size: var(--lbs); } .stg .lb-big { font-size: calc(var(--lbs) * 1.8); font-weight: 700; } .stg .lb-w { fill: #fff; font-size: var(--lbs); font-weight: 700; }
+.stg .bn { fill: #fff; font: 800 var(--lbs)/1 var(--body); }
+.stg .ld { stroke: var(--stg-ink); stroke-width: 2; stroke-linecap: round; } .stg .ldd { fill: var(--stg-ink); }
+.stg .ln { fill: none; stroke: var(--stg-ink); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.stg .ln.thin { stroke-width: 1.8; } .stg .arrowl { stroke: var(--stg-c1); stroke-width: 3; }
+.stg .glass { fill: rgb(255 255 255 / .75); stroke: var(--stg-ink); stroke-width: 2.2; stroke-linejoin: round; }
+.stg .cap { fill: #CFD8DC; stroke: var(--stg-ink); stroke-width: 2.2; }
+.stg .eq { fill: var(--stg-eq); stroke: var(--stg-ink); stroke-width: 2.4; stroke-linejoin: round; } .stg .eq2 { fill: var(--stg-eq2); stroke: var(--stg-ink); stroke-width: 2.4; stroke-linejoin: round; }
+.stg .fill-1 { fill: var(--stg-c1); } .stg .fill-2 { fill: var(--stg-c2); } .stg .fill-3 { fill: var(--stg-c3); } .stg .fill-4 { fill: var(--stg-c4); } .stg .fill-5 { fill: var(--stg-c5); } .stg .fill-6 { fill: var(--stg-c6); }
+.stg [class*="fill-"], .stg [class*="tint-"] { stroke: var(--stg-ink); stroke-width: 2; stroke-linejoin: round; }
+.stg .tint-1 { fill: color-mix(in srgb, var(--stg-c1) 25%, white); } .stg .tint-2 { fill: color-mix(in srgb, var(--stg-c2) 25%, white); } .stg .tint-3 { fill: color-mix(in srgb, var(--stg-c3) 25%, white); }
+.stg .tint-4 { fill: color-mix(in srgb, var(--stg-c4) 25%, white); } .stg .tint-5 { fill: color-mix(in srgb, var(--stg-c5) 25%, white); } .stg .tint-6 { fill: color-mix(in srgb, var(--stg-c6) 25%, white); }
+.stg .lq-blue { fill: color-mix(in srgb, var(--stg-c4) 24%, white); } .stg .lq-clear { fill: #EAF1F4; } .stg .lq-oil { fill: #F2E6A8; }
+.stg .lq-sage { fill: #D9E6D8; } .stg .lq-coral { fill: color-mix(in srgb, var(--stg-c2) 28%, white); } .stg .lq-violet { fill: color-mix(in srgb, var(--stg-c3) 28%, white); }
+.stg .well { fill: #fff; stroke: var(--stg-ink); stroke-width: 1.4; } .stg .wt-b { fill: color-mix(in srgb, var(--stg-c4) 24%, white); } .stg .wt-c { fill: color-mix(in srgb, var(--stg-c2) 28%, white); }
+.stg .tip { fill: #fff; stroke: var(--stg-ink); stroke-width: 2; stroke-linejoin: round; } .stg .pip { fill: var(--stg-c1); stroke: var(--stg-ink); stroke-width: 2.4; } .stg .pipg { fill: color-mix(in srgb, var(--stg-c1) 70%, black); }
+.stg .scr { fill: var(--stg-screen); stroke: var(--stg-ink); stroke-width: 2; } .stg .scl { fill: none; stroke: #8FD3CF; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.stg .slot { fill: #52646D; stroke: var(--stg-ink); stroke-width: 2; } .stg .led { fill: #4FB38A; stroke: var(--stg-ink); stroke-width: 1.6; }
+.stg .rot { fill: #fff; stroke: var(--stg-ink); stroke-width: 2.4; } .stg .hub { fill: var(--stg-ink); }
+.stg .mag { fill: #C8554B; stroke: var(--stg-ink); stroke-width: 2; } .stg .chp { fill: #CFE3F5; stroke: var(--stg-ink); stroke-width: 1.6; }
+.stg .chan { fill: #EAF1F4; stroke: var(--stg-ink); stroke-width: 2; }
+.stg .term { fill: #17252C; stroke: var(--stg-ink); stroke-width: 2.4; } .stg .termbar { fill: #2C414B; } .stg .td { fill: #8FD3CF; }
+.stg .tm { fill: #E6F1EE; font: 500 var(--lbs)/1 var(--mono); } .stg .cur { fill: #8FD3CF; }
+.stg .file { fill: #fff; stroke: var(--stg-ink); stroke-width: 2.4; stroke-linejoin: round; }
+.stg .zoom { fill: #F4F8F1; stroke: var(--stg-ink); stroke-width: 2.4; stroke-dasharray: 3 9; stroke-linecap: round; }
+.stg .zoomr { fill: #F7F5EC; stroke: var(--stg-ink); stroke-width: 2; stroke-dasharray: 3 8; stroke-linecap: round; }
+.stg .dash { stroke: var(--stg-ink); stroke-width: 2; stroke-dasharray: 3 8; stroke-linecap: round; } .stg .dash-e { fill: none; stroke: var(--stg-ink); stroke-width: 2; stroke-dasharray: 3 8; stroke-linecap: round; }
+.stg .badge { fill: var(--stg-c1); stroke: var(--stg-ink); stroke-width: 2; }
+.stg .brk { fill: none; stroke: var(--stg-ink); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.stg .curve { fill: none; stroke: var(--stg-c1); stroke-width: 4; stroke-linecap: round; }
+.stg .skel { fill: #D6DFE3; } .stg .tile { fill: #fff; stroke: var(--stg-ink); stroke-width: 1.8; }
+.stg .panelw { fill: #fff; stroke: var(--stg-ink); stroke-width: 2.2; } .stg .panelh { fill: var(--stg-ink); }
+.stg .dotm { stroke: var(--stg-ink); stroke-width: 1.8; }
+/* electronics */
+.stg .pcb { fill: color-mix(in srgb, var(--stg-c1) 62%, #123); stroke: var(--stg-ink); stroke-width: 2.4; } .stg .cu { fill: none; stroke: #E7C463; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.stg .ic { fill: #2A3A42; stroke: var(--stg-ink); stroke-width: 2.2; } .stg .pin { fill: #E7C463; stroke: var(--stg-ink); stroke-width: 1.6; }
+.stg .hole { fill: #fff; stroke: var(--stg-ink); stroke-width: 1.4; } .stg .via { fill: #E7C463; stroke: var(--stg-ink); stroke-width: 1.6; } .stg .usb { fill: #CFD8DC; stroke: var(--stg-ink); stroke-width: 2.2; }
+.stg .snap { fill: #CFD8DC; stroke: var(--stg-ink); stroke-width: 2.2; } .stg .knob { fill: var(--stg-eq2); stroke: var(--stg-ink); stroke-width: 2; }
+.stg .wire { fill: none; stroke-width: 5; stroke-linecap: round; } .stg .w-1 { stroke: var(--stg-c1); } .stg .w-2 { stroke: var(--stg-c2); } .stg .w-3 { stroke: var(--stg-c3); } .stg .w-4 { stroke: var(--stg-c4); } .stg .w-5 { stroke: var(--stg-c5); } .stg .w-6 { stroke: var(--stg-c6); }
+.stg .trace { fill: none; stroke: #8FE3B0; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; } .stg .gr { stroke: rgb(255 255 255 / .18); stroke-width: 1; }
+.stg .rail-r { stroke: var(--stg-c2); stroke-width: 3; } .stg .rail-b { stroke: var(--stg-c4); stroke-width: 3; }
+/* data, software, sound, paper */
+.stg .gr2 { stroke: color-mix(in srgb, var(--stg-ink) 28%, white); stroke-width: 1.4; } .stg .hotc { fill: color-mix(in srgb, var(--stg-c1) 28%, white); stroke: var(--stg-c1); stroke-width: 2.4; }
+.stg .chk { stroke: #fff; stroke-width: 5; }
+.stg .heat { stroke: none; } .stg .h0 { fill: #EEF2F3; } .stg .h1 { fill: color-mix(in srgb, var(--stg-c1) 35%, white); } .stg .h2 { fill: color-mix(in srgb, var(--stg-c1) 70%, white); } .stg .h3 { fill: var(--stg-c2); }
+.stg .hl { fill: #FFD60A; opacity: .75; }
+.stg .bar { stroke-width: 1.6; }
+/* animation hooks when no player is present (the stage player drives data-a instead) */
+@media (prefers-reduced-motion: no-preference) {
+  .g-flow { stroke-dasharray: 3 8; animation: g-flow 1.4s linear infinite; }
+  .g-pulse { animation: g-pulse 1.8s cubic-bezier(.45, 0, .55, 1) infinite; transform-box: fill-box; transform-origin: center; }
+  .g-enter { animation: g-enter .7s cubic-bezier(.16, 1, .3, 1) both; }
+  .g-travel { animation: g-travel 2.4s cubic-bezier(.65, 0, .35, 1) infinite alternate; }
+}
+@keyframes g-flow { to { stroke-dashoffset: -22; } }
+@keyframes g-pulse { 50% { opacity: .55; } }
+@keyframes g-enter { from { opacity: 0; transform: translateY(18px); } }
+@keyframes g-travel { to { transform: translateX(40px); } }
+/* player hooks: the final frame is the markup */
+.stg [data-a^="gone "], .stg [data-a^="trip "] { opacity: 0; }
+.stg [data-a] { transform-box: fill-box; transform-origin: 50% 50%; }
+@media (prefers-reduced-motion: reduce) { .stg-ol a span { transition: none; } }
+/* reducedFinalFrame: an alternate static drawing shown without the player */
+.stg .stg-final { display: block; } .stg .stg-anim { display: none; }
+.stg-live .stg-final { display: none; } .stg-live .stg-anim { display: block; }
+.stg-note.stg-files, .stg-files { margin-top: .6rem; display: grid; gap: .2rem; }
+.stg circle.lq-sage { stroke: #7C9B7C; stroke-width: 1.6; } .stg circle.lq-oil { stroke: #B79B1F; stroke-width: 1.6; }
+.stg .termi { fill: #17252C; stroke: var(--stg-ink); stroke-width: 2; } .stg .termg { fill: none; stroke: #8FD3CF; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+
+@media (max-width: 47.99rem) { .stg-track { scroll-margin-top: var(--bar, 3.25rem); } }
+
+/* one quiet world-level note under the stage list */
+.stg-ill.stg-once { margin: 1.4rem 0 0; padding-inline: var(--pad); font-weight: 500; max-width: 60ch; }
+@media (min-width: 48rem) { .stg-ill.stg-once { padding-inline: 0; } }
+
+/* phone: the sticky bar already says 'Stage N of M'; do not repeat it inline */
+@media (max-width: 47.99rem) { .stg-js .stg-step { display: none; } }

@@ -1,0 +1,162 @@
+{
+ "slug": "metabolites-transcriptome-preprint-web",
+ "title": "Serum Metabolites and Whole Blood Transcriptome in Metabolically Healthy Obesity (preprint)",
+ "pdf": "/docs/metabolites-transcriptome-preprint-original.pdf",
+ "pages": 18,
+ "size": [
+  1100,
+  1424
+ ],
+ "coords": "x and y are percent of the page image, measured from the top left",
+ "startHere": [
+  1,
+  2,
+  4,
+  8,
+  10,
+  14
+ ],
+ "intro": "Research Square preprint, 14 October 2024. Not peer-reviewed.",
+ "hotspots": [
+  {
+   "page": 1,
+   "x": 32,
+   "y": 14,
+   "n": 1,
+   "title": "What this is",
+   "kind": "what",
+   "note": "The authors compare serum metabolites and blood gene activity between an obesity group and lean controls. Research Square posted this preprint on 14 October 2024; it has not undergone peer review.",
+   "margin": true
+  },
+  {
+   "page": 2,
+   "x": 50,
+   "y": 52,
+   "n": 2,
+   "title": "The abstract",
+   "kind": "what",
+   "note": "The study enrolled 40 adults; 36 remained in the metabolite analysis after exclusions. The authors report 116 of 711 metabolites at p < 0.05 without multiple-testing correction, and differences in 14 of 26 blood gene-activity pathways.",
+   "margin": true
+  },
+  {
+   "page": 3,
+   "x": 10,
+   "y": 89,
+   "n": 3,
+   "title": "From 1,069 to 711 metabolites",
+   "kind": "why",
+   "note": "The lab profiled 1,069 metabolites. Excluding 174 unidentified metabolites and those with more than 20% missing data left 711.",
+   "margin": true
+  },
+  {
+   "page": 4,
+   "x": 10,
+   "y": 9,
+   "n": 4,
+   "title": "Outliers removed",
+   "kind": "what",
+   "note": "A principal component analysis flagged four samples as outliers: one lean control and three from the obesity group. That leaves 36 people for the metabolite analysis, 19 lean and 17 with obesity, not the 40 in the abstract.",
+   "margin": true
+  },
+  {
+   "page": 5,
+   "x": 10,
+   "y": 70,
+   "n": 5,
+   "title": "The gene-activity side",
+   "kind": "what",
+   "note": "Whole blood RNA was read on a microarray covering 32,304 genes. This part of the analysis uses 21 profiles, 11 lean and 10 with obesity, so it rests on fewer people than the metabolite part.",
+   "margin": true
+  },
+  {
+   "page": 6,
+   "x": 10,
+   "y": 32,
+   "n": 6,
+   "title": "Baseline: who was in the study",
+   "kind": "what",
+   "note": "Mean ages were 35.40 and 35.95 years, and mean BMIs were 23.31 and 40.43. The authors report a higher proportion of women in the obesity group (p ≤ 0.012).",
+   "margin": true
+  },
+  {
+   "page": 7,
+   "x": 22,
+   "y": 23,
+   "n": 7,
+   "title": "Table 1",
+   "kind": "limit",
+   "note": "The enrolled groups differed in sex distribution: 14 men and 6 women in the lean group, 5 men and 15 women in the obesity group. The analysis adjusted for sex, age and BMI.",
+   "margin": true
+  },
+  {
+   "page": 8,
+   "x": 50,
+   "y": 26,
+   "n": 8,
+   "title": "116 metabolites, no correction",
+   "kind": "limit",
+   "note": "The authors report 116 of 711 metabolites at p < 0.05; 91 were higher in the obesity group. They did not correct for multiple testing, so these findings are exploratory.",
+   "margin": true
+  },
+  {
+   "page": 10,
+   "x": 22,
+   "y": 17,
+   "n": 9,
+   "title": "Table 2: pathways",
+   "kind": "why",
+   "note": "The authors group metabolites by biochemical pathway. Arginine, glutamate, and cysteine and methionine pathways have some of the smallest FDR p-values in this table.",
+   "margin": true
+  },
+  {
+   "page": 12,
+   "x": 50,
+   "y": 34,
+   "n": 10,
+   "title": "The authors' limits",
+   "kind": "limit",
+   "note": "Small sample because of strict age matching, a single time point that cannot show cause, and blood only, which says little about specific tissues. The authors say the study needs repeating in larger, more varied groups.",
+   "margin": true
+  },
+  {
+   "page": 12,
+   "x": 10,
+   "y": 71,
+   "n": 11,
+   "title": "Who did what",
+   "kind": "what",
+   "note": "The preprint credits me and five co-authors with collecting, purifying and harmonizing samples. Other authors handled the computational analysis and writing.",
+   "margin": true
+  },
+  {
+   "page": 15,
+   "x": 25,
+   "y": 30,
+   "n": 12,
+   "title": "Figure 1: volcano plot and counts",
+   "kind": "what",
+   "note": "Each dot is a metabolite; higher means a smaller p-value. The bars count metabolites meeting the uncorrected p < 0.05 threshold. Lipids include 36 higher and 14 lower in the obesity group.",
+   "margin": true
+  },
+  {
+   "page": 16,
+   "x": 25,
+   "y": 32,
+   "n": 13,
+   "title": "Figure 2: sphingomyelins",
+   "kind": "why",
+   "note": "The figure shows higher levels of 15 sphingomyelins in the obesity group. Each pair of boxes represents one lipid; the comparisons are exploratory.",
+   "margin": true
+  },
+  {
+   "page": 18,
+   "x": 60,
+   "y": 27,
+   "n": 14,
+   "title": "Figure 4: pathway activity",
+   "kind": "why",
+   "note": "The bars show pathway scores derived from blood gene activity, with obesity in red and lean controls in teal.",
+   "margin": true
+  }
+ ]
+}

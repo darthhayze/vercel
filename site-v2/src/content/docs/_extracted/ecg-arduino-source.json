@@ -1,0 +1,12 @@
+{
+  "pages": 1,
+  "size": [
+    1100,
+    1556
+  ],
+  "page_text": [
+    "// This Arduino code has been written by Univeristy Of Cincinnati Student Hamza\nAl Halabi [Alhalaha] for use in Circuits BME2081C for Summer of 2026\n// This code runs in parallel with Processing to create visual outputs including\naudio, light, and graphic representation\n// Enjoy!\n\n// FILENAME: Alhalaha_ECG_Monitor.ino\n// Based on EXAMPLE02_Sample.ino (Orlando S. Hoilett, Ph.D.)\n// Reads ECG analog input from Ninetales board and transmits values over Serial\nto Processing for real-time visualization & beat detection.\n\n\n// ECG Channel Pin (A2 is default for EXG/ECG on Ninetales, A1 can also be used)\nconst int ECG_PIN = A1;\n\nvoid setup() {\n  // Initialize serial communication at 9600 baud for smooth plotting\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  // Read the analog signal from Ninetales (0 to 1023)\n  int ecgSignal = analogRead(ECG_PIN);\n\n    // Send raw value over Serial\n    Serial.println(ecgSignal);\n\n    // 10ms delay gives ~100 Hz sampling rate, ideal for ECG capture\n    delay(10);\n}"
+  ],
+  "headings": [],
+  "figures": []
+}

@@ -1,0 +1,256 @@
+---
+// WORLD 2: pediatric arch support. The soul is the human foot arch (medial longitudinal arch, flat feet in children aged 5 to 7)
+// drawn as anatomy, with the insert shown as slicer-style layers. The reports record no printing for V2: the layer look is illustration.
+// Story, top to bottom: Need > How an arch works > What we built > How it was tested > What comes next > Documents.
+// Signature 1: raise-the-arch slider (profile contour, wet-test print and insert layers move together).
+// Signature 2: Build scrubber (scroll, drag, or Replay) that draws the sleeve, pocket, insert layers and strap like a slicer.
+import './arch.css';
+import WorldShell from '../../components/kit/WorldShell.astro';
+import DocTabs from '../../components/docs/DocTabs.astro';
+import Foot from './Foot.astro';
+import Print from './Print.astro';
+import { wordsFor } from './foot';
+import { row } from './../../lib/data';
+interface Props { slug: string; c: any }
+const { slug, c } = Astro.props;
+
+const steps = [
+  { n: 1, name: 'Sleeve', t: 'Breathable muslin that pulls over the foot like a sock.' },
+  { n: 2, name: 'Pocket', t: 'Reinforced stitching holds the gel pad under the arch.' },
+  { n: 3, name: 'Insert', t: 'A gel pad with an adhesive layer fills the space under the arch.' },
+  { n: 4, name: 'Strap', t: 'An elastic band at the heel guides placement.' },
+];
+const bonesKey = [['calcaneus', 'Calcaneus (heel bone)'], ['talus', 'Talus'], ['navicular', 'Navicular'], ['cuneiform', 'Medial cuneiform'], ['metatarsal', 'First metatarsal'], ['fascia', 'Plantar fascia']];
+const plan = [
+  'A reinforced pouch and a printed TPU encasement to keep the gel in.',
+  'Inserts printed from a 3D scan of each foot.',
+  'A gait study with children, before any claim that it corrects the arch.',
+];
+---
+<WorldShell slug={slug} title={c.title} description={c.summary}>
+  <Fragment slot="head"><script is:inline src="/worlds-assets/arch-support/boot.js"></script></Fragment>
+
+  <!-- ============ 1. NEED ============ -->
+  <header class="as-hero" aria-labelledby="page-title" data-seq="hero">
+    <div class="as-wrap as-hero-grid">
+      <div class="as-hero-copy">
+        <h1 id="page-title" class="as-title" data-rise data-d="0">Pediatric arch support</h1>
+        <p class="as-lede" data-rise data-d="140">Our team designed a sleeve with a gel insert to support the arch in children aged 5 to 7 with symptomatic flat feet.</p>
+        <p class="as-need" data-rise data-d="260">Flat feet are common in young children. For some they hurt: sore feet, ankles and shins. Rigid orthotics are fixed in size and need replacing as the foot grows, so we built a sleeve that pulls on like a sock and holds a gel insert.</p>
+        <p class="as-meta" data-rise data-d="380">BME 3050 Medical Device Design, University of Cincinnati, summer 2026. I was the clinical-contact coordinator on Group 11.</p>
+      </div>
+      <figure class="as-prints" data-rise data-d="200">
+        <div class="as-prints-row">
+          <div class="as-print-cell">
+            <Print id="hero-flat" h={0} seq={500} label="Wet-test footprint of a flat arch, sole view: the whole sole prints, full width at the midfoot." />
+            <p class="as-print-cap" data-rise data-d="1500">Flat arch</p>
+          </div>
+          <div class="as-print-cell">
+            <Print id="hero-up" h={0.7} seq={800} label="Wet-test footprint of a supported arch, sole view: the midfoot prints as a narrow band." />
+            <p class="as-print-cap" data-rise data-d="1650">Supported arch</p>
+          </div>
+        </div>
+        <figcaption>Wet-test footprints, sole view. Teaching illustration.</figcaption>
+      </figure>
+    </div>
+  </header>
+
+  <!-- ============ 2. HOW AN ARCH WORKS ============ -->
+  <section class="as-sec as-archsec" id="arch" aria-labelledby="arch-h" data-seq="arch">
+    <div class="as-wrap">
+      <div class="as-head">
+        <h2 id="arch-h" class="as-h2" data-rise data-d="0">How an arch works</h2>
+        <p class="as-sub" data-rise data-d="110">The inner arch of the foot is a bridge. The heel bone, midfoot bones and the first metatarsal form the span, and a band under the foot, the plantar fascia, ties the two ends together. Doctors call it the medial longitudinal arch. In a flat foot the bridge sinks and the whole sole meets the floor.</p>
+      </div>
+      <p class="as-scroll-hint">Scrolling raises the arch. Use the slider to adjust it.</p>
+      <div class="as-anatomy-story" data-anatomy-story>
+      <div class="as-lab" id="demo" data-stage-pin data-lab data-h="up" data-seq="lab" data-margin="-22%">
+        <div class="as-lab-stage">
+          <figure class="as-profile" data-rise data-d="180">
+            <Foot id="lab" h={0.7} variant="lab" seq={300} label="Side view of the inside of a foot, heel on the left, toes on the right. The heel bone, talus, navicular, medial cuneiform and first metatarsal form a bridge over the arch. The plantar fascia ties the heel to the ball. Orange layers under the arch show the insert, and a dimension line shows arch height." />
+          </figure>
+          <figure class="as-printplate" data-rise data-d="260">
+            <Print id="lab" h={0.7} seq={900} label="Wet-test footprint, sole view. It changes with the slider: the midfoot narrows as the arch rises." />
+            <figcaption>Wet-test print, sole view</figcaption>
+          </figure>
+        </div>
+        <ol class="as-key" aria-label="Parts in the drawing">
+          {bonesKey.map(([id, label]) => <li data-bone={id}>{label}</li>)}
+        </ol>
+        <div class="as-ctl" data-rise data-d="1500">
+          <label class="as-ctl-l" for="as-arch">Raise the arch</label>
+          <div class="as-ctl-row">
+            <span class="as-ctl-end" aria-hidden="true">flat</span>
+            <input id="as-arch" class="as-range as-arch" type="range" min="0" max="100" step="1" value="70" aria-describedby="as-arch-out" />
+            <span class="as-ctl-end" aria-hidden="true">supported</span>
+          </div>
+        </div>
+        <p class="as-readout" id="as-arch-out" role="status" aria-live="polite" data-archout data-rise data-d="1560">{wordsFor(0.7)}</p>
+        <p class="as-legend" data-rise data-d="1620">Orange: the insert, drawn as stacked layers under the arch. The pale line under the skin is the plantar fascia.</p>
+      </div>
+      <div class="as-anatomy-notes">
+        <div class="as-scroll-note"><h3 class="as-h3">The arch lowers</h3><p>In a flat foot, the bridge sinks and the midfoot print widens.</p></div>
+        <div class="as-scroll-note"><h3 class="as-h3">The bridge rises</h3><p>The heel, midfoot bones and first metatarsal form the span. The plantar fascia ties the heel to the ball.</p></div>
+        <div class="as-scroll-note"><h3 class="as-h3">Space for the insert</h3><p>The orange layers fill the space beneath the arch. The heel, outer edge and ball still meet the floor.</p></div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. WHAT WE BUILT ============ -->
+  <section class="as-sec as-build" id="build" aria-labelledby="build-h" data-seq="build-h">
+    <div class="as-wrap">
+      <div class="as-head">
+        <h2 id="build-h" class="as-h2" data-rise data-d="0">What we built</h2>
+        <p class="as-sub" data-rise data-d="110">Version 2 (beta) is a sewn sleeve with a pocket and a gel insert. V2 used a gel pad. Version 1, cardboard and foam in a standard sock, gave the lift but was not stable, so we moved to gel pads in compression sleeves.</p>
+      </div>
+
+      <p class="as-scroll-hint">Scrolling assembles the sleeve. Drag the build slider to inspect a part.</p>
+      <div class="as-bsplit" data-bsplit data-seq="build" data-margin="-22%">
+        <div class="as-build-bed" data-stage-pin>
+        <figure class="as-bplate" data-rise data-d="160">
+          <Foot id="build" h={0.7} variant="build" seq={200} label="Side view of a foot with the V2 parts drawn on it: a sleeve around the foot, a pocket under the arch, the insert as stacked layers, and an elastic strap at the heel." />
+          <figcaption>
+            <span class="as-bstate" data-bstate role="status" aria-live="off">Sleeve, pocket, insert and strap</span>
+            <span class="as-bnote">Insert drawn as stacked layers.</span>
+          </figcaption>
+        </figure>
+        <div class="as-bctl" data-bctl hidden>
+          <label class="as-ctl-l" for="as-build">Build</label>
+          <div class="as-ctl-row">
+            <input id="as-build" class="as-range as-buildrange" type="range" min="0" max="100" step="1" value="100" />
+            <button type="button" class="as-btn" data-replay>Replay</button>
+          </div>
+        </div>
+        </div>
+        <ol class="as-steps" data-steps aria-label="Parts of the V2 sleeve">
+          {steps.map((s) => (
+            <li class="as-step" data-step={s.n - 1}>
+              <h3 class="as-h3">{s.name}</h3>
+              <p>{s.t}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <div data-seq="b2" data-margin="-10%">
+      <p class="as-target" data-rise data-d="0">Targets from the brief: room for {row('arch-growth').value} growth, a {row('arch-grf').value} ground-reaction load and a midfoot under 8 mm.</p>
+
+      <ul class="as-plates" aria-label="Figures from the design review">
+        <li data-rise data-d="0">
+          <figure class="as-plate">
+            <img src="/worlds-assets/arch-support/pattern-pieces.webp" width="539" height="452" alt="The four paper pattern pieces: bottom pad with a do-not-cut pocket mark, top pad, pocket and back strap." loading="lazy" decoding="async" />
+            <figcaption><b>Fig. 1</b> The four pieces we cut the sleeve from. <span>Design review, page 8</span></figcaption>
+          </figure>
+        </li>
+        <li data-rise data-d="90">
+          <figure class="as-plate">
+            <img src="/worlds-assets/arch-support/needs-table.webp" width="1045" height="372" alt="Table of four user needs, each with a design input and a verification method." loading="lazy" decoding="async" />
+            <figcaption><b>Fig. 2</b> Four user needs and the test planned for each. <span>Design review, page 5</span></figcaption>
+          </figure>
+        </li>
+        <li data-rise data-d="180">
+          <figure class="as-plate">
+            <img src="/worlds-assets/arch-support/engineering-analysis.webp" width="1056" height="359" alt="Two panels: arch biomechanics modelled as a windlass, and material stress on the sleeve." loading="lazy" decoding="async" />
+            <figcaption><b>Fig. 3</b> The arch as a windlass, and sleeve stress at 10% strain. <span>Design review, page 9</span></figcaption>
+          </figure>
+        </li>
+      </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. TESTING ============ -->
+  <section class="as-sec as-test" id="test" aria-labelledby="test-h" data-seq="test">
+    <div class="as-wrap">
+      <div class="as-head">
+        <h2 id="test-h" class="as-h2" data-rise data-d="0">How we tested it</h2>
+        <p class="as-sub" data-rise data-d="110">We put a 30 lb dumbbell on the V2 insert: three holds of 1 minute, then three drops from 1 foot. Pass meant the insert stayed fully intact. One prototype went through the bench test.</p>
+      </div>
+
+      <div class="as-test-grid">
+        <div class="as-tests" data-tests data-seq="test-fig" data-margin="-20%">
+          <figure class="as-tfig" data-rise data-d="200">
+            <svg viewBox="0 0 300 230" role="img" aria-label="Static hold: a 30 lb weight lowers onto the insert and rests there for 1 minute." focusable="false">
+              <path class="t-floor" d="M10 200 H290" />
+              <g data-t-insert><path class="t-insert" d="M70 200 C96 160 204 160 230 200 Z" /></g>
+              <g data-t-weight="hold"><rect class="t-weight" x="104" y="116" width="92" height="46" rx="4" /><text x="150" y="146" text-anchor="middle">30 lb</text></g>
+              <path class="t-timer-bg" d="M70 218 H230" /><path class="t-timer" data-t-timer pathLength="1" d="M70 218 H230" />
+            </svg>
+            <figcaption><b>Static hold</b> 30 lb for 1 minute, three times.</figcaption>
+          </figure>
+          <figure class="as-tfig" data-rise data-d="300">
+            <svg viewBox="0 0 300 230" role="img" aria-label="Drop: a 30 lb weight falls 1 foot onto the insert." focusable="false">
+              <path class="t-floor" d="M10 200 H290" />
+              <g data-t-insert2><path class="t-insert" d="M70 200 C96 160 204 160 230 200 Z" /></g>
+              <g data-t-weight="drop"><rect class="t-weight" x="104" y="116" width="92" height="46" rx="4" /><text x="150" y="146" text-anchor="middle">30 lb</text></g>
+              <path class="t-dim" d="M262 70 V162 M254 70 H270 M254 162 H270" />
+              <text class="t-dim-t" x="256" y="122" text-anchor="end">1 ft</text>
+            </svg>
+            <figcaption><b>Drop</b> 30 lb from 1 foot, three times.</figcaption>
+          </figure>
+          <button type="button" class="as-btn as-btn-quiet" data-replay-test hidden>Replay the test</button>
+        </div>
+
+        <table class="as-table">
+          <caption>Bench results from the final report</caption>
+          <thead><tr><th scope="col">Test</th><th scope="col">Load</th><th scope="col">Result</th></tr></thead>
+          <tbody>
+            <tr data-rise data-d="420"><th scope="row">Static hold 1 to 3</th><td>30 lb, 1 minute</td><td>Insert unaffected</td></tr>
+            <tr data-rise data-d="500"><th scope="row">Drop 1 and 2</th><td>30 lb, 1 foot</td><td>Insert unaffected</td></tr>
+            <tr data-rise data-d="580"><th scope="row">Drop 3</th><td>30 lb, 1 foot</td><td>Insert slightly damaged, slight leakage</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ul class="as-plates as-plates-2" aria-label="Test record" data-seq="t2" data-margin="-10%">
+        <li data-rise data-d="0">
+          <figure class="as-plate">
+            <img src="/worlds-assets/arch-support/bench-frame.webp" width="891" height="465" alt="A frame from the bench test in our report: a foot beside the 30 lb dumbbell on a floor mat." loading="lazy" decoding="async" />
+            <figcaption><b>Fig. 4</b> A frame from the bench test in our report.</figcaption>
+          </figure>
+        </li>
+        <li data-rise data-d="90">
+          <figure class="as-plate">
+            <img src="/worlds-assets/arch-support/test-procedure.webp" width="528" height="454" alt="The test procedure slide: place the insert and sleeve on a flat surface, place a 30 lb dumbbell on the insert for 1 minute, drop it from 1 foot." loading="lazy" decoding="async" />
+            <figcaption><b>Fig. 5</b> The procedure as written for the bench test. <span>Design review, page 11</span></figcaption>
+          </figure>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 5. WHAT COMES NEXT ============ -->
+  <section class="as-sec as-next" id="next" aria-labelledby="next-h" data-seq="next">
+    <div class="as-wrap as-next-grid">
+      <div class="as-next-copy">
+        <h2 id="next-h" class="as-h2" data-rise data-d="0">What comes next</h2>
+        <p class="as-sub" data-rise data-d="110">V3 is a plan. We ran out of semester before building it, and our memo hands it to the next team. The third drop shows where to start: keeping the gel in.</p>
+        <ul class="as-plan">
+          {plan.map((p, i) => <li data-rise data-d={String(260 + i * 90)}>{p}</li>)}
+        </ul>
+      </div>
+      <figure class="as-nfig" data-rise data-d="120">
+        <p class="as-chip">Proposed, not built</p>
+        <Foot id="plan" h={0.85} variant="plan" seq={200} label="Dashed side view of the planned V3: a custom-molded insert under the arch inside a reinforced pouch, drawn as dashed layers. Not built." />
+        <figcaption>V3 as planned: a molded insert in a reinforced pouch, drawn dashed because it does not exist yet.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ 6. DOCUMENTS ============ -->
+  <section class="as-sec as-docs" id="papers" aria-labelledby="docs-h" data-seq="docs">
+    <div class="as-wrap">
+      <div class="as-head">
+        <h2 id="docs-h" class="as-h2" data-rise data-d="0">Documents</h2>
+        <p class="as-sub" data-rise data-d="110">Three team reports with a note on each key page.</p>
+      </div>
+      <div data-rise data-d="200">
+        <DocTabs docs={[{ doc: 'arch-final-report', label: 'Final report' }, { doc: 'arch-design-review', label: 'Design review' }, { doc: 'arch-background-review', label: 'Background review' }]} />
+      </div>
+      <p class="as-foot">Sources: the <a href="/evidence/">evidence ledger</a> and the three reports as PDF: <a href="/docs/arch-final-report.pdf">final report</a>, <a href="/docs/arch-design-review.pdf">design review</a>, <a href="/docs/arch-background-review.pdf">background review</a>.</p>
+    </div>
+  </section>
+</WorldShell>
+
+<script>import './arch-client';</script>

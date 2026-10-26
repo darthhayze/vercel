@@ -42,6 +42,58 @@
           "value": "public, max-age=31536000, immutable"
         }
       ]
+    },
+    {
+      "source": "/docs/arch-background-review.pdf",
+      "headers": [{ "key": "Link", "value": "<https://hamza-bme.tech/docs/arch-final-report.pdf>; rel=\"canonical\"" }]
+    },
+    {
+      "source": "/docs/arch-design-review.pdf",
+      "headers": [{ "key": "Link", "value": "<https://hamza-bme.tech/docs/arch-design-review.pdf>; rel=\"canonical\"" }]
+    },
+    {
+      "source": "/docs/arch-final-report.pdf",
+      "headers": [{ "key": "Link", "value": "<https://hamza-bme.tech/docs/arch-final-report.pdf>; rel=\"canonical\"" }]
+    },
+    {
+      "source": "/docs/ecg-arduino-source.pdf",
+      "headers": [{ "key": "Link", "value": "<https://hamza-bme.tech/docs/ecg-arduino-source.pdf>; rel=\"canonical\"" }]
+    },
+    {
+      "source": "/docs/ecg-processing-source.pdf",
+      "headers": [{ "key": "Link", "value": "<https://hamza-bme.tech/docs/ecg-processing-source.pdf>; rel=\"canonical\"" }]
+    },
+    {
+      "source": "/docs/ijms-26-02262.pdf",
+      "headers": [{ "key": "Link", "value": "<https://hamza-bme.tech/docs/ijms-26-02262.pdf>; rel=\"canonical\"" }]
+    },
+    {
+      "source": "/docs/metabolites-transcriptome-preprint-original.pdf",
+      "headers": [{ "key": "Link", "value": "<https://hamza-bme.tech/docs/metabolites-transcriptome-preprint-original.pdf>; rel=\"canonical\"" }]
+    },
+    {
+      "source": "/docs/metabolites-transcriptome-preprint-web.pdf",
+      "headers": [{ "key": "Link", "value": "<https://hamza-bme.tech/docs/metabolites-transcriptome-preprint-original.pdf>; rel=\"canonical\"" }]
+    },
+    {
+      "source": "/docs/ninetales-assignment.pdf",
+      "headers": [{ "key": "Link", "value": "<https://hamza-bme.tech/docs/ninetales-assignment.pdf>; rel=\"canonical\"" }]
+    },
+    {
+      "source": "/docs/tens-literature-review.pdf",
+      "headers": [{ "key": "Link", "value": "<https://hamza-bme.tech/docs/tens-literature-review.pdf>; rel=\"canonical\"" }]
+    },
+    {
+      "source": "/docs/tens-poster.pdf",
+      "headers": [{ "key": "Link", "value": "<https://hamza-bme.tech/docs/tens-poster.pdf>; rel=\"canonical\"" }]
+    },
+    {
+      "source": "/resume/Hamza_Al_Halabi_Resume_1page.pdf",
+      "headers": [{ "key": "Link", "value": "<https://hamza-bme.tech/resume/Hamza_Al_Halabi_Resume_1page.pdf>; rel=\"canonical\"" }]
+    },
+    {
+      "source": "/resume/Hamza_Al_Halabi_Resume_Extended_3page.pdf",
+      "headers": [{ "key": "Link", "value": "<https://hamza-bme.tech/resume/Hamza_Al_Halabi_Resume_Extended_3page.pdf>; rel=\"canonical\"" }]
     }
   ]
 }

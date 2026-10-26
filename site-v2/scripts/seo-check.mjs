@@ -62,6 +62,13 @@ check(robots.includes(`Sitemap: ${origin}/sitemap.xml`) && !/^Disallow:\s*\S/m.t
 const vercel = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
 const csp = vercel.headers.find((rule) => rule.source === '/(.*)')?.headers.find((h) => h.key.toLowerCase() === 'content-security-policy')?.value;
 check(!!csp && csp.includes("style-src 'self';") && !/unsafe-inline|unsafe-eval/.test(csp), 'strict CSP header');
+// PDFs cannot carry a canonical tag, so each one declares its canonical in a Link header that points at a published file.
+for (const pdf of fs.readdirSync(dist, { recursive: true }).filter((file) => file.endsWith('.pdf'))) {
+  const published = '/' + pdf.split(path.sep).join('/');
+  const link = vercel.headers.find((rule) => rule.source === published)?.headers.find((h) => h.key === 'Link')?.value ?? '';
+  const target = link.match(/^<([^>]+)>; rel="canonical"$/)?.[1];
+  check(!!target && (target === origin + published || fs.existsSync(path.join(dist, target.replace(origin, '')))), published + ': canonical Link header to a published file');
+}
 // Self-check the tag parser used by this audit.
 assert.equal(attrs('<meta name="description" content="A > B">').content, 'A > B');
 assert.equal(decode('A &amp; B &#39;'), "A & B '");
